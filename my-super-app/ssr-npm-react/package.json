@@ -1,0 +1,27 @@
+{
+  "name": "ssr-npm-react",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./router-react": "./dist/router-react/index.js"
+  },
+  "scripts": {
+    "build": "esmx build",
+    "dev": "esmx dev",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ssr-npm-base": "workspace:*"
+  },
+  "devDependencies": {
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
+  }
+}

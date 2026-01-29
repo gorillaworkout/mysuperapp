@@ -1,0 +1,25 @@
+{
+  "name": "esmx-super-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --parallel run build",
+    "dev": "pnpm -r --parallel run dev",
+    "clean": "pnpm -r --parallel run clean",
+    "start": "cd my-super-app/ssr-hub && pnpm start"
+  },
+  "devDependencies": {
+    "@esmx/core": "^3.0.0-rc.107",
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "@esmx/rspack-vue": "^3.0.0-rc.107",
+    "@esmx/rspack-react": "^3.0.0-rc.107",
+    "@esmx/router": "^3.0.0-rc.107",
+    "@esmx/router-vue": "^3.0.0-rc.107",
+    "@esmx/router-react": "^3.0.0-rc.107",
+    "typescript": "^5.0.0",
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
+  }
+}

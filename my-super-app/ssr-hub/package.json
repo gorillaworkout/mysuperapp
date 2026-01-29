@@ -1,0 +1,31 @@
+{
+  "name": "ssr-hub",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./layout/MainLayout": "./dist/layout/MainLayout.js"
+  },
+  "scripts": {
+    "build": "esmx build",
+    "dev": "esmx dev",
+    "start": "esmx start",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "ssr-npm-react": "workspace:*",
+    "ssr-npm-vue2": "workspace:*",
+    "ssr-npm-vue3": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "@esmx/core": "^3.0.0-rc.107",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
+  }
+}

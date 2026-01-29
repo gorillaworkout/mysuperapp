@@ -1,0 +1,25 @@
+{
+  "name": "ssr-npm-vue3",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./router-vue": "./dist/router-vue/index.js"
+  },
+  "scripts": {
+    "build": "esmx build",
+    "dev": "esmx dev",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "ssr-npm-base": "workspace:*"
+  },
+  "devDependencies": {
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "typescript": "^5.0.0",
+    "@types/node": "^18.0.0"
+  }
+}

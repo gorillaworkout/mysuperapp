@@ -1,0 +1,29 @@
+{
+  "name": "ssr-npm-base",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./@esmx/router": "./dist/router/index.js",
+    "./@esmx/core": "./dist/core/index.js",
+    "./@esmx/class-state": "./dist/class-state/index.js",
+    "./@esmx/fetch": "./dist/fetch/index.js"
+  },
+  "scripts": {
+    "build": "esmx build",
+    "dev": "esmx dev",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@esmx/router": "^3.0.0-rc.107",
+    "@esmx/core": "^3.0.0-rc.107",
+    "@esmx/class-state": "^3.0.0-rc.107",
+    "@esmx/fetch": "^3.0.0-rc.107"
+  },
+  "devDependencies": {
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,5 @@
+packages:
+  - 'my-super-app/*'
+
+autoInstallPeers: true
+strict-peer-dependencies: false

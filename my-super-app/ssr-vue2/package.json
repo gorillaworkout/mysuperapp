@@ -1,0 +1,24 @@
+{
+  "name": "ssr-vue2",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./pages/*": "./dist/pages/*.js"
+  },
+  "scripts": {
+    "build": "esmx build",
+    "dev": "esmx dev",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "ssr-npm-vue2": "workspace:*",
+    "vue": "^2.7.14"
+  },
+  "devDependencies": {
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "typescript": "^5.0.0",
+    "@types/node": "^18.0.0"
+  }
+}
