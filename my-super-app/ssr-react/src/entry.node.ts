@@ -12,10 +12,7 @@ export default {
       '@esmx/router-react': 'ssr-npm-react/router-react'
     },
     exports: [
-      ".", 
-      "./pages/HomePage",
-      "./pages/AboutPage", 
-      "./pages/ContactPage"
+      "pages/HomePage"
     ]
   },
   async devApp(esmx) {

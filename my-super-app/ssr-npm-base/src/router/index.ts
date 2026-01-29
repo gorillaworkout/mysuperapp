@@ -68,3 +68,58 @@ export interface RouteConfig {
   meta?: Record<string, any>;
   children?: RouteConfig[];
 }
+
+// Async Data Loading Support
+export interface AsyncDataContext {
+  params: Record<string, string>;
+  query: Record<string, string>;
+}
+
+export interface AsyncDataResult {
+  data: any;
+  error?: Error;
+}
+
+export type AsyncDataLoader = (ctx: AsyncDataContext) => Promise<any>;
+
+// Extend route to support async data
+export interface RouteConfigWithAsync extends RouteConfig {
+  asyncData?: AsyncDataLoader;
+  loader?: AsyncDataLoader;
+}
+
+// Helper untuk SSR data pre-fetching
+export async function prefetchRouteData(
+  path: string,
+  routeConfig: RouteConfigWithAsync,
+  context: AsyncDataContext
+): Promise<AsyncDataResult> {
+  try {
+    const loader = routeConfig.asyncData || routeConfig.loader;
+    if (!loader) {
+      return { data: null };
+    }
+    
+    const data = await loader(context);
+    return { data };
+  } catch (error) {
+    return { data: null, error: error as Error };
+  }
+}
+
+// Route metadata untuk SSR
+export interface RouteMeta {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  loader?: AsyncDataLoader;
+  asyncData?: AsyncDataLoader;
+}
+
+// Hydration context untuk client-side
+export interface HydrationContext {
+  route: string;
+  data?: any;
+  params: Record<string, string>;
+  query: Record<string, string>;
+}

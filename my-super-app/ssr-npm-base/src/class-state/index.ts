@@ -13,3 +13,6 @@ export abstract class BaseState {
     };
   }
 }
+
+// Concrete implementations
+export * from './SuperState.js';

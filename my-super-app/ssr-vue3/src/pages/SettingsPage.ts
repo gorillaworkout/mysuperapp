@@ -1,7 +1,5 @@
 import { defineComponent } from 'vue';
 
-export const SettingsPage = defineComponent({
-  name: 'Vue3SettingsPage',
   template: `
     <div class="vue3-settings">
       <h1>Vue 3 Settings</h1>
@@ -15,4 +13,3 @@ export const SettingsPage = defineComponent({
   `
 });
 
-export default SettingsPage;

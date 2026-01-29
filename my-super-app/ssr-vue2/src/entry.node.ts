@@ -11,10 +11,7 @@ export default {
       '@esmx/router-vue': 'ssr-npm-vue2/router-vue'
     },
     exports: [
-      ".", 
-      "./pages/HomePage",
-      "./pages/ProductsPage",
-      "./pages/DashboardPage"
+      "pages/HomePage"
     ]
   },
   async devApp(esmx) {

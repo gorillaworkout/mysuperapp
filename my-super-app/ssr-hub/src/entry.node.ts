@@ -21,8 +21,7 @@ export default {
       '@esmx/router-vue': 'ssr-npm-vue3/router-vue'
     },
     exports: [
-      ".",
-      "./layout/MainLayout"
+      "layout/MainLayout"
     ]
   },
   async devApp(esmx) {

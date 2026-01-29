@@ -3,9 +3,7 @@ import { defineConfig } from '@esmx/rspack';
 export default defineConfig({
   entry: {
     index: './src/index.tsx',
-    'pages/HomePage': './src/pages/HomePage.tsx',
-    'pages/AboutPage': './src/pages/AboutPage.tsx',
-    'pages/ContactPage': './src/pages/ContactPage.tsx'
+    'pages/HomePage': './src/pages/HomePage.tsx'
   },
   output: {
     path: './dist',

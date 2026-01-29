@@ -9,7 +9,8 @@
     "./@esmx/router": "./dist/router/index.js",
     "./@esmx/core": "./dist/core/index.js",
     "./@esmx/class-state": "./dist/class-state/index.js",
-    "./@esmx/fetch": "./dist/fetch/index.js"
+    "./@esmx/fetch": "./dist/fetch/index.js",
+    "./router-react": "./dist/router-react/index.js"
   },
   "scripts": {
     "build": "esmx build",

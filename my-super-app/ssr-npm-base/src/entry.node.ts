@@ -12,8 +12,11 @@ export default {
     ]
   },
   async devApp(esmx) {
-    return import('@esmx/rspack').then((m) =>
-      m.createRspackHtmlApp(esmx, { chain() {} })
-    );
+    return {
+      async start() {
+        console.log('ssr-npm-base provider ready');
+        return new Promise(() => {}); // Keep running
+      }
+    };
   }
 } satisfies EsmxOptions;

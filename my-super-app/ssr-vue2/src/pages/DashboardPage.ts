@@ -1,7 +1,5 @@
 import Vue from 'vue';
 
-export const DashboardPage = Vue.extend({
-  name: 'Vue2DashboardPage',
   template: `
     <div class="vue2-dashboard">
       <h1>Vue 2 Dashboard</h1>
@@ -15,4 +13,3 @@ export const DashboardPage = Vue.extend({
   `
 });
 
-export default DashboardPage;
