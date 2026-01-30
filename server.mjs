@@ -53,9 +53,6 @@ const server = createServer((req, res) => {
   } else if (url === '/react' || url === '/react/') {
     filePath = join(__dirname, 'public/react.html');
     ext = '.html';
-  } else if (url === '/ecommerce' || url === '/ecommerce/') {
-    filePath = join(__dirname, 'public/ecommerce.html');
-    ext = '.html';
   } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
     ext = url.match(/\.[^.]+$/)?.[0] || '';
@@ -98,9 +95,7 @@ server.listen(PORT, () => {
   console.log('║  🌿 Vue 2:     /vue2                           ║');
   console.log('║  💜 Vue 3:     /vue3                           ║');
   console.log('║  🔥 React:     /react                          ║');
-  console.log('║  🛒 E-Commerce: /ecommerce                     ║');
   console.log('║                                                ║');
   console.log('║  🛑 Press Ctrl+C to stop                       ║');
   console.log('╚════════════════════════════════════════════════╝');
 });
-// Version 1.1.0 - Added E-Commerce Module Fri Jan 30 14:54:55 WIB 2026
