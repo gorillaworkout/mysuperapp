@@ -19,13 +19,14 @@ ESMX Super App menggunakan **micro-frontend architecture** dengan pattern:
 - **NPM Packages**: Shared packages (`ssr-npm-base`, `ssr-npm-react`, `ssr-npm-vue2`, `ssr-npm-vue3`)
 - **SSR Apps**: Individual apps (`ssr-react`, `ssr-vue2`, `ssr-vue3`)
 
-### Current Projects (3 Active)
+### Current Projects (4 Active)
 
 | Project | Framework | Type | URL Path |
 |---------|-----------|------|----------|
 | ssr-react | React 18 | SSR App | `/react` |
 | ssr-vue2 | Vue 2.7 | SSR App | `/vue2` |
 | ssr-vue3 | Vue 3.3 | SSR App | `/vue3` |
+| ssr-vue3-ecommerce | Vue 3.3 | SSR App | `/ecommerce` |
 
 ---
 
@@ -38,6 +39,7 @@ esmx-demo/
 │   ├── ssr-react/            # React SSR app
 │   ├── ssr-vue2/             # Vue 2.7 SSR app
 │   ├── ssr-vue3/             # Vue 3.3 SSR app
+│   ├── ssr-vue3-ecommerce/   # Vue 3 E-Commerce app
 │   ├── ssr-npm-base/         # Shared base packages
 │   ├── ssr-npm-react/        # React shared deps
 │   ├── ssr-npm-vue2/         # Vue 2 shared deps
@@ -46,7 +48,8 @@ esmx-demo/
 │   ├── index.html           # Dashboard with cards
 │   ├── react.html           # React app HTML
 │   ├── vue2.html            # Vue 2 app HTML
-│   └── vue3.html            # Vue 3 app HTML
+│   ├── vue3.html            # Vue 3 app HTML
+│   └── ecommerce.html       # E-Commerce app HTML
 ├── server.mjs               # Node.js server
 ├── Dockerfile               # Docker config
 ├── package.json             # Root package
@@ -136,14 +139,30 @@ export default defineConfig({
 
 **`src/entry.node.ts`**:
 ```typescript
-import { createServer } from '@esmx/core';
+import type { EsmxOptions } from '@esmx/core';
 
-const server = createServer({
-  // Node.js server entry
-});
-
-export default server;
+export default {
+  modules: {
+    links: {
+      'ssr-npm-base': './node_modules/ssr-npm-base/dist',
+      'ssr-npm-vue3': './node_modules/ssr-npm-vue3/dist'
+    },
+    imports: {
+      'vue': 'ssr-npm-vue3',
+      '@esmx/router': 'ssr-npm-base',
+      '@esmx/router-vue': 'ssr-npm-vue3'
+    },
+    exports: []
+  },
+  async devApp(esmx) {
+    return import('@esmx/rspack').then((m) =>
+      m.createRspackHtmlApp(esmx, { chain() {} })
+    );
+  }
+} satisfies EsmxOptions;
 ```
+
+**Important**: `entry.node.ts` must export an `EsmxOptions` object with module links and imports, NOT a server instance!
 
 **`src/entry.server.ts`**:
 ```typescript
@@ -208,26 +227,18 @@ Create `public/ecommerce.html`:
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-  <div id="app"></div>
-  <script type="module">
-    import { createApp } from 'vue';
-    
-    const app = createApp({
-      template: `
-        <div class="min-h-screen bg-gradient-to-br from-orange-400 to-red-500">
-          <div class="container mx-auto px-4 py-16">
-            <h1 class="text-5xl font-bold text-white mb-8">🛒 E-Commerce</h1>
-            <p class="text-xl text-white/90">Vue 3 E-Commerce Module</p>
-          </div>
-        </div>
-      `
-    });
-    
-    app.mount('#app');
-  </script>
+  <!-- Static HTML content - no ES module imports -->
+  <div class="min-h-screen bg-gradient-to-br from-orange-400 to-red-500">
+    <div class="container mx-auto px-4 py-16">
+      <h1 class="text-5xl font-bold text-white mb-8">🛒 E-Commerce</h1>
+      <p class="text-xl text-white/90">Vue 3 E-Commerce Module</p>
+    </div>
+  </div>
 </body>
 </html>
 ```
+
+**Important**: Use static HTML like other pages (vue2.html, vue3.html, react.html). Don't use ES module imports (`import { createApp } from 'vue'`) as they won't resolve correctly!
 
 ### Step 6: Update Server
 
