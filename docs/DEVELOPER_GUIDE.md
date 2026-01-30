@@ -1,74 +1,147 @@
-# ESMX Super App - Developer Guide
+# ESMX Super App - Complete Developer Guide
 
-## 📚 Table of Contents
+## 📍 Where Am I? (Important!)
 
-1. [Architecture Overview](#architecture-overview)
-2. [Project Structure](#project-structure)
-3. [Adding a New Project](#adding-a-new-project)
-4. [Local Development](#local-development)
-5. [Deployment](#deployment)
-6. [Troubleshooting](#troubleshooting)
+**Project Root**: `/Users/bayudarmawan/Documents/belajar/esmx-demo` (folder `esmx-demo`)
 
----
-
-## Architecture Overview
-
-ESMX Super App menggunakan **micro-frontend architecture** dengan pattern:
-
-- **Hub & Spokes**: `ssr-hub` sebagai entry point utama
-- **NPM Packages**: Shared packages (`ssr-npm-base`, `ssr-npm-react`, `ssr-npm-vue2`, `ssr-npm-vue3`)
-- **SSR Apps**: Individual apps (`ssr-react`, `ssr-vue2`, `ssr-vue3`)
-
-### Current Projects (4 Active)
-
-| Project | Framework | Type | URL Path |
-|---------|-----------|------|----------|
-| ssr-react | React 18 | SSR App | `/react` |
-| ssr-vue2 | Vue 2.7 | SSR App | `/vue2` |
-| ssr-vue3 | Vue 3.3 | SSR App | `/vue3` |
-| ssr-vue3-ecommerce | Vue 3.3 | SSR App | `/ecommerce` |
-
----
-
-## Project Structure
-
+**Working Directory Structure**:
 ```
-esmx-demo/
-├── my-super-app/
-│   ├── ssr-hub/              # Entry point & dashboard
-│   ├── ssr-react/            # React SSR app
-│   ├── ssr-vue2/             # Vue 2.7 SSR app
-│   ├── ssr-vue3/             # Vue 3.3 SSR app
-│   ├── ssr-vue3-ecommerce/   # Vue 3 E-Commerce app
-│   ├── ssr-npm-base/         # Shared base packages
-│   ├── ssr-npm-react/        # React shared deps
-│   ├── ssr-npm-vue2/         # Vue 2 shared deps
-│   └── ssr-npm-vue3/         # Vue 3 shared deps
-├── public/                   # Static HTML files
-│   ├── index.html           # Dashboard with cards
-│   ├── react.html           # React app HTML
-│   ├── vue2.html            # Vue 2 app HTML
-│   ├── vue3.html            # Vue 3 app HTML
-│   └── ecommerce.html       # E-Commerce app HTML
-├── server.mjs               # Node.js server
-├── Dockerfile               # Docker config
-├── package.json             # Root package
-└── pnpm-workspace.yaml      # PNPM workspace config
+esmx-demo/                    ← YOU ARE HERE (Root)
+├── my-super-app/            ← Sub-projects folder
+│   ├── ssr-hub/            ← Individual project
+│   ├── ssr-react/          ← Individual project
+│   ├── ssr-vue2/           ← Individual project
+│   ├── ssr-vue3/           ← Individual project
+│   ├── ssr-vue3-ecommerce/ ← Individual project (example)
+│   └── ssr-npm-*/          ← Shared packages
+├── public/                  ← Static HTML files
+├── server.mjs              ← Main server file
+├── package.json            ← Root package.json
+└── docs/                   ← This documentation
 ```
 
+**Rule of Thumb**:
+- 🔵 **BLUE commands** = Run in **ROOT** (`esmx-demo/`)
+- 🟢 **GREEN commands** = Run in **SUB-PROJECT** (`my-super-app/ssr-xxx/`)
+
 ---
 
-## Adding a New Project
+## 🚀 Quick Start (For First Time)
 
-### Step 1: Create Project Directory
+### Step 1: Open Terminal
+
+Open terminal and navigate to project root:
+```bash
+cd /Users/bayudarmawan/Documents/belajar/esmx-demo
+```
+
+### Step 2: Install Dependencies (Root)
+
+🔵 **Location**: `esmx-demo/`
+```bash
+pnpm install
+```
+
+### Step 3: Build All Projects (Root)
+
+🔵 **Location**: `esmx-demo/`
+```bash
+pnpm build
+```
+
+### Step 4: Start Server (Root)
+
+🔵 **Location**: `esmx-demo/`
+```bash
+node server.mjs
+```
+
+### Step 5: Open Browser
+
+Navigate to: http://localhost:3000
+
+---
+
+## 📚 Complete Command Reference
+
+### Daily Development Commands
+
+| Command | Where to Run | Description |
+|---------|--------------|-------------|
+| `pnpm install` | 🔵 Root | Install all dependencies |
+| `pnpm build` | 🔵 Root | Build ALL 9 packages |
+| `pnpm clean` | 🔵 Root | Delete all dist/ folders |
+| `node server.mjs` | 🔵 Root | Start production server |
+| `pnpm dev` | 🟢 Sub-project | Start single project dev mode |
+
+### Individual Project Commands
+
+🔵 **Build specific project from root**:
+```bash
+cd /Users/bayudarmawan/Documents/belajar/esmx-demo
+pnpm --filter ssr-vue3 build
+```
+
+🟢 **Build from inside project**:
+```bash
+cd my-super-app/ssr-vue3
+pnpm build
+```
+
+---
+
+## 🏗️ Project Architecture
+
+### Current Active Projects (4)
+
+| Project | Path | URL | Description |
+|---------|------|-----|-------------|
+| ssr-hub | `my-super-app/ssr-hub/` | `/` | Dashboard & entry point |
+| ssr-react | `my-super-app/ssr-react/` | `/react` | React 18 SSR app |
+| ssr-vue2 | `my-super-app/ssr-vue2/` | `/vue2` | Vue 2.7 SSR app |
+| ssr-vue3 | `my-super-app/ssr-vue3/` | `/vue3` | Vue 3.3 SSR app |
+| ssr-vue3-ecommerce | `my-super-app/ssr-vue3-ecommerce/` | `/ecommerce` | Vue 3 E-Commerce |
+
+### Shared Packages (4)
+
+| Package | Path | Purpose |
+|---------|------|---------|
+| ssr-npm-base | `my-super-app/ssr-npm-base/` | Base utilities & router |
+| ssr-npm-react | `my-super-app/ssr-npm-react/` | React shared deps |
+| ssr-npm-vue2 | `my-super-app/ssr-npm-vue2/` | Vue 2 shared deps |
+| ssr-npm-vue3 | `my-super-app/ssr-npm-vue3/` | Vue 3 shared deps |
+
+---
+
+## ➕ Adding New Project: Complete Walkthrough
+
+### Goal: Add `ssr-vue3-ecommerce` project
+
+---
+
+### Phase 1: Create Project Structure
+
+🔵 **Location**: `esmx-demo/`
 
 ```bash
+# Create directory structure
 mkdir -p my-super-app/ssr-vue3-ecommerce/src/pages
+mkdir -p my-super-app/ssr-vue3-ecommerce/rspack
 ```
 
-### Step 2: Create package.json
+**Verify**:
+```bash
+ls -la my-super-app/ssr-vue3-ecommerce/
+# Should show: src/ rspack/
+```
 
-Create `my-super-app/ssr-vue3-ecommerce/package.json`:
+---
+
+### Phase 2: Create package.json
+
+🔵 **Location**: `esmx-demo/`
+
+Create file: `my-super-app/ssr-vue3-ecommerce/package.json`
 
 ```json
 {
@@ -99,11 +172,17 @@ Create `my-super-app/ssr-vue3-ecommerce/package.json`:
 }
 ```
 
-**Important**: Use `ts-loader` instead of `builtin:swc-loader` to avoid parsing binary files in node_modules.
+**Key Points**:
+- Use `ts-loader` (NOT `builtin:swc-loader`)
+- Dependencies use `workspace:*` for shared packages
 
-### Step 3: Create Rspack Config
+---
 
-Create `my-super-app/ssr-vue3-ecommerce/rspack/config.ts`:
+### Phase 3: Create Rspack Config
+
+🔵 **Location**: `esmx-demo/`
+
+Create file: `my-super-app/ssr-vue3-ecommerce/rspack/config.ts`
 
 ```typescript
 import { defineConfig } from '@esmx/rspack';
@@ -121,7 +200,7 @@ export default defineConfig({
     extensions: ['.ts', '.js', '.json']
   },
   module: {
-    noParse: /node_modules/,  // Important: Skip parsing node_modules
+    noParse: /node_modules/,  // Critical: Skip parsing node_modules
     rules: [
       {
         test: /\.ts$/,
@@ -133,11 +212,19 @@ export default defineConfig({
 });
 ```
 
-### Step 4: Create Source Files
+**Critical Settings**:
+- `noParse: /node_modules/` - Prevents parsing binary files
+- `exclude: /node_modules/` in loader rules
+- Use `ts-loader` not swc-loader
 
-#### Entry Files
+---
 
-**`src/entry.node.ts`**:
+### Phase 4: Create Source Files
+
+🔵 **Location**: `esmx-demo/`
+
+#### File 1: src/entry.node.ts
+
 ```typescript
 import type { EsmxOptions } from '@esmx/core';
 
@@ -162,9 +249,10 @@ export default {
 } satisfies EsmxOptions;
 ```
 
-**Important**: `entry.node.ts` must export an `EsmxOptions` object with module links and imports, NOT a server instance!
+**⚠️ WARNING**: Must export `EsmxOptions` object, NOT a server instance!
 
-**`src/entry.server.ts`**:
+#### File 2: src/entry.server.ts
+
 ```typescript
 import { createApp } from 'vue';
 import { renderToString } from 'vue/server-renderer';
@@ -179,7 +267,8 @@ export default async function server(ctx: any) {
 }
 ```
 
-**`src/entry.client.ts`**:
+#### File 3: src/entry.client.ts
+
 ```typescript
 import { createApp } from 'vue';
 
@@ -190,15 +279,15 @@ const app = createApp({
 app.mount('#app');
 ```
 
-**`src/index.ts`**:
+#### File 4: src/index.ts
+
 ```typescript
 export { default as server } from './entry.server';
 export { default as client } from './entry.client';
 ```
 
-#### Page Component
+#### File 5: src/pages/HomePage.ts
 
-**`src/pages/HomePage.ts`**:
 ```typescript
 import { h } from 'vue';
 
@@ -213,9 +302,23 @@ export default {
 };
 ```
 
-### Step 5: Create HTML File
+**Verify all files created**:
+```bash
+ls -la my-super-app/ssr-vue3-ecommerce/src/
+# Should show: entry.client.ts entry.node.ts entry.server.ts index.ts
+# And folder: pages/
 
-Create `public/ecommerce.html`:
+ls -la my-super-app/ssr-vue3-ecommerce/src/pages/
+# Should show: HomePage.ts
+```
+
+---
+
+### Phase 5: Create HTML File
+
+🔵 **Location**: `esmx-demo/`
+
+Create file: `public/ecommerce.html`
 
 ```html
 <!DOCTYPE html>
@@ -227,7 +330,7 @@ Create `public/ecommerce.html`:
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-  <!-- Static HTML content - no ES module imports -->
+  <!-- Static HTML only - NO ES module imports -->
   <div class="min-h-screen bg-gradient-to-br from-orange-400 to-red-500">
     <div class="container mx-auto px-4 py-16">
       <h1 class="text-5xl font-bold text-white mb-8">🛒 E-Commerce</h1>
@@ -238,22 +341,39 @@ Create `public/ecommerce.html`:
 </html>
 ```
 
-**Important**: Use static HTML like other pages (vue2.html, vue3.html, react.html). Don't use ES module imports (`import { createApp } from 'vue'`) as they won't resolve correctly!
+**⚠️ WARNING**: Use static HTML like other pages. Don't use `<script type="module">` with ES imports!
 
-### Step 6: Update Server
+---
 
-Edit `server.mjs` to add route:
+### Phase 6: Update Server
 
+🔵 **Location**: `esmx-demo/`
+
+Edit file: `server.mjs`
+
+Find this section (around line 47-65):
 ```javascript
-// Add this condition in the URL routing section
+if (url === '/vue2' || url === '/vue2/') {
+  filePath = join(__dirname, 'public/vue2.html');
+  ext = '.html';
+} else if (url === '/vue3' || url === '/vue3/') {
+  filePath = join(__dirname, 'public/vue3.html');
+  ext = '.html';
+} else if (url === '/react' || url === '/react/') {
+  filePath = join(__dirname, 'public/react.html');
+  ext = '.html';
+} else if (url.startsWith('/my-super-app/')) {
+```
+
+Add new route BEFORE the last else if:
+```javascript
 } else if (url === '/ecommerce' || url === '/ecommerce/') {
   filePath = join(__dirname, 'public/ecommerce.html');
   ext = '.html';
 } else if (url.startsWith('/my-super-app/')) {
 ```
 
-Also update the console.log banner:
-
+Also update console banner (around line 91-105):
 ```javascript
 console.log('║  🌿 Vue 2:     /vue2                           ║');
 console.log('║  💜 Vue 3:     /vue3                           ║');
@@ -261,16 +381,20 @@ console.log('║  🔥 React:     /react                          ║');
 console.log('║  🛒 E-Commerce: /ecommerce                     ║');
 ```
 
-### Step 7: Update Dashboard
+---
 
-Edit `public/index.html`:
+### Phase 7: Update Dashboard
 
-1. Change grid to 4 columns:
-```html
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-```
+🔵 **Location**: `esmx-demo/`
 
-2. Add the 4th card after Vue 3 card:
+Edit file: `public/index.html`
+
+#### Change 1: Update Grid Columns
+Find: `<div class="grid md:grid-cols-3 gap-8">`
+Change to: `<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">`
+
+#### Change 2: Add 4th Card
+After Vue 3 card, add:
 ```html
 <a href="/ecommerce" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100 block cursor-pointer">
   <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
@@ -285,248 +409,265 @@ Edit `public/index.html`:
 </a>
 ```
 
-3. Update stats:
-```html
-<div class="text-3xl font-bold text-green-600 mb-1">8</div>
-<div class="text-green-700 text-sm">Packages Built</div>
-```
-
-```html
-<div class="text-3xl font-bold text-blue-600 mb-1">4</div>
-<div class="text-blue-700 text-sm">Frameworks</div>
-```
-
-### Step 8: Install Dependencies
-
-```bash
-pnpm install
-```
-
-### Step 9: Build Locally
-
-```bash
-pnpm clean
-pnpm build
-```
-
-### Step 10: Test Locally
-
-```bash
-node server.mjs
-```
-
-Open http://localhost:3000 and verify all 4 cards appear.
+#### Change 3: Update Stats
+Find and change:
+- Packages: `7` → `8`
+- Frameworks: `3` → `4`
 
 ---
 
-## Local Development
+### Phase 8: Update Dockerfile
 
-### Commands
+🔵 **Location**: `esmx-demo/`
 
-```bash
-# Install all dependencies
-pnpm install
+Edit file: `Dockerfile`
 
-# Build all packages
-pnpm build
-
-# Clean build artifacts
-pnpm clean
-
-# Start development server
-pnpm dev
-
-# Start production server
-node server.mjs
+Add COPY command for new project (around line 18):
+```dockerfile
+COPY my-super-app/ssr-vue3-ecommerce/package.json ./my-super-app/ssr-vue3-ecommerce/
 ```
 
-### Testing Individual Projects
+**Full Dockerfile section**:
+```dockerfile
+COPY package.json pnpm-workspace.yaml .npmrc ./
+COPY my-super-app/ssr-hub/package.json ./my-super-app/ssr-hub/
+COPY my-super-app/ssr-react/package.json ./my-super-app/ssr-react/
+COPY my-super-app/ssr-vue2/package.json ./my-super-app/ssr-vue2/
+COPY my-super-app/ssr-vue3/package.json ./my-super-app/ssr-vue3/
+COPY my-super-app/ssr-vue3-ecommerce/package.json ./my-super-app/ssr-vue3-ecommerce/  ← ADD THIS
+COPY my-super-app/ssr-npm-base/package.json ./my-super-app/ssr-npm-base/
+COPY my-super-app/ssr-npm-react/package.json ./my-super-app/ssr-npm-react/
+COPY my-super-app/ssr-npm-vue2/package.json ./my-super-app/ssr-npm-vue2/
+COPY my-super-app/ssr-npm-vue3/package.json ./my-super-app/ssr-npm-vue3/
+```
+
+---
+
+### Phase 9: Install Dependencies
+
+🔵 **Location**: `esmx-demo/`
 
 ```bash
-# Build specific project
+pnpm install
+```
+
+This will install dependencies for the new project too.
+
+---
+
+### Phase 10: Build Project
+
+🔵 **Location**: `esmx-demo/`
+
+**Option A: Build all projects**:
+```bash
+pnpm clean
+pnpm build
+```
+
+**Option B: Build only new project**:
+```bash
 cd my-super-app/ssr-vue3-ecommerce
 pnpm build
-
-# Test specific route
-curl http://localhost:3000/ecommerce
 ```
 
-### File Structure for New Project
-
-```
-ssr-vue3-ecommerce/
-├── package.json
-├── rspack/
-│   └── config.ts
-└── src/
-    ├── entry.client.ts
-    ├── entry.node.ts
-    ├── entry.server.ts
-    ├── index.ts
-    └── pages/
-        └── HomePage.ts
+Or from root:
+```bash
+pnpm --filter ssr-vue3-ecommerce build
 ```
 
 ---
 
-## Deployment
+### Phase 11: Test Locally
 
-### Prerequisites
+🔵 **Location**: `esmx-demo/`
 
-1. Railway CLI installed: `npm install -g @railway/cli`
-2. Logged in: `railway login`
-3. Project linked: `railway link`
+```bash
+node server.mjs
+```
 
-### Deploy Steps
+Open browser: http://localhost:3000
+
+**Verify**:
+- [ ] Dashboard shows 4 cards
+- [ ] Click E-Commerce card works
+- [ ] All other cards still work
+
+---
+
+### Phase 12: Deploy to Railway
+
+🔵 **Location**: `esmx-demo/`
 
 ```bash
 # Check status
 railway status
 
-# Deploy to specific service
+# Deploy
 railway up --service perceptive-compassion
 
-# View logs
+# Check logs
 railway logs
 
 # Get domain
 railway domain
 ```
 
-### Dockerfile Best Practices
+---
 
-Current Dockerfile:
+## 🧪 Testing Commands
 
-```dockerfile
-# Use Node 24 (required by ESMX)
-FROM node:24-alpine
+### Test from Root
 
-WORKDIR /app
+🔵 **Location**: `esmx-demo/`
 
-# Install pnpm
-RUN npm install -g pnpm
+```bash
+# Test all routes
+curl http://localhost:3000
+curl http://localhost:3000/react
+curl http://localhost:3000/vue2
+curl http://localhost:3000/vue3
+curl http://localhost:3000/ecommerce
 
-# Copy package files first (for caching)
-COPY package.json pnpm-workspace.yaml .npmrc ./
-COPY my-super-app/ssr-hub/package.json ./my-super-app/ssr-hub/
-COPY my-super-app/ssr-react/package.json ./my-super-app/ssr-react/
-COPY my-super-app/ssr-vue2/package.json ./my-super-app/ssr-vue2/
-COPY my-super-app/ssr-vue3/package.json ./my-super-app/ssr-vue3/
-COPY my-super-app/ssr-npm-base/package.json ./my-super-app/ssr-npm-base/
-COPY my-super-app/ssr-npm-react/package.json ./my-super-app/ssr-npm-react/
-COPY my-super-app/ssr-npm-vue2/package.json ./my-super-app/ssr-npm-vue2/
-COPY my-super-app/ssr-npm-vue3/package.json ./my-super-app/ssr-npm-vue3/
-# Add new project here:
-# COPY my-super-app/ssr-vue3-ecommerce/package.json ./my-super-app/ssr-vue3-ecommerce/
-
-# Install dependencies
-RUN pnpm install
-
-# Copy all source files
-COPY . .
-
-# Remove problematic C# files (optional safety)
-RUN find node_modules -type f -name "*.cs" -delete 2>/dev/null || true
-
-# Build all packages
-RUN pnpm build
-
-# Expose port
-EXPOSE 3000
-
-# Start server
-CMD ["node", "server.mjs"]
+# Check build output
+ls my-super-app/ssr-vue3-ecommerce/dist/
 ```
 
-**Important**: When adding new project, add its package.json COPY line before `pnpm install`.
+### Test Individual Project
+
+🟢 **Location**: `my-super-app/ssr-vue3-ecommerce/`
+
+```bash
+cd my-super-app/ssr-vue3-ecommerce
+
+# Build
+pnpm build
+
+# Check output
+ls dist/
+cat dist/manifest.json
+```
 
 ---
 
-## Troubleshooting
+## 🐛 Troubleshooting Guide
 
-### Build Fails with "Module parse failed"
+### Problem 1: "Module parse failed" Error
 
-**Error**: `JavaScript parse error: Unexpected character '\u{7f}'`
+**Symptom**: Build fails with `JavaScript parse error: Unexpected character`
 
-**Cause**: Rspack trying to parse binary files (.so, .node) in node_modules.
+**Cause**: Rspack trying to parse binary files in node_modules
 
-**Solution**: 
-1. Use `ts-loader` instead of `builtin:swc-loader`
-2. Add `noParse: /node_modules/` to rspack config
-3. Exclude node_modules in loader rules
+**Solution**:
+1. Check `rspack/config.ts` has:
+   - `noParse: /node_modules/`
+   - `use: 'ts-loader'` (not swc-loader)
+   - `exclude: /node_modules/` in rules
 
-### Build Fails with "Cannot find module"
-
-**Error**: `Cannot find module '@rspack/binding-linux-x64-musl'`
-
-**Cause**: Deleted .node files that are required.
-
-**Solution**: Don't delete `.node` files in Dockerfile, only `.cs` files.
-
-### Railway Deployment Fails
-
-**Check logs**:
+2. Rebuild:
 ```bash
-railway logs --deployment <deployment-id>
+pnpm clean
+pnpm build
 ```
 
-**Common fixes**:
-1. Ensure all package.json files are copied in Dockerfile
-2. Use `ts-loader` for new projects
-3. Add `noParse` to rspack config
+### Problem 2: "Cannot find module" Error
 
-### Local Works but Railway Fails
+**Symptom**: `Cannot find module '@rspack/binding-linux-x64-musl'`
 
-This usually happens because:
-1. Different Node versions (use node:24-alpine)
-2. Missing COPY commands in Dockerfile
-3. Binary file parsing issues (use ts-loader)
+**Cause**: Missing .node files (accidentally deleted)
 
-### Port Already in Use
+**Solution**:
+- Don't delete `.node` files in Dockerfile
+- Only delete `.cs` files if needed
 
+### Problem 3: Port Already in Use
+
+**Symptom**: `EADDRINUSE: address already in use :::3000`
+
+**Solution**:
 ```bash
-# Kill existing server
+# Kill all node processes
 pkill -f "node server.mjs"
 
 # Or use different port
 PORT=3001 node server.mjs
 ```
 
----
+### Problem 4: ES Module Import Error in Browser
 
-## Quick Reference
+**Symptom**: `Failed to resolve module specifier "vue"`
 
-### Adding Project Checklist
+**Cause**: Using ES module imports in HTML file
 
-- [ ] Create directory structure
-- [ ] Create package.json with ts-loader
-- [ ] Create rspack/config.ts with noParse
-- [ ] Create entry files (client, server, node, index)
-- [ ] Create page component
-- [ ] Create HTML file in public/
-- [ ] Update server.mjs route
-- [ ] Update public/index.html card
-- [ ] Update Dockerfile COPY command
-- [ ] Run pnpm install
-- [ ] Run pnpm build
-- [ ] Test locally
-- [ ] Deploy to Railway
-
-### File Templates
-
-See existing projects in `my-super-app/` for reference:
-- `ssr-vue3/` - Best reference for Vue 3 projects
-- `ssr-react/` - Best reference for React projects
-- `ssr-vue2/` - Best reference for Vue 2 projects
+**Solution**: Use static HTML only, no `<script type="module">`
 
 ---
 
-## Next Steps
+## ✅ Complete Checklist
 
-1. **Copy this guide** when creating new projects
-2. **Test locally first** before deploying
-3. **Use ts-loader** to avoid binary file issues
-4. **Always add noParse** to rspack config
-5. **Update Dockerfile** with new project package.json
+### Before Starting
+- [ ] Terminal open in `esmx-demo/` root
+- [ ] Node.js 24+ installed
+- [ ] PNPM installed
+
+### Creating Project
+- [ ] Directory structure created
+- [ ] package.json created with ts-loader
+- [ ] rspack/config.ts with noParse
+- [ ] All 5 source files created in correct locations
+- [ ] HTML file created in public/
+
+### Integration
+- [ ] server.mjs updated with new route
+- [ ] public/index.html updated with new card
+- [ ] Dockerfile updated with COPY command
+
+### Testing
+- [ ] pnpm install success
+- [ ] pnpm build success
+- [ ] node server.mjs starts without error
+- [ ] All 4 cards visible on dashboard
+- [ ] All routes return 200 OK
+
+### Deployment
+- [ ] railway up success
+- [ ] railway domain shows URL
+- [ ] Live site works correctly
+
+---
+
+## 📖 Reference: File Locations
+
+### Root Level Files (esmx-demo/)
+- `package.json` - Root package config
+- `pnpm-workspace.yaml` - Workspace definition
+- `server.mjs` - Main server
+- `Dockerfile` - Docker config
+- `.npmrc` - NPM config
+
+### Public Files (esmx-demo/public/)
+- `index.html` - Dashboard
+- `react.html` - React app page
+- `vue2.html` - Vue 2 app page
+- `vue3.html` - Vue 3 app page
+- `ecommerce.html` - E-Commerce page
+
+### Project Files (esmx-demo/my-super-app/PROJECT_NAME/)
+- `package.json` - Project config
+- `rspack/config.ts` - Build config
+- `src/entry.node.ts` - Node entry
+- `src/entry.server.ts` - Server entry
+- `src/entry.client.ts` - Client entry
+- `src/index.ts` - Main exports
+- `src/pages/*.ts` - Page components
+
+---
+
+## 🎯 Next Steps
+
+1. **Follow the walkthrough** step-by-step
+2. **Use correct directory** for each command
+3. **Test locally** before deploying
+4. **Check checklist** before moving to next phase
 
 Good luck! 🚀
