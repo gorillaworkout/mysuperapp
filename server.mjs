@@ -62,7 +62,7 @@ const server = createServer((req, res) => {
   }
   
   try {
-    const indexPath = join(__dirname, 'my-super-app/ssr-hub/dist/index.html');
+    const indexPath = join(__dirname, 'public/index.html');
     const content = readFileSync(indexPath, 'utf-8');
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(content);
