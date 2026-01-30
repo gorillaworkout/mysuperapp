@@ -11,5 +11,14 @@ export default defineConfig({
   },
   resolve: {
     extensions: ['.ts', '.js', '.json']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: 'builtin:swc-loader'
+      }
+    ]
   }
 });
