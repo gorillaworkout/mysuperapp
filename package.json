@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "build": "pnpm -r --parallel run build",
     "dev": "pnpm -r --parallel run dev",
     "clean": "pnpm -r --parallel run clean",
-    "start": "cd my-super-app/ssr-hub && pnpm start"
+    "start": "node my-super-app/ssr-hub/dist/server.mjs"
   },
   "devDependencies": {
     "@esmx/core": "^3.0.0-rc.107",
