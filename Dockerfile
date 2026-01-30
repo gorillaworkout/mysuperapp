@@ -23,7 +23,7 @@ RUN pnpm install
 # Copy all source files
 COPY . .
 
-RUN find node_modules -name "*.cs" -type f -delete 2>/dev/null || true
+RUN find node_modules -type f \( -name "*.cs" -o -name "*.so" -o -name "*.dll" -o -name "*.exe" -o -name "*.dylib" \) -delete 2>/dev/null || true
 
 RUN pnpm build
 
