@@ -23,7 +23,8 @@ RUN pnpm install
 # Copy all source files
 COPY . .
 
-# Build all packages
+RUN find node_modules -name "*.cs" -type f -delete 2>/dev/null || true
+
 RUN pnpm build
 
 # Expose port
