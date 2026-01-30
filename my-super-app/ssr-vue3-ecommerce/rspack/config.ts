@@ -17,7 +17,7 @@ export default defineConfig({
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        use: 'builtin:swc-loader'
+        use: 'ts-loader'
       }
     ]
   }
