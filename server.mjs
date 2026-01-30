@@ -21,13 +21,13 @@ const mimeTypes = {
 
 const server = createServer((req, res) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+
   let url = req.url === '/' ? '/index.html' : req.url;
-  
+
   if (url === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
@@ -38,12 +38,12 @@ const server = createServer((req, res) => {
     }));
     return;
   }
-  
+
   url = url.split('?')[0];
-  
+
   let filePath;
   let ext;
-  
+
   if (url === '/vue2' || url === '/vue2/') {
     filePath = join(__dirname, 'public/vue2.html');
     ext = '.html';
@@ -53,6 +53,9 @@ const server = createServer((req, res) => {
   } else if (url === '/react' || url === '/react/') {
     filePath = join(__dirname, 'public/react.html');
     ext = '.html';
+  } else if (url === '/ecommerce' || url === '/ecommerce/') {
+    filePath = join(__dirname, 'public/ecommerce.html');
+    ext = '.html';
   } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
     ext = url.match(/\.[^.]+$/)?.[0] || '';
@@ -60,9 +63,9 @@ const server = createServer((req, res) => {
     filePath = join(__dirname, 'public', url);
     ext = url.match(/\.[^.]+$/)?.[0] || '';
   }
-  
+
   const contentType = mimeTypes[ext] || 'application/octet-stream';
-  
+
   if (existsSync(filePath)) {
     try {
       const content = readFileSync(filePath);
@@ -73,7 +76,7 @@ const server = createServer((req, res) => {
       console.error('Error reading file:', error);
     }
   }
-  
+
   try {
     const indexPath = join(__dirname, 'public/index.html');
     const content = readFileSync(indexPath, 'utf-8');
@@ -92,9 +95,10 @@ server.listen(PORT, () => {
   console.log('║                                                ║');
   console.log('║  📍 URL: http://localhost:' + PORT + '                ║');
   console.log('║                                                ║');
-  console.log('║  🌿 Vue 2:  /vue2                              ║');
-  console.log('║  💜 Vue 3:  /vue3                              ║');
-  console.log('║  🔥 React:  /react                             ║');
+  console.log('║  🌿 Vue 2:     /vue2                           ║');
+  console.log('║  💜 Vue 3:     /vue3                           ║');
+  console.log('║  🔥 React:     /react                          ║');
+  console.log('║  🛒 E-Commerce: /ecommerce                     ║');
   console.log('║                                                ║');
   console.log('║  🛑 Press Ctrl+C to stop                       ║');
   console.log('╚════════════════════════════════════════════════╝');
