@@ -44,10 +44,18 @@ const server = createServer((req, res) => {
   const ext = url.match(/\.[^.]+$/)?.[0] || '';
   const contentType = mimeTypes[ext] || 'application/octet-stream';
   
-  let filePath = join(__dirname, 'my-super-app/ssr-hub/dist', url);
+  let filePath;
   
-  if (url.startsWith('/my-super-app/')) {
+  if (url.startsWith('/vue2')) {
+    filePath = join(__dirname, 'my-super-app/ssr-vue2/dist/VUE2-LANDING.html');
+  } else if (url.startsWith('/vue3')) {
+    filePath = join(__dirname, 'my-super-app/ssr-vue3/dist/VUE3-LANDING.html');
+  } else if (url.startsWith('/react')) {
+    filePath = join(__dirname, 'my-super-app/ssr-hub/dist/TEST-VIEWER-FIXED.html');
+  } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
+  } else {
+    filePath = join(__dirname, 'public', url);
   }
   
   if (existsSync(filePath)) {
@@ -78,6 +86,10 @@ server.listen(PORT, () => {
   console.log('╠════════════════════════════════════════════════╣');
   console.log('║                                                ║');
   console.log('║  📍 URL: http://localhost:' + PORT + '                ║');
+  console.log('║                                                ║');
+  console.log('║  🌿 Vue 2:  /vue2                              ║');
+  console.log('║  💜 Vue 3:  /vue3                              ║');
+  console.log('║  🔥 React:  /react                             ║');
   console.log('║                                                ║');
   console.log('║  🛑 Press Ctrl+C to stop                       ║');
   console.log('╚════════════════════════════════════════════════╝');
