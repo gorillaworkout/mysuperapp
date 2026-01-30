@@ -239,6 +239,31 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  my-super-app/ssr-vue3-admin:
+    dependencies:
+      ssr-npm-base:
+        specifier: workspace:*
+        version: link:../ssr-npm-base
+      ssr-npm-vue3:
+        specifier: workspace:*
+        version: link:../ssr-npm-vue3
+      vue:
+        specifier: ^3.3.4
+        version: 3.5.27(typescript@5.9.3)
+    devDependencies:
+      '@esmx/core':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107
+      '@esmx/rspack':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107(@esmx/core@3.0.0-rc.107)(less@4.5.1)(webpack@5.104.1)
+      ts-loader:
+        specifier: ^9.4.0
+        version: 9.5.4(typescript@5.9.3)(webpack@5.104.1)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   my-super-app/ssr-vue3-ecommerce:
     dependencies:
       ssr-npm-base:

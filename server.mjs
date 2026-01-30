@@ -56,6 +56,9 @@ const server = createServer((req, res) => {
   } else if (url === '/ecommerce' || url === '/ecommerce/') {
     filePath = join(__dirname, 'public/ecommerce.html');
     ext = '.html';
+  } else if (url === '/admin' || url === '/admin/') {
+    filePath = join(__dirname, 'public/admin.html');
+    ext = '.html';
   } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
     ext = url.match(/\.[^.]+$/)?.[0] || '';
@@ -99,6 +102,7 @@ server.listen(PORT, () => {
   console.log('║  💜 Vue 3:     /vue3                           ║');
   console.log('║  🔥 React:     /react                          ║');
   console.log('║  🛒 E-Commerce: /ecommerce                     ║');
+  console.log('║  🛒 Admin:     /admin                          ║');
   console.log('║  🛑 Press Ctrl+C to stop                       ║');
   console.log('╚════════════════════════════════════════════════╝');
 });
