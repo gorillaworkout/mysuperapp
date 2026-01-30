@@ -41,22 +41,27 @@ const server = createServer((req, res) => {
   
   url = url.split('?')[0];
   
-  const ext = url.match(/\.[^.]+$/)?.[0] || '';
-  const contentType = mimeTypes[ext] || 'application/octet-stream';
-  
   let filePath;
+  let ext;
   
   if (url === '/vue2' || url === '/vue2/') {
     filePath = join(__dirname, 'public/vue2.html');
+    ext = '.html';
   } else if (url === '/vue3' || url === '/vue3/') {
     filePath = join(__dirname, 'public/vue3.html');
+    ext = '.html';
   } else if (url === '/react' || url === '/react/') {
     filePath = join(__dirname, 'public/react.html');
+    ext = '.html';
   } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
+    ext = url.match(/\.[^.]+$/)?.[0] || '';
   } else {
     filePath = join(__dirname, 'public', url);
+    ext = url.match(/\.[^.]+$/)?.[0] || '';
   }
+  
+  const contentType = mimeTypes[ext] || 'application/octet-stream';
   
   if (existsSync(filePath)) {
     try {
