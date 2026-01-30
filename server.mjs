@@ -46,12 +46,12 @@ const server = createServer((req, res) => {
   
   let filePath;
   
-  if (url.startsWith('/vue2')) {
-    filePath = join(__dirname, 'my-super-app/ssr-vue2/dist/VUE2-LANDING.html');
-  } else if (url.startsWith('/vue3')) {
-    filePath = join(__dirname, 'my-super-app/ssr-vue3/dist/VUE3-LANDING.html');
-  } else if (url.startsWith('/react')) {
-    filePath = join(__dirname, 'my-super-app/ssr-hub/dist/TEST-VIEWER-FIXED.html');
+  if (url === '/vue2' || url === '/vue2/') {
+    filePath = join(__dirname, 'public/vue2.html');
+  } else if (url === '/vue3' || url === '/vue3/') {
+    filePath = join(__dirname, 'public/vue3.html');
+  } else if (url === '/react' || url === '/react/') {
+    filePath = join(__dirname, 'public/react.html');
   } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
   } else {

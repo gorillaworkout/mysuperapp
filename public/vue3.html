@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 3.3 Landing Page - ESMX Micro-Frontend</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    .animate-float-delayed {
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 3s;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-violet-50 via-purple-50 to-fuchsia-50 min-h-screen">
+  <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">💜</span>
+          <span class="font-bold text-xl text-gray-900">Vue 3.3</span>
+        </div>
+        <div class="flex gap-4">
+          <a href="/" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">← Dashboard</a>
+          <a href="/vue2" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Vue 2</a>
+          <a href="/react" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">React</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 opacity-10"></div>
+    <div class="absolute top-20 right-20 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+    <div class="absolute bottom-20 left-20 w-72 h-72 bg-fuchsia-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float-delayed"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+      <div class="text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-8">
+          <span class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
+          Vue 3.3 Micro-Frontend
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
+          Next-Gen Apps with <span class="gradient-text">Vue 3</span>
+        </h1>
+        
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Leverage the Composition API for maximum flexibility. 
+          Modern reactivity with ESMX micro-frontend architecture.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <button class="px-8 py-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl font-semibold hover:shadow-xl transition-all transform hover:-translate-y-1">
+            Start Building
+          </button>
+          <button class="px-8 py-4 bg-white text-purple-600 border-2 border-purple-200 rounded-xl font-semibold hover:border-purple-400 transition-all">
+            View Docs
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Vue 3 Superpowers</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Modern features for building scalable micro-frontends
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-purple-200">
+        <div class="w-16 h-16 bg-gradient-to-br from-violet-100 to-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-4xl">💜</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Composition API</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Better logic reuse with composables. More flexible and powerful than ever before.
+        </p>
+      </div>
+
+      <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-purple-200">
+        <div class="w-16 h-16 bg-gradient-to-br from-purple-100 to-fuchsia-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-4xl">⚡</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Proxy Reactivity</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Faster and more efficient reactivity system using JavaScript Proxies.
+        </p>
+      </div>
+
+      <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-purple-200">
+        <div class="w-16 h-16 bg-gradient-to-br from-fuchsia-100 to-pink-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-4xl">🚀</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Teleport & Suspense</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Advanced features for complex UIs. Render anywhere, handle async gracefully.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-gray-900 py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h3 class="text-2xl font-bold text-white mb-2">Clean & Modern Syntax</h3>
+        <p class="text-gray-400">Script setup with TypeScript</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 overflow-x-auto">
+        <pre class="text-sm text-gray-300"><code>&lt;script setup lang="ts"&gt;
+import { ref, computed } from 'vue'
+
+const count = ref(0)
+const doubled = computed(() => count.value * 2)
+
+function increment() {
+  count.value++
+}
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">3.3</div>
+          <div class="text-purple-200 text-lg">Vue Version</div>
+        </div>
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">30%</div>
+          <div class="text-purple-200 text-lg">Faster</div>
+        </div>
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">50%</div>
+          <div class="text-purple-200 text-lg">Smaller</div>
+        </div>
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">TS</div>
+          <div class="text-purple-200 text-lg">First Class</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-white rounded-3xl p-10 shadow-xl border border-gray-100">
+      <h3 class="text-3xl font-bold text-gray-900 mb-8 text-center">Modern Stack</h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        <span class="px-6 py-3 bg-violet-50 text-violet-700 rounded-xl font-semibold text-lg">Vue 3.3</span>
+        <span class="px-6 py-3 bg-purple-50 text-purple-700 rounded-xl font-semibold text-lg">Composition API</span>
+        <span class="px-6 py-3 bg-blue-50 text-blue-700 rounded-xl font-semibold text-lg">TypeScript 5</span>
+        <span class="px-6 py-3 bg-orange-50 text-orange-700 rounded-xl font-semibold text-lg">ESMX</span>
+        <span class="px-6 py-3 bg-cyan-50 text-cyan-700 rounded-xl font-semibold text-lg">Rspack</span>
+        <span class="px-6 py-3 bg-pink-50 text-pink-700 rounded-xl font-semibold text-lg">Tailwind CSS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 rounded-3xl p-12 text-center text-white shadow-2xl">
+      <h2 class="text-4xl font-bold mb-4">Ready to Build?</h2>
+      <p class="text-xl mb-8 text-purple-100 max-w-2xl mx-auto">
+        Start building your micro-frontend application with Vue 3.3 and ESMX today.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="px-8 py-4 bg-white text-purple-600 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-lg">
+          Start Building Now
+        </button>
+        <button class="px-8 py-4 bg-purple-700 text-white border-2 border-purple-400 rounded-xl font-bold hover:bg-purple-800 transition-all">
+          View Examples
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center gap-2 mb-4 md:mb-0">
+          <span class="text-3xl">💜</span>
+          <span class="font-bold text-2xl">Vue 3.3 Micro-App</span>
+        </div>
+        <div class="flex gap-6 text-gray-400">
+          <a href="#" class="hover:text-white transition-colors">Documentation</a>
+          <a href="#" class="hover:text-white transition-colors">GitHub</a>
+          <a href="#" class="hover:text-white transition-colors">ESMX</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500">
+        <p>Built with ESMX Federation • Part of ESMX Super App</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    console.log('💜 Vue 3.3 Landing Page Loaded');
+  </script>
+</body>
+</html>

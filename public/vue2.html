@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 2.7 Landing Page - ESMX Micro-Frontend</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 min-h-screen">
+  <!-- Navigation -->
+  <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🌿</span>
+          <span class="font-bold text-xl text-gray-900">Vue 2.7</span>
+        </div>
+        <div class="flex gap-4">
+          <a href="/" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">← Dashboard</a>
+          <a href="/vue3" class="text-gray-600 hover:text-purple-600 font-medium transition-colors">Vue 3</a>
+          <a href="/react" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">React</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-600 opacity-10"></div>
+    <div class="absolute top-20 right-20 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+      <div class="text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium mb-8">
+          <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+          Vue 2.7 Micro-Frontend
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
+          Build Modern Apps with <span class="gradient-text">Vue 2.7</span>
+        </h1>
+        
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Experience the power of Options API with ESMX Federation. 
+          Seamlessly integrated micro-frontend architecture for scalable applications.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <button class="px-8 py-4 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-all shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1">
+            Get Started
+          </button>
+          <button class="px-8 py-4 bg-white text-emerald-600 border-2 border-emerald-200 rounded-xl font-semibold hover:border-emerald-400 hover:bg-emerald-50 transition-all">
+            View Documentation
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Vue 2.7?</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Perfect balance of simplicity and power for your micro-frontend needs
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-emerald-200">
+        <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-4xl">🌿</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Options API</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Familiar and intuitive API pattern that makes development straightforward, maintainable, and easy to understand for teams.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-emerald-200">
+        <div class="w-16 h-16 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-4xl">⚡</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Lightning Fast</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Optimized reactivity system ensures your app runs smoothly with minimal overhead and maximum performance.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-emerald-200">
+        <div class="w-16 h-16 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-4xl">🔗</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">ESMX Ready</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Built specifically for micro-frontend architecture with seamless module federation and zero-bundler sharing.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">2.7</div>
+          <div class="text-emerald-100 text-lg">Vue Version</div>
+        </div>
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">100%</div>
+          <div class="text-emerald-100 text-lg">TypeScript</div>
+        </div>
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">ESM</div>
+          <div class="text-emerald-100 text-lg">Native Modules</div>
+        </div>
+        <div class="p-4">
+          <div class="text-5xl font-bold mb-2">SSR</div>
+          <div class="text-emerald-100 text-lg">Ready</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-white rounded-3xl p-10 shadow-xl border border-gray-100">
+      <h3 class="text-3xl font-bold text-gray-900 mb-8 text-center">Technology Stack</h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        <span class="px-6 py-3 bg-emerald-50 text-emerald-700 rounded-xl font-semibold text-lg hover:bg-emerald-100 transition-colors cursor-default">Vue 2.7</span>
+        <span class="px-6 py-3 bg-blue-50 text-blue-700 rounded-xl font-semibold text-lg hover:bg-blue-100 transition-colors cursor-default">Options API</span>
+        <span class="px-6 py-3 bg-purple-50 text-purple-700 rounded-xl font-semibold text-lg hover:bg-purple-100 transition-colors cursor-default">TypeScript</span>
+        <span class="px-6 py-3 bg-orange-50 text-orange-700 rounded-xl font-semibold text-lg hover:bg-orange-100 transition-colors cursor-default">ESMX</span>
+        <span class="px-6 py-3 bg-cyan-50 text-cyan-700 rounded-xl font-semibold text-lg hover:bg-cyan-100 transition-colors cursor-default">Rspack</span>
+        <span class="px-6 py-3 bg-pink-50 text-pink-700 rounded-xl font-semibold text-lg hover:bg-pink-100 transition-colors cursor-default">Tailwind CSS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl p-12 text-center text-white shadow-2xl">
+      <h2 class="text-4xl font-bold mb-4">Ready to Build?</h2>
+      <p class="text-xl mb-8 text-emerald-100 max-w-2xl mx-auto">
+        Start building your micro-frontend application with Vue 2.7 and ESMX today.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="px-8 py-4 bg-white text-emerald-600 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-lg">
+          Start Building Now
+        </button>
+        <button class="px-8 py-4 bg-emerald-700 text-white border-2 border-emerald-400 rounded-xl font-bold hover:bg-emerald-800 transition-all">
+          View Examples
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center gap-2 mb-4 md:mb-0">
+          <span class="text-3xl">🌿</span>
+          <span class="font-bold text-2xl">Vue 2.7 Micro-App</span>
+        </div>
+        <div class="flex gap-6 text-gray-400">
+          <a href="#" class="hover:text-white transition-colors">Documentation</a>
+          <a href="#" class="hover:text-white transition-colors">GitHub</a>
+          <a href="#" class="hover:text-white transition-colors">ESMX</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500">
+        <p>Built with ESMX Federation • Part of ESMX Super App</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    console.log('🌿 Vue 2.7 Landing Page Loaded');
+    console.log('This is a static HTML version of the Vue 2.7 HomePage component');
+  </script>
+</body>
+</html>
