@@ -1,31 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Commerce - Vue 3</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-
 <body class="bg-gray-50">
-    <div id="app"></div>
-    <script type="module">
-        import { createApp } from 'vue';
-
-        const app = createApp({
-            template: `
-        <div class="min-h-screen bg-gradient-to-br from-orange-400 to-red-500">
-          <div class="container mx-auto px-4 py-16">
-            <h1 class="text-5xl font-bold text-white mb-8">🛒 E-Commerce</h1>
-            <p class="text-xl text-white/90">Vue 3 E-Commerce Module</p>
-          </div>
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🛒</span>
+                    <span class="font-bold text-xl text-gray-900">E-Commerce</span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">← Dashboard</a>
+                    <a href="/vue2" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Vue 2</a>
+                    <a href="/vue3" class="text-gray-600 hover:text-purple-600 font-medium transition-colors">Vue 3</a>
+                    <a href="/react" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">React</a>
+                </div>
+            </div>
         </div>
-      `
-        });
+    </nav>
 
-        app.mount('#app');
+    <div class="min-h-screen bg-gradient-to-br from-orange-400 to-red-500">
+        <div class="container mx-auto px-4 py-16">
+            <div class="text-center">
+                <h1 class="text-5xl font-bold text-white mb-8">🛒 E-Commerce</h1>
+                <p class="text-xl text-white/90 mb-8">Vue 3 E-Commerce Module</p>
+                
+                <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <div class="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white">
+                        <div class="text-4xl mb-4">📦</div>
+                        <h3 class="text-xl font-bold mb-2">Products</h3>
+                        <p class="text-white/80">Manage your product catalog</p>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white">
+                        <div class="text-4xl mb-4">🛍️</div>
+                        <h3 class="text-xl font-bold mb-2">Orders</h3>
+                        <p class="text-white/80">Track customer orders</p>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white">
+                        <div class="text-4xl mb-4">👥</div>
+                        <h3 class="text-xl font-bold mb-2">Customers</h3>
+                        <p class="text-white/80">Customer management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400">Built with ESMX Federation • Vue 3 E-Commerce Module</p>
+        </div>
+    </footer>
+
+    <script>
+        console.log('🛒 E-Commerce Module Loaded');
     </script>
 </body>
-
 </html>
