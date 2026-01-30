@@ -10,7 +10,10 @@
     "./@esmx/core": "./dist/core/index.js",
     "./@esmx/class-state": "./dist/class-state/index.js",
     "./@esmx/fetch": "./dist/fetch/index.js",
-    "./router-react": "./dist/router-react/index.js"
+    "./@esmx/router-vue": "./dist/router-vue/index.js",
+    "./@esmx/router-react": "./dist/router-react/index.js",
+    "./router-react": "./dist/router-react/index.js",
+    "./router-vue": "./dist/router-vue/index.js"
   },
   "scripts": {
     "build": "esmx build",

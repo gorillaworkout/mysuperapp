@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { HomePage } from './pages/HomePage.js';
+import { HomePage } from './pages/HomePage.tsx';
 import type { RenderContext } from '@esmx/core';
 
 export default async function serverEntry(rc: RenderContext) {

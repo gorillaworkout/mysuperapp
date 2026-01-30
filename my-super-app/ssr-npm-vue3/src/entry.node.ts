@@ -4,7 +4,11 @@ export default {
   modules: {
     links: { 'ssr-npm-base': './node_modules/ssr-npm-base/dist' },
     imports: {
-      '@esmx/router': 'ssr-npm-base/@esmx/router'
+      'vue': 'ssr-npm-vue3',
+      '@esmx/router': 'ssr-npm-vue3',
+      '@esmx/core': 'ssr-npm-vue3',
+      '@esmx/class-state': 'ssr-npm-vue3',
+      '@esmx/fetch': 'ssr-npm-vue3'
     },
     exports: [
       "pkg:vue"

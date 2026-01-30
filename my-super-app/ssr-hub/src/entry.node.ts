@@ -12,17 +12,13 @@ export default {
       'ssr-vue3': './node_modules/ssr-vue3/dist'
     },
     imports: {
-      '@esmx/router': 'ssr-npm-base/@esmx/router',
-      '@esmx/core': 'ssr-npm-base/@esmx/core',
+      '@esmx/router': 'ssr-npm-base',
+      '@esmx/router-react': 'ssr-npm-react',
+      '@esmx/router-vue': 'ssr-npm-vue3',
       'react': 'ssr-npm-react',
-      'react-dom': 'ssr-npm-react',
-      '@esmx/router-react': 'ssr-npm-react/router-react',
-      'vue': 'ssr-npm-vue3',
-      '@esmx/router-vue': 'ssr-npm-vue3/router-vue'
+      'react-dom': 'ssr-npm-react'
     },
-    exports: [
-      "layout/MainLayout"
-    ]
+    exports: []
   },
   async devApp(esmx) {
     return import('@esmx/rspack').then((m) =>

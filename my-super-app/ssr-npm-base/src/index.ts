@@ -1,7 +1,5 @@
-// Main exports for ssr-npm-base
-export * from '@esmx/router';
-export * from '@esmx/core';
-export * from '@esmx/class-state';
-export * from '@esmx/fetch';
-export * from './router-react/index.js';
-export * from './router-vue/index.js';
+// SSR NPM Base Provider
+// This is a pure aggregation package - all functionality comes from @esmx/* dependencies
+// The package.json defines the exports, no actual code needed here
+console.log('ssr-npm-base provider initialized');
+export const PROVIDER = 'ssr-npm-base';

@@ -5,8 +5,4 @@ export const App = defineComponent({
   template: '<router-view/>'
 });
 
-router.addRoute('/vue3', { component: HomePage });
-
-export default function createApp() {
-  return createApp(App);
-}
+export default App;

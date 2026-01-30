@@ -2,21 +2,17 @@ import type { EsmxOptions } from '@esmx/core';
 
 export default {
   modules: {
+    lib: true,
     links: {},
     imports: {},
     exports: [
       "pkg:@esmx/router",
-      "pkg:@esmx/core", 
-      "pkg:@esmx/class-state",
-      "pkg:@esmx/fetch"
+      "pkg:@esmx/class-state"
     ]
   },
   async devApp(esmx) {
-    return {
-      async start() {
-        console.log('ssr-npm-base provider ready');
-        return new Promise(() => {}); // Keep running
-      }
-    };
+    return import('@esmx/rspack').then((m) =>
+      m.createRspackHtmlApp(esmx, { chain() {} })
+    );
   }
 } satisfies EsmxOptions;

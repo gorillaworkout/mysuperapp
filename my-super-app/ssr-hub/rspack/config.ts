@@ -10,16 +10,7 @@ export default defineConfig({
     clean: true
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
-  },
-  module: {
-    rules: [
-      {
-        test: /\.[jt]sx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
-      }
-    ]
+    extensions: ['.tsx', '.ts', '.js', '.jsx', '.json']
   },
   devServer: {
     port: 3000,

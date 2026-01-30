@@ -8,12 +8,10 @@ export default {
     imports: {
       'react': 'ssr-npm-react',
       'react-dom': 'ssr-npm-react',
-      '@esmx/router': 'ssr-npm-react/ssr-npm-base/@esmx/router',
-      '@esmx/router-react': 'ssr-npm-react/router-react'
+      '@esmx/router': 'ssr-npm-react',
+      '@esmx/router-react': 'ssr-npm-react'
     },
-    exports: [
-      "pages/HomePage"
-    ]
+    exports: []
   },
   async devApp(esmx) {
     return import('@esmx/rspack').then((m) =>

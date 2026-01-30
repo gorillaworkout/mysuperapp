@@ -4,7 +4,12 @@ export default {
   modules: {
     links: { 'ssr-npm-base': './node_modules/ssr-npm-base/dist' },
     imports: {
-      '@esmx/router': 'ssr-npm-base/@esmx/router'
+      'react': 'ssr-npm-react',
+      'react-dom': 'ssr-npm-react',
+      '@esmx/router': 'ssr-npm-react',
+      '@esmx/core': 'ssr-npm-react',
+      '@esmx/class-state': 'ssr-npm-react',
+      '@esmx/fetch': 'ssr-npm-react'
     },
     exports: [
       "pkg:react",

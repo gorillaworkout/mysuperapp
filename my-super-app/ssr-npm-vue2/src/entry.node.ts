@@ -6,15 +6,14 @@ export default {
       'ssr-npm-base': './node_modules/ssr-npm-base/dist' 
     },
     imports: {
-      '@esmx/router': 'ssr-npm-base/@esmx/router',
-      '@esmx/core': 'ssr-npm-base/@esmx/core',
-      '@esmx/class-state': 'ssr-npm-base/@esmx/class-state',
-      '@esmx/fetch': 'ssr-npm-base/@esmx/fetch'
+      'vue': 'ssr-npm-vue2',
+      '@esmx/router': 'ssr-npm-vue2',
+      '@esmx/core': 'ssr-npm-vue2',
+      '@esmx/class-state': 'ssr-npm-vue2',
+      '@esmx/fetch': 'ssr-npm-vue2'
     },
     exports: [
-      "pkg:vue",
-      "pkg:ssr-npm-base",
-      "pkg:ssr-npm-base/@esmx/router-vue"
+      "pkg:vue"
     ]
   },
   async devApp(esmx) {

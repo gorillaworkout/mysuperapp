@@ -10,7 +10,7 @@ export default defineConfig({
     clean: true
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+    extensions: ['.tsx', '.ts', '.js', '.jsx', '.json']
   },
   module: {
     rules: [

@@ -1,11 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { MainLayout } from './layout/MainLayout.js';
+import { MainLayout } from './layout/MainLayout.tsx';
 import { Router } from '@esmx/router';
 
 const router = Router.getInstance();
-
-router.push(window.location.pathname);
 
 export function App() {
   return React.createElement(MainLayout);
