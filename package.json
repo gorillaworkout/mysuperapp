@@ -10,7 +10,7 @@
     "build": "pnpm -r --parallel run build",
     "dev": "pnpm -r --parallel run dev",
     "clean": "pnpm -r --parallel run clean",
-    "start": "node my-super-app/ssr-hub/dist/server.mjs"
+    "start": "node server.mjs"
   },
   "devDependencies": {
     "@esmx/core": "^3.0.0-rc.107",
