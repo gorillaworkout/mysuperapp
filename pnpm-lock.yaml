@@ -50,6 +50,33 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
+      ssr-npm-base:
+        specifier: workspace:*
+        version: link:../ssr-npm-base
+      ssr-npm-react:
+        specifier: workspace:*
+        version: link:../ssr-npm-react
+      ssr-npm-vue2:
+        specifier: workspace:*
+        version: link:../ssr-npm-vue2
+      ssr-npm-vue3:
+        specifier: workspace:*
+        version: link:../ssr-npm-vue3
+      ssr-react:
+        specifier: workspace:*
+        version: link:../ssr-react
+      ssr-vue2:
+        specifier: workspace:*
+        version: link:../ssr-vue2
+      ssr-vue3:
+        specifier: workspace:*
+        version: link:../ssr-vue3
+      ssr-vue3-admin:
+        specifier: workspace:*
+        version: link:../ssr-vue3-admin
+      ssr-vue3-ecommerce:
+        specifier: workspace:*
+        version: link:../ssr-vue3-ecommerce
     devDependencies:
       '@esmx/core':
         specifier: ^3.0.0-rc.107
@@ -63,6 +90,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.0
         version: 18.3.7(@types/react@18.3.27)
+      ts-loader:
+        specifier: ^9.4.0
+        version: 9.5.4(typescript@5.9.3)(webpack@5.104.1)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3

@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESMX Super App - Deployed on Railway</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>ESMX Super App - Micro-Frontend Architecture</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -12,124 +15,429 @@
     body {
       font-family: 'Inter', sans-serif;
     }
-
-    .gradient-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    .card-hover {
-      transition: all 0.3s ease;
-    }
-
-    .card-hover:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    }
   </style>
 </head>
 
 <body class="bg-gray-50 min-h-screen">
-  <div class="gradient-bg text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-5xl font-bold mb-4">🚀 ESMX Super App</h1>
-      <p class="text-xl text-blue-100 max-w-2xl mx-auto">
-        Successfully Deployed on Railway!
-      </p>
-      <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm">
-        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-        Production Ready
-      </div>
-    </div>
-  </div>
+  <div id="app"></div>
 
-  <main id="spa-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 mb-4">Micro-Frontend Architecture</h2>
-      <p class="text-gray-600">All 8 packages built and deployed successfully</p>
-    </div>
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react-dom": "https://esm.sh/react-dom@18.3.1",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+      "react-router-dom": "https://esm.sh/react-router-dom@6.22.0?deps=react@18.3.1,react-dom@18.3.1",
+      "vue": "https://esm.sh/vue@3.5.13",
+      "vue-router": "https://esm.sh/vue-router@4.2.5?deps=vue@3.5.13"
+    }
+  }
+  </script>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- React SSR Card -->
-      <a href="/react" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-3xl">🔥</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">React SSR</h3>
-        <p class="text-gray-600 mb-4">React 18 + TypeScript + SSR</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">React 18</span>
-          <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">SSR</span>
-        </div>
-      </a>
+  <script type="module">
+    import { createApp, h } from 'vue';
+    import { createRouter, createWebHistory } from 'vue-router';
+    import React from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+    
+    // Detect which framework to use based on route
+    const path = window.location.pathname;
+    const isVueRoute = ['/vue2', '/vue3', '/ecommerce', '/admin'].some(route => path.startsWith(route));
+    
+    if (isVueRoute) {
+      // ========== VUE ROUTER IMPLEMENTATION ==========
+      
+      // Vue Header Component
+      const VueHeader = {
+        template: `
+          <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="flex items-center justify-between h-16">
+                <router-link to="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                  🚀 ESMX Super App
+                </router-link>
+                <nav class="flex space-x-1">
+                  <router-link to="/react" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">
+                    React
+                  </router-link>
+                  <router-link to="/vue2" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">
+                    Vue 2
+                  </router-link>
+                  <router-link to="/vue3" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">
+                    Vue 3
+                  </router-link>
+                  <router-link to="/ecommerce" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">
+                    E-Commerce
+                  </router-link>
+                  <router-link to="/admin" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">
+                    Admin
+                  </router-link>
+                </nav>
+              </div>
+            </div>
+          </header>
+        `
+      };
+      
+      // Vue Footer Component
+      const VueFooter = {
+        template: `
+          <footer class="bg-gray-900 text-white py-8 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="text-center text-gray-400">
+                ✅ Using Vue Router v4 • Built with ESMX Federation • Micro-Frontend Architecture
+              </div>
+            </div>
+          </footer>
+        `
+      };
+      
+      // Vue Dashboard Component
+      const VueDashboard = {
+        template: `
+          <div class="space-y-8">
+            <div class="text-center space-y-4">
+              <h1 class="text-5xl font-bold text-gray-900">ESMX Super App</h1>
+              <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Micro-frontend architecture with Vue Router, SSR, and ESMX Federation
+              </p>
+              <div class="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+                ✅ Vue Router v4 Active
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="app in apps" :key="app.name" @click="$router.push('/' + app.name)" 
+                   :class="'bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-' + app.color + '-200 group'">
+                <div class="p-6 space-y-4">
+                  <div class="flex items-center justify-between">
+                    <div class="text-4xl">{{ app.icon }}</div>
+                    <div :class="'text-xs font-medium px-2 py-1 rounded ' + (app.status.includes('✅') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700')">
+                      {{ app.status }}
+                    </div>
+                  </div>
+                  <h3 :class="'text-xl font-bold text-gray-900 group-hover:text-' + app.color + '-600 transition-colors'">
+                    {{ app.title }}
+                  </h3>
+                  <p class="text-gray-600 text-sm">{{ app.desc }}</p>
+                  <button :class="'w-full mt-4 bg-' + app.color + '-600 hover:bg-' + app.color + '-700 text-white font-medium py-2 px-4 rounded-lg transition-colors'">
+                    Launch App →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        data() {
+          return {
+            apps: [
+              { name: 'react', icon: '🔥', title: 'React SSR', desc: 'React 18 + TypeScript + Server-Side Rendering', color: 'blue', status: '✅ SSR Ready' },
+              { name: 'vue2', icon: '🌿', title: 'Vue 2.7 Classic', desc: 'Options API + Composition API Support', color: 'emerald', status: '⏳ Pending' },
+              { name: 'vue3', icon: '💜', title: 'Vue 3 Composition', desc: 'Modern Vue with Composition API', color: 'purple', status: '⏳ Pending' },
+              { name: 'ecommerce', icon: '🛒', title: 'E-Commerce Platform', desc: 'Full-featured shopping experience', color: 'orange', status: '⏳ Pending' },
+              { name: 'admin', icon: '⚙️', title: 'Admin Dashboard', desc: 'Management and analytics', color: 'gray', status: '⏳ Pending' }
+            ]
+          };
+        }
+      };
+      
+      // Vue MicroApp Component
+      const VueMicroApp = {
+        template: `
+          <div class="space-y-6">
+            <div :class="'bg-gradient-to-br from-' + app.color + '-50 to-' + app.color + '-100 rounded-2xl p-8 shadow-lg'">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="text-6xl backdrop-blur-sm bg-white/50 rounded-2xl p-4">{{ app.icon }}</div>
+                <div>
+                  <h1 :class="'text-4xl font-bold text-' + app.color + '-900'">{{ app.title }}</h1>
+                  <p :class="'text-' + app.color + '-700 mt-2'">Route: /{{ $route.params.appName }}</p>
+                </div>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div v-for="(feature, i) in app.features" :key="i" 
+                     :class="'bg-white/80 backdrop-blur rounded-lg p-4 border border-' + app.color + '-200'">
+                  <div class="flex items-center gap-2">
+                    <span class="text-green-500 font-bold">✓</span>
+                    <span class="text-gray-700 font-medium">{{ feature }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">🚀 Powered by Vue Router</h2>
+              <div class="space-y-2 text-gray-600">
+                <p>✅ Current route: {{ $route.params.appName }}</p>
+                <p>✅ Navigation without page reload</p>
+                <p>✅ Browser back/forward support</p>
+                <p>✅ URL-based routing with $route.params</p>
+                <p>✅ Programmatic navigation with $router.push()</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <button @click="$router.back()" 
+                      class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                ← Back
+              </button>
+              <button @click="$router.push('/')" 
+                      :class="'flex-1 bg-' + app.color + '-600 hover:bg-' + app.color + '-700 text-white font-medium py-3 px-6 rounded-lg transition-colors'">
+                🏠 Dashboard
+              </button>
+            </div>
+          </div>
+        `,
+        computed: {
+          app() {
+            const apps = {
+              'react': { icon: '🔥', title: 'React SSR Application', color: 'blue', features: ['Server-Side Rendering', 'Client Hydration', 'React 18 Hooks', 'TypeScript Support'] },
+              'vue2': { icon: '🌿', title: 'Vue 2.7 Classic', color: 'emerald', features: ['Options API', 'Composition API', 'Reactive Data', 'Component System'] },
+              'vue3': { icon: '💜', title: 'Vue 3 Composition', color: 'purple', features: ['Composition API', 'Teleport', 'Fragments', 'Suspense'] },
+              'ecommerce': { icon: '🛒', title: 'E-Commerce Platform', color: 'orange', features: ['Product Catalog', 'Shopping Cart', 'Checkout Flow', 'Order Management'] },
+              'admin': { icon: '⚙️', title: 'Admin Dashboard', color: 'gray', features: ['Analytics', 'User Management', 'Settings', 'Reports'] }
+            };
+            return apps[this.$route.params.appName] || { icon: '❓', title: 'Unknown App', color: 'gray', features: [] };
+          }
+        }
+      };
+      
+      // Vue Router Configuration
+      const routes = [
+        { path: '/', component: VueDashboard },
+        { path: '/:appName', component: VueMicroApp }
+      ];
+      
+      const router = createRouter({
+        history: createWebHistory(),
+        routes
+      });
+      
+      // Vue App
+      const VueApp = {
+        template: `
+          <div class="min-h-screen flex flex-col">
+            <VueHeader />
+            <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+              <router-view />
+            </main>
+            <VueFooter />
+          </div>
+        `,
+        components: {
+          VueHeader,
+          VueFooter
+        }
+      };
+      
+      // Mount Vue App
+      const app = createApp(VueApp);
+      app.use(router);
+      app.mount('#app');
+      
+      console.log('✅ Vue Router v4 initialized');
+      console.log('📍 Vue Routes:', routes.map(r => r.path));
+    } else {
+      // ========== REACT ROUTER IMPLEMENTATION ==========
+      const h = React.createElement;
+    
+      // Header Component
+      const Header = () => {
+        return h('header', { className: 'bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50' },
+          h('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' },
+            h('div', { className: 'flex items-center justify-between h-16' },
+              h(Link, {
+                to: '/',
+                className: 'flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors'
+              }, '🚀 ESMX Super App'),
+              h('nav', { className: 'flex space-x-1' },
+                [
+                  { name: 'React', path: '/react' },
+                  { name: 'Vue 2', path: '/vue2' },
+                  { name: 'Vue 3', path: '/vue3' },
+                  { name: 'E-Commerce', path: '/ecommerce' },
+                  { name: 'Admin', path: '/admin' }
+                ].map(item =>
+                  h(Link, {
+                    key: item.path,
+                    to: item.path,
+                    className: 'font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                  }, item.name)
+                )
+              )
+            )
+          )
+        );
+      };
 
-      <!-- Vue 2.7 Card -->
-      <a href="/vue2" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-3xl">🌿</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Vue 2.7</h3>
-        <p class="text-gray-600 mb-4">Options API + ESMX Federation</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium">Vue 2.7</span>
-          <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-sm font-medium">CSR</span>
-        </div>
-      </a>
+      // Footer Component
+      const Footer = () => {
+        return h('footer', { className: 'bg-gray-900 text-white py-8 mt-auto' },
+          h('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' },
+            h('div', { className: 'text-center text-gray-400' },
+              '✅ Using React Router v6 • Built with ESMX Federation • Micro-Frontend Architecture'
+            )
+          )
+        );
+      };
+        
+      // Dashboard Component
+      const Dashboard = () => {
+        const navigate = useNavigate();
+        const apps = [
+          { name: 'react', icon: '🔥', title: 'React SSR', desc: 'React 18 + TypeScript + Server-Side Rendering', color: 'blue', status: '✅ SSR Ready' },
+          { name: 'vue2', icon: '🌿', title: 'Vue 2.7 Classic', desc: 'Options API + Composition API Support', color: 'emerald', status: '⏳ Pending' },
+          { name: 'vue3', icon: '💜', title: 'Vue 3 Composition', desc: 'Modern Vue with Composition API', color: 'purple', status: '⏳ Pending' },
+          { name: 'ecommerce', icon: '🛒', title: 'E-Commerce Platform', desc: 'Full-featured shopping experience', color: 'orange', status: '⏳ Pending' },
+          { name: 'admin', icon: '⚙️', title: 'Admin Dashboard', desc: 'Management and analytics', color: 'gray', status: '⏳ Pending' }
+        ];
 
-      <!-- Vue 3.3 Card -->
-      <a href="/vue3" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-3xl">💜</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Vue 3.3</h3>
-        <p class="text-gray-600 mb-4">Composition API + Modern</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">Vue 3.3</span>
-          <span class="px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">CSR</span>
-        </div>
-      </a>
+        return h('div', { className: 'space-y-8' },
+          h('div', { className: 'text-center space-y-4' },
+            h('h1', { className: 'text-5xl font-bold text-gray-900' }, 'ESMX Super App'),
+            h('p', { className: 'text-xl text-gray-600 max-w-2xl mx-auto' },
+              'Micro-frontend architecture with React Router, SSR, and ESMX Federation'
+            ),
+            h('div', { className: 'inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium' },
+              '✅ React Router v6 Active'
+            )
+          ),
+          h('div', { className: 'grid md:grid-cols-2 lg:grid-cols-3 gap-6' },
+            apps.map(app =>
+              h('div', {
+                key: app.name,
+                onClick: () => navigate(`/${app.name}`),
+                className: `bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-${app.color}-200 group`
+              },
+                h('div', { className: 'p-6 space-y-4' },
+                  h('div', { className: 'flex items-center justify-between' },
+                    h('div', { className: 'text-4xl' }, app.icon),
+                    h('div', { className: `text-xs font-medium px-2 py-1 rounded ${app.status.includes('✅') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}` },
+                      app.status
+                    )
+                  ),
+                  h('h3', { className: `text-xl font-bold text-gray-900 group-hover:text-${app.color}-600 transition-colors` },
+                    app.title
+                  ),
+                  h('p', { className: 'text-gray-600 text-sm' }, app.desc),
+                  h('button', {
+                    className: `w-full mt-4 bg-${app.color}-600 hover:bg-${app.color}-700 text-white font-medium py-2 px-4 rounded-lg transition-colors`
+                  }, 'Launch App →')
+                )
+              )
+            )
+          )
+        );
+      };
 
-      <!-- E-Commerce Card -->
-      <a href="/ecommerce" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-3xl">🛒</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">E-Commerce</h3>
-        <p class="text-gray-600 mb-4">Vue 3 E-Commerce Module</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm font-medium">Vue 3.3</span>
-          <span class="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm font-medium">Store</span>
-        </div>
-      </a>
+      // MicroApp Component (using route params)
+      const MicroApp = () => {
+        const { appName } = useParams();
+        const navigate = useNavigate();
 
-      <!-- Admin Card -->
-      <a href="/admin" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-3xl">⚙️</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Admin</h3>
-        <p class="text-gray-600 mb-4">Vue 3 Admin Module</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">Vue 3.3</span>
-          <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">Admin</span>
-        </div>
-      </a>
-    </div>
-  </main>
+        const apps = {
+          'react': { 
+            icon: '🔥', 
+            title: 'React SSR Application', 
+            color: 'blue',
+            features: ['Server-Side Rendering', 'Client Hydration', 'React 18 Hooks', 'TypeScript Support']
+          },
+          'vue2': { 
+            icon: '🌿', 
+            title: 'Vue 2.7 Classic', 
+            color: 'emerald',
+            features: ['Options API', 'Composition API', 'Reactive Data', 'Component System']
+          },
+          'vue3': { 
+            icon: '💜', 
+            title: 'Vue 3 Composition', 
+            color: 'purple',
+            features: ['Composition API', 'Teleport', 'Fragments', 'Suspense']
+          },
+          'ecommerce': { 
+            icon: '🛒', 
+            title: 'E-Commerce Platform', 
+            color: 'orange',
+            features: ['Product Catalog', 'Shopping Cart', 'Checkout Flow', 'Order Management']
+          },
+          'admin': { 
+            icon: '⚙️', 
+            title: 'Admin Dashboard', 
+            color: 'gray',
+            features: ['Analytics', 'User Management', 'Settings', 'Reports']
+          }
+        };
 
-  <footer class="bg-gray-900 text-white py-12 mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center">
-        <p class="text-gray-400">
-          Built with ESMX Federation • Hub & Spokes Architecture • Micro-Frontend Ready
-        </p>
-        <p class="text-gray-500 text-sm mt-2">
-          Deployed on Railway • 2026
-        </p>
-      </div>
-    </div>
-  </footer>
+        const app = apps[appName] || { icon: '❓', title: 'Unknown App', color: 'gray', features: [] };
 
-  <script src="/spa-navigation.js"></script>
+        return h('div', { className: 'space-y-6' },
+          h('div', { className: `bg-gradient-to-br from-${app.color}-50 to-${app.color}-100 rounded-2xl p-8 shadow-lg` },
+            h('div', { className: 'flex items-center gap-4 mb-6' },
+              h('div', { className: 'text-6xl backdrop-blur-sm bg-white/50 rounded-2xl p-4' }, app.icon),
+              h('div', null,
+                h('h1', { className: `text-4xl font-bold text-${app.color}-900` }, app.title),
+                h('p', { className: `text-${app.color}-700 mt-2` }, `Route: /${appName}`)
+              )
+            ),
+            h('div', { className: 'grid md:grid-cols-2 gap-4' },
+              app.features.map((feature, i) =>
+                h('div', {
+                  key: i,
+                  className: `bg-white/80 backdrop-blur rounded-lg p-4 border border-${app.color}-200`
+                },
+                  h('div', { className: 'flex items-center gap-2' },
+                    h('span', { className: 'text-green-500 font-bold' }, '✓'),
+                    h('span', { className: 'text-gray-700 font-medium' }, feature)
+                  )
+                )
+              )
+            )
+          ),
+          h('div', { className: 'bg-white rounded-xl shadow-md p-6' },
+            h('h2', { className: 'text-2xl font-bold text-gray-900 mb-4' }, '🚀 Powered by React Router'),
+            h('div', { className: 'space-y-2 text-gray-600' },
+              h('p', null, `✅ Current route: ${appName}`),
+              h('p', null, '✅ Navigation without page reload'),
+              h('p', null, '✅ Browser back/forward support'),
+              h('p', null, '✅ URL-based routing with useParams()'),
+              h('p', null, '✅ Programmatic navigation with useNavigate()')
+            )
+          ),
+          h('div', { className: 'flex gap-4' },
+            h('button', {
+              onClick: () => navigate(-1),
+              className: `flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors`
+            }, '← Back'),
+            h('button', {
+              onClick: () => navigate('/'),
+              className: `flex-1 bg-${app.color}-600 hover:bg-${app.color}-700 text-white font-medium py-3 px-6 rounded-lg transition-colors`
+            }, '🏠 Dashboard')
+          )
+        );
+      };
+        
+      // Main App with React Router
+      const App = () => {
+        return h(BrowserRouter, null,
+          h('div', { className: 'min-h-screen flex flex-col' },
+            h(Header),
+            h('main', { className: 'flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8' },
+              h(Routes, null,
+                h(Route, { path: '/', element: h(Dashboard) }),
+                h(Route, { path: '/:appName', element: h(MicroApp) })
+              )
+            ),
+            h(Footer)
+          )
+        );
+      };
+    
+      // Render React app
+      const container = document.getElementById('app');
+      const root = createRoot(container);
+      root.render(h(App));
+      
+      console.log('✅ React Router v6 initialized');
+      console.log('📍 React Routes:', ['/', '/:appName']);
+    }
+  </script>
 </body>
 
 </html>

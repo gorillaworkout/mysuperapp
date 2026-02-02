@@ -1,8 +1,15 @@
-import { defineComponent } from 'vue';
+import { createApp } from 'vue';
+import { HomePage } from './pages/HomePage';
 
-export const App = defineComponent({
-  name: 'App',
-  template: '<router-view/>'
-});
+export function mount(container: HTMLElement) {
+  const app = createApp(HomePage);
+  app.mount(container);
+  
+  return {
+    unmount: () => {
+      app.unmount();
+    }
+  };
+}
 
-export default App;
+export default mount;

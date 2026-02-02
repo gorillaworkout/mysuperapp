@@ -12,6 +12,15 @@ export default defineConfig({
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx', '.json']
   },
+  module: {
+    rules: [
+      {
+        test: /\.[jt]sx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  },
   devServer: {
     port: 3000,
     static: {

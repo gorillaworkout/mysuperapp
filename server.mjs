@@ -45,19 +45,19 @@ const server = createServer((req, res) => {
   let ext;
 
   if (url === '/vue2' || url === '/vue2/') {
-    filePath = join(__dirname, 'public/vue2.html');
+    filePath = join(__dirname, 'public/index.html');
     ext = '.html';
   } else if (url === '/vue3' || url === '/vue3/') {
-    filePath = join(__dirname, 'public/vue3.html');
+    filePath = join(__dirname, 'public/index.html');
     ext = '.html';
   } else if (url === '/react' || url === '/react/') {
-    filePath = join(__dirname, 'public/react.html');
+    filePath = join(__dirname, 'public/index.html');
     ext = '.html';
   } else if (url === '/ecommerce' || url === '/ecommerce/') {
-    filePath = join(__dirname, 'public/ecommerce.html');
+    filePath = join(__dirname, 'public/index.html');
     ext = '.html';
   } else if (url === '/admin' || url === '/admin/') {
-    filePath = join(__dirname, 'public/admin.html');
+    filePath = join(__dirname, 'public/index.html');
     ext = '.html';
   } else if (url.startsWith('/my-super-app/')) {
     filePath = join(__dirname, url.replace('/my-super-app/', 'my-super-app/'));
