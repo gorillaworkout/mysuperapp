@@ -5,3 +5,5 @@ const app = createApp({
 });
 
 app.mount('#app');
+
+export default app;

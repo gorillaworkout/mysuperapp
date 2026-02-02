@@ -42,111 +42,94 @@
     </div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <main id="spa-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">Micro-Frontend Architecture</h2>
       <p class="text-gray-600">All 8 packages built and deployed successfully</p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
-      <a href="/react"
-        class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100 block cursor-pointer">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- React SSR Card -->
+      <a href="/react" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-4xl">🔥</span>
+          <span class="text-3xl">🔥</span>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">React SSR</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">React SSR</h3>
         <p class="text-gray-600 mb-4">React 18 + TypeScript + SSR</p>
         <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">React 18</span>
-          <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">SSR</span>
+          <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">React 18</span>
+          <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">SSR</span>
         </div>
       </a>
 
-      <a href="/vue2" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100 block cursor-pointer">
+      <!-- Vue 2.7 Card -->
+      <a href="/vue2" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-4xl">🌿</span>
+          <span class="text-3xl">🌿</span>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">Vue 2.7</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Vue 2.7</h3>
         <p class="text-gray-600 mb-4">Options API + ESMX Federation</p>
         <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm">Vue 2.7</span>
-          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm">CSR</span>
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium">Vue 2.7</span>
+          <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-sm font-medium">CSR</span>
         </div>
       </a>
 
-      <a href="/vue3" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100 block cursor-pointer">
+      <!-- Vue 3.3 Card -->
+      <a href="/vue3" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-4xl">💜</span>
+          <span class="text-3xl">💜</span>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">Vue 3.3</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Vue 3.3</h3>
         <p class="text-gray-600 mb-4">Composition API + Modern</p>
         <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">Vue 3.3</span>
-          <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">CSR</span>
+          <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">Vue 3.3</span>
+          <span class="px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">CSR</span>
         </div>
       </a>
-      <a href="/ecommerce"
-        class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100 block cursor-pointer">
+
+      <!-- E-Commerce Card -->
+      <a href="/ecommerce" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-4xl">🛒</span>
+          <span class="text-3xl">🛒</span>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">E-Commerce</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">E-Commerce</h3>
         <p class="text-gray-600 mb-4">Vue 3 E-Commerce Module</p>
         <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm">Vue 3.3</span>
-          <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm">E-Commerce</span>
+          <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm font-medium">Vue 3.3</span>
+          <span class="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm font-medium">Store</span>
         </div>
       </a>
-      <a href="/admin"
-        class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100 block cursor-pointer">
-        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
-          <span class="text-4xl">🛒</span>
+
+      <!-- Admin Card -->
+      <a href="/admin" class="card-hover bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
+          <span class="text-3xl">⚙️</span>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">Admin</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Admin</h3>
         <p class="text-gray-600 mb-4">Vue 3 Admin Module</p>
         <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm">Vue 3.3</span>
-          <span class="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm">Admin</span>
+          <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">Vue 3.3</span>
+          <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">Admin</span>
         </div>
       </a>
     </div>
+  </main>
 
-    <div class="mt-12 bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-      <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">📊 Deployment Status</h3>
-      <div class="grid md:grid-cols-4 gap-6">
-        <div class="text-center p-4 bg-green-50 rounded-xl">
-          <div class="text-3xl font-bold text-green-600 mb-1">8</div>
-          <div class="text-green-700 text-sm">Packages Built</div>
-        </div>
-        <div class="text-center p-4 bg-blue-50 rounded-xl">
-          <div class="text-3xl font-bold text-blue-600 mb-1">5</div>
-          <div class="text-blue-700 text-sm">Frameworks</div>
-        </div>
-        <div class="text-center p-4 bg-purple-50 rounded-xl">
-          <div class="text-3xl font-bold text-purple-600 mb-1">100%</div>
-          <div class="text-purple-700 text-sm">TypeScript</div>
-        </div>
-        <div class="text-center p-4 bg-orange-50 rounded-xl">
-          <div class="text-3xl font-bold text-orange-600 mb-1">ESM</div>
-          <div class="text-orange-700 text-sm">Native Modules</div>
-        </div>
+  <footer class="bg-gray-900 text-white py-12 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <p class="text-gray-400">
+          Built with ESMX Federation • Hub & Spokes Architecture • Micro-Frontend Ready
+        </p>
+        <p class="text-gray-500 text-sm mt-2">
+          Deployed on Railway • 2026
+        </p>
       </div>
     </div>
-
-    <div class="mt-8 text-center">
-      <p class="text-gray-500">
-        🎉 <strong>Success!</strong> Deployed with Docker + Node 24 on Railway
-      </p>
-    </div>
-  </div>
-
-  <footer class="bg-gray-900 text-white py-8 mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p class="text-gray-400">
-        Built with ESMX Federation • Hub & Spokes Architecture • DIAMOND Pattern
-      </p>
-    </div>
   </footer>
+
+  <script src="/spa-navigation.js"></script>
 </body>
 
 </html>

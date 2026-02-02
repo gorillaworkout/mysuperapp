@@ -13,7 +13,6 @@ export default defineConfig({
         extensions: ['.ts', '.js', '.json']
     },
     module: {
-        noParse: /node_modules/,  // Important: Skip parsing node_modules
         rules: [
             {
                 test: /\.ts$/,

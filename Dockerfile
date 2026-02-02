@@ -16,6 +16,8 @@ COPY my-super-app/ssr-npm-base/package.json ./my-super-app/ssr-npm-base/
 COPY my-super-app/ssr-npm-react/package.json ./my-super-app/ssr-npm-react/
 COPY my-super-app/ssr-npm-vue2/package.json ./my-super-app/ssr-npm-vue2/
 COPY my-super-app/ssr-npm-vue3/package.json ./my-super-app/ssr-npm-vue3/
+COPY my-super-app/ssr-vue3-admin/package.json ./my-super-app/ssr-vue3-admin/
+COPY my-super-app/ssr-vue3-ecommerce/package.json ./my-super-app/ssr-vue3-ecommerce/
 
 # Install dependencies
 RUN pnpm install

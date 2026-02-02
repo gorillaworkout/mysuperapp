@@ -9,12 +9,11 @@ export default {
       'ssr-npm-vue3': './node_modules/ssr-npm-vue3/dist',
       'ssr-react': './node_modules/ssr-react/dist',
       'ssr-vue2': './node_modules/ssr-vue2/dist',
-      'ssr-vue3': './node_modules/ssr-vue3/dist'
+      'ssr-vue3': './node_modules/ssr-vue3/dist',
+      'ssr-vue3-ecommerce': './node_modules/ssr-vue3-ecommerce/dist',
+      'ssr-vue3-admin': './node_modules/ssr-vue3-admin/dist'
     },
     imports: {
-      '@esmx/router': 'ssr-npm-base',
-      '@esmx/router-react': 'ssr-npm-react',
-      '@esmx/router-vue': 'ssr-npm-vue3',
       'react': 'ssr-npm-react',
       'react-dom': 'ssr-npm-react'
     },
