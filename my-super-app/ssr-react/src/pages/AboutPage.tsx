@@ -9,8 +9,12 @@ export const AboutPage = () => {
       ),
 
       React.createElement('div', { className: 'mb-8 p-4 bg-gray-50 rounded-lg' },
-        React.createElement('h3', { className: 'font-semibold text-gray-800 mb-3' }, '🧭 Internal Navigation'),
-        React.createElement('div', { className: 'flex gap-4' },
+        React.createElement('h3', { className: 'font-semibold text-gray-800 mb-3' }, '🧭 Navigation'),
+        React.createElement('div', { className: 'flex gap-4 flex-wrap' },
+          React.createElement('a', { 
+            href: '/',
+            className: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+          }, '← Back to Dashboard'),
           React.createElement('a', { 
             href: '/react',
             className: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'

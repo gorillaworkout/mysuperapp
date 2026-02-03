@@ -1,4 +1,4 @@
-import { createApp, ref, onMounted, onUnmounted, h } from 'vue';
+import { createApp, ref, onMounted, onUnmounted, h, defineComponent } from 'vue';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 
@@ -10,7 +10,7 @@ function getCurrentPage() {
   return 'home';
 }
 
-const App = {
+export const App = defineComponent({
   setup() {
     const currentPage = ref(getCurrentPage());
 
@@ -29,11 +29,11 @@ const App = {
     return { currentPage };
   },
   render() {
-    return this.currentPage === 'settings' 
-      ? h(SettingsPage) 
+    return this.currentPage === 'settings'
+      ? h(SettingsPage)
       : h(HomePage);
   }
-};
+});
 
 export function mount(container: HTMLElement) {
   const app = createApp(App);

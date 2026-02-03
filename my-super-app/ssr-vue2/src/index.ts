@@ -11,32 +11,48 @@ function getCurrentPage() {
 }
 
 export function mount(container: HTMLElement) {
+  console.log('[Vue2] Mount called with container:', container);
   let popStateHandler;
+
+  const currentPage = getCurrentPage();
+  console.log('[Vue2] Current page:', currentPage);
 
   const App = Vue.extend({
     data() {
       return {
-        currentPage: getCurrentPage()
+        currentPage: currentPage
       };
     },
     render(h) {
-      return h(this.currentPage === 'about' ? AboutPage : HomePage);
+      console.log('[Vue2] Rendering page:', this.currentPage);
+      const pageComponent = this.currentPage === 'about' ? AboutPage : HomePage;
+      console.log('[Vue2] Component:', pageComponent?.name || 'unknown');
+      return h(pageComponent);
     },
     created() {
+      console.log('[Vue2] App created');
       popStateHandler = () => {
         this.currentPage = getCurrentPage();
       };
       window.addEventListener('popstate', popStateHandler);
+    },
+    mounted() {
+      console.log('[Vue2] App mounted to DOM');
     },
     beforeDestroy() {
       window.removeEventListener('popstate', popStateHandler);
     }
   });
 
+  console.log('[Vue2] Creating Vue instance...');
+  container.innerHTML = '';
+  
   const vm = new Vue({
     el: container,
     render: h => h(App)
   });
+  
+  console.log('[Vue2] Mount complete');
   
   return {
     unmount: () => {

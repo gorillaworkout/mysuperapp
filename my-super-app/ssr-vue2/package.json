@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "ssr-npm-vue2": "workspace:*",
-    "vue": "^2.7.14"
+    "vue": "^2.7.14",
+    "vue-server-renderer": "^2.7.14"
   },
   "devDependencies": {
     "@esmx/rspack": "^3.0.0-rc.107",

@@ -26,14 +26,16 @@ export default async function serverEntry(rc: RenderContext) {
   });
 
   hub.registerMultiple(microAppConfigs);
-  
+
   await import('ssr-react/pages/HomePage.js');
   await import('ssr-vue3/pages/HomePage.js');
   await import('ssr-vue2/pages/HomePage.js');
-  
+  await import('ssr-vue3-ecommerce/pages/HomePage.js');
+  await import('ssr-vue3-admin/pages/HomePage.js');
+
   const html = renderToString(React.createElement(App));
   await rc.commit();
-  
+
   rc.html = `<!DOCTYPE html>
 <html lang="en">
 <head>

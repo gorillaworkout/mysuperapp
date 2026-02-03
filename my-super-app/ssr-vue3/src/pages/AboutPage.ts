@@ -1,74 +1,58 @@
-import { defineComponent } from 'vue';
+import { defineComponent, h } from 'vue';
 
 export const AboutPage = defineComponent({
   name: 'Vue3AboutPage',
-  template: `
-    <div class="min-h-screen bg-gradient-to-br from-fuchsia-50 via-purple-50 to-violet-50">
-      <div class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-violet-500 opacity-10"></div>
-        <div class="absolute top-0 right-0 w-96 h-96 bg-fuchsia-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-violet-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style="animation-delay: 2s;"></div>
-        
-        <div class="relative max-w-6xl mx-auto px-6 py-20 text-center">
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-fuchsia-100 text-fuchsia-700 rounded-full text-sm font-medium mb-6">
-            <span>📖</span>
-            About Vue 3 App
-          </div>
-          <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Page 2 - <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-violet-600">Multi-Page Demo</span>
-          </h1>
-          <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            This is the second page demonstrating internal routing within the Vue 3 micro-frontend.
-          </p>
-        </div>
-      </div>
+  render() {
+    return h('div', { 
+      class: 'min-h-screen bg-gradient-to-br from-fuchsia-50 via-purple-50 to-violet-50 p-8' 
+    }, [
+      h('div', { class: 'max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8' }, [
+        h('div', { class: 'text-center mb-8' }, [
+          h('h1', { class: 'text-4xl font-bold text-fuchsia-600 mb-2' }, '📖 About Vue 3.3 App'),
+          h('p', { class: 'text-lg text-gray-600' }, 'Page 2 - Multi-page routing demo')
+        ]),
 
-      <div class="max-w-6xl mx-auto px-6 py-16">
-        <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">🧭 Internal Navigation</h2>
-          <div class="flex gap-4">
-            <a href="/vue3" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition">
-              ← Back to Home
-            </a>
-            <span class="self-center text-gray-400">|</span>
-            <span class="self-center text-gray-600">Current: About Page</span>
-          </div>
-        </div>
+        h('div', { class: 'mb-8 p-4 bg-gray-50 rounded-lg' }, [
+          h('h3', { class: 'font-semibold text-gray-800 mb-3' }, '🧭 Navigation'),
+          h('div', { class: 'flex gap-4 flex-wrap' }, [
+            h('a', { 
+              href: '/',
+              class: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+            }, '← Dashboard'),
+            h('a', { 
+              href: '/vue3',
+              class: 'bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition'
+            }, '← Home'),
+            h('span', { class: 'text-gray-400 self-center' }, '|'),
+            h('span', { class: 'text-gray-600 self-center' }, 'Current: About Page')
+          ])
+        ]),
 
-        <div class="grid md:grid-cols-2 gap-8 mb-8">
-          <div class="bg-fuchsia-50 rounded-2xl p-8 shadow-lg border-l-4 border-fuchsia-500">
-            <h3 class="text-xl font-bold text-gray-900 mb-3">🎯 Multi-Page Demo</h3>
-            <p class="text-gray-600 leading-relaxed">
-              This demonstrates internal routing within the Vue 3 micro-app. Each app can have multiple pages while being managed by the Hub.
-            </p>
-          </div>
-          
-          <div class="bg-purple-50 rounded-2xl p-8 shadow-lg border-l-4 border-purple-500">
-            <h3 class="text-xl font-bold text-gray-900 mb-3">🔄 Routing Structure</h3>
-            <ul class="text-gray-600 space-y-2">
-              <li>• /vue3 → Home Page</li>
-              <li>• /vue3/about → About Page</li>
-              <li>• Hub manages app switching</li>
-              <li>• App manages internal pages</li>
-            </ul>
-          </div>
-        </div>
+        h('div', { class: 'grid md:grid-cols-2 gap-6 mb-8' }, [
+          h('div', { class: 'bg-fuchsia-50 p-6 rounded-lg border-l-4 border-fuchsia-500' }, [
+            h('h3', { class: 'font-semibold text-gray-800 mb-2' }, '🎯 Multi-Page Demo'),
+            h('p', { class: 'text-sm text-gray-600' }, 
+              'This demonstrates internal routing within the Vue 3 micro-app. Each app can have multiple pages while being managed by the Hub.'
+            )
+          ]),
+          h('div', { class: 'bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500' }, [
+            h('h3', { class: 'font-semibold text-gray-800 mb-2' }, '🔄 Routing Structure'),
+            h('ul', { class: 'text-sm text-gray-600 space-y-1' }, [
+              h('li', '• /vue3 → Home Page'),
+              h('li', '• /vue3/about → About Page'),
+              h('li', '• Hub manages app switching'),
+              h('li', '• App manages internal pages')
+            ])
+          ])
+        ]),
 
-        <div class="bg-gradient-to-r from-fuchsia-600 to-violet-600 rounded-2xl p-8 text-center text-white">
-          <h3 class="text-2xl font-bold mb-2">🛣️ Route: /vue3/about</h3>
-          <p>This is the second page of the Vue 3 micro-frontend</p>
-        </div>
-      </div>
-
-      <div class="bg-gray-900 text-white py-8">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-          <p class="text-gray-400">
-            💜 Vue 3.3 Micro-App • Page 2 • Built with ESMX Federation
-          </p>
-        </div>
-      </div>
-    </div>
-  `
+        h('div', { class: 'bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white p-6 rounded-lg text-center' }, [
+          h('h3', { class: 'font-semibold mb-2' }, '🛣️ Route: /vue3/about'),
+          h('p', { class: 'text-sm' }, 'This is the second page of the Vue 3 micro-frontend')
+        ])
+      ])
+    ]);
+  }
 });
 
 export default AboutPage;

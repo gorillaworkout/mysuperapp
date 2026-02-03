@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -34,7 +34,7 @@ const microApps = {
     title: 'Vue 2.7',
     dir: 'ssr-vue2',
     framework: 'vue2',
-    ssr: false
+    ssr: true
   },
   '/vue3': {
     name: 'vue3',
@@ -246,6 +246,67 @@ const server = createServer(async (req, res) => {
   if (appConfig && appConfig.ssr) {
     const rendered = await renderMicroApp(appConfig, url, req, res);
     if (rendered) return;
+  }
+  
+  // Handle client-side apps (Vue apps without SSR)
+  if (appConfig && !appConfig.ssr) {
+    console.log(`[CLIENT] Serving client-side app: ${appConfig.name}`);
+    
+    // Find client entry file
+    const clientSrcPath = join(__dirname, 'my-super-app', appConfig.dir, 'dist/client/src');
+    let clientScript = '';
+    
+    try {
+      const clientFiles = readdirSync(clientSrcPath);
+      const clientEntryFile = clientFiles.find(f => f.startsWith('entry.client.') && f.endsWith('.final.mjs'));
+      
+      if (clientEntryFile) {
+        clientScript = `<script type="module" src="/my-super-app/${appConfig.dir}/dist/client/src/${clientEntryFile}"></script>`;
+      }
+    } catch (err) {
+      console.log(`[CLIENT] Warning: Could not find client entry: ${err.message}`);
+    }
+    
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${appConfig.title} - ESMX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">🚀 ESMX Super App</a>
+        <nav class="flex space-x-1">
+          <a href="/react" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">React</a>
+          <a href="/vue2" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 2</a>
+          <a href="/vue3" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 3</a>
+          <a href="/ecommerce" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">E-Commerce</a>
+          <a href="/admin" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Admin</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <div id="app"></div>
+  <script type="importmap">{
+    "imports": {
+      "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13?bundle"
+    }
+  }</script>
+  ${clientScript}
+</body>
+</html>`;
+    
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(html);
+    return;
   }
 
   // Serve static files from public/ directory

@@ -1,9 +1,18 @@
-import { createApp } from 'vue';
+import { mount } from './index';
 
-const app = createApp({
-    template: '<div>Admin Page</div>'
-});
+console.log('[Admin] Client entry loading...');
 
-app.mount('#app');
+const container = document.getElementById('app');
+console.log('[Admin] Container found:', !!container);
 
-export default app;
+if (container) {
+  try {
+    mount(container);
+    console.log('[Admin] App mounted successfully');
+  } catch (error) {
+    console.error('[Admin] Mount error:', error);
+    container.innerHTML = '<div style="padding: 20px; color: red;">Error loading Admin app. Check console.</div>';
+  }
+} else {
+  console.error('[Admin] Container #app not found');
+}

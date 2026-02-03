@@ -42,7 +42,11 @@ export const HomePage = () => {
           React.createElement('span', { className: 'bg-green-100 text-green-800 px-3 py-1 rounded text-sm' }, '/vue2 → Vue 2 App'),
           React.createElement('span', { className: 'bg-purple-100 text-purple-800 px-3 py-1 rounded text-sm' }, '/vue3 → Vue 3 App')
         ),
-        React.createElement('div', { className: 'mt-4' },
+        React.createElement('div', { className: 'mt-4 flex gap-3' },
+          React.createElement('a', { 
+            href: '/',
+            className: 'inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+          }, '← Back to Dashboard'),
           React.createElement('a', { 
             href: '/react/about',
             className: 'inline-block bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition'
