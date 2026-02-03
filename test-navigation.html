@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation Test - ESMX Super App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Client-Side Navigation Test</h1>
+
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Test Instructions</h2>
+      <ol class="list-decimal pl-5 space-y-2">
+        <li>Open browser DevTools Console (F12)</li>
+        <li>Go to <a href="/" class="text-blue-600 underline">http://localhost:3000</a></li>
+        <li>Click any navigation link (React, Vue 2, Vue 3, etc.)</li>
+        <li>Watch the console - should see messages like:<br>
+          <code>Loading: /react content fetched</code><br>
+          <code>Content replaced smoothly</code>
+        </li>
+        <li>The page should NOT flash/refresh - only content changes</li>
+        <li>Check that the URL changes to <code>/react</code> or <code>/vue2</code> etc.</li>
+        <li>Use browser Back button - should navigate back smoothly</li>
+      </ol>
+    </div>
+
+    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-semibold text-green-800 mb-2">Expected Behavior</h2>
+      <ul class="space-y-2 text-green-700">
+        <li> No page reload/flash when clicking links</li>
+        <li> URL updates via <code>history.pushState</code></li>
+        <li> Back/Forward buttons work correctly</li>
+        <li> Only &lt;main&gt; content is replaced</li>
+        <li> Header and footer remain stable <strong>(crucial for seamless experience)</strong></li>
+      </ul>
+    </div>
+
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <h2 class="text-xl font-semibold text-blue-800 mb-2">Technical Details</h2>
+      <p class="text-blue-700 mb-2">The script intercepts all internal link clicks and:</p>
+      <ol class="list-decimal pl-5 space-y-1 text-blue-700">
+        <li>Prevents default navigation with <code>e.preventDefault()</code></li>
+        <li>Fetches the linked page content via <code>fetch()</code></li>
+        <li>Parses the HTML and extracts the <code>&lt;main&gt;</code> element</li>
+        <li>Replaces current <code>&lt;main&gt;</code> content with crossfade</li>
+        <li>Updates <code>history.pushState</code> for proper URL</li>
+      </ol>
+    </div>
+
+    <div class="mt-6">
+      <a href="/" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+        Go Back to App
+      </a>
+    </div>
+  </div>
+</body>
+</html>
