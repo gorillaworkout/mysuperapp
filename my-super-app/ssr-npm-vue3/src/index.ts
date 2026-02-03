@@ -1,2 +1,2 @@
 export * from 'vue';
-export * from './router-vue/index.js';
+export * from './router-vue/index.ts';

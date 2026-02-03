@@ -13,12 +13,28 @@ export function useRouter(): Router {
 
 export function useRoute() {
   const router = useRouter();
-  const [route, setRoute] = useState(() => router.getCurrentRoute());
+  // router.route is a getter.
+  const [route, setRoute] = useState(() => {
+    try {
+      return router.route;
+    } catch (e) {
+      return null;
+    }
+  });
 
   useEffect(() => {
-    const unsubscribe = router.onRouteChange(setRoute);
+    // router.afterEach returns unsubscribe
+    const unsubscribe = router.afterEach((to) => {
+      setRoute(to);
+    });
+    // In case navigation happened before effect but after state init
+    try {
+      if (router.route !== route) {
+        setRoute(router.route);
+      }
+    } catch (e) { }
     return unsubscribe;
-  }, [router]);
+  }, [router, route]);
 
   return route;
 }
@@ -31,19 +47,19 @@ export interface RouterLinkProps {
   children: React.ReactNode;
 }
 
-export const RouterLink: React.FC<RouterLinkProps> = ({ 
-  to, 
-  replace = false, 
+export const RouterLink: React.FC<RouterLinkProps> = ({
+  to,
+  replace = false,
   activeClass,
   className,
-  children 
+  children
 }) => {
   const router = useRouter();
   const currentRoute = useRoute();
-  
+
   const path = typeof to === 'string' ? to : to.path;
-  const isActive = currentRoute?.component && path === window.location.pathname;
-  
+  const isActive = currentRoute?.path === path; // Check exact match or use isRouteMatched if available? path usually includes query? No, path is path.
+
   const classes = [className];
   if (isActive && activeClass) {
     classes.push(activeClass);
@@ -51,44 +67,59 @@ export const RouterLink: React.FC<RouterLinkProps> = ({
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(path, replace);
+    if (replace) {
+      router.replace(path);
+    } else {
+      router.push(path);
+    }
   };
 
-  return (
-    <a 
-      href={path} 
-      onClick={handleClick}
-      className={classes.join(' ').trim() || undefined}
-    >
-      {children}
-    </a>
-  );
+  return React.createElement('a', {
+    href: path,
+    onClick: handleClick,
+    className: classes.join(' ').trim() || undefined
+  }, children);
 };
 
 
 export const RouterView: React.FC = () => {
   const currentRoute = useRoute();
-  
+
   if (!currentRoute) {
     return null;
   }
 
-  const { component: Component } = currentRoute;
-  return <Component />;
+  // Route does not have .component directly.
+  // It has .matched array of config objects which have .component
+  // Use the last match? or first? usually matched contains all matched segments.
+  // For single view, we probably want the most specific one i.e. last one? or first?
+  // Hub routes are flat.
+  const matched = currentRoute.matched;
+  if (!matched || matched.length === 0) return null;
+
+  // Assuming the component is on the last matched segment for now
+  const component = matched[matched.length - 1].component;
+
+  // Cast component to any or React Component type
+  const Component = component as React.ComponentType<any>;
+
+  if (!Component) return null;
+
+  return React.createElement(Component);
 };
 
 export interface RouterProviderProps {
-  router?: Router;
+  router: Router; // Required
   children: React.ReactNode;
 }
 
-export const RouterProvider: React.FC<RouterProviderProps> = ({ 
-  router = Router.getInstance(), 
-  children 
+export const RouterProvider: React.FC<RouterProviderProps> = ({
+  router,
+  children
 }) => {
-  return (
-    <RouterContext.Provider value={router}>
-      {children}
-    </RouterContext.Provider>
-  );
+  if (!router) {
+    console.warn("RouterProvider requires a 'router' prop.");
+    return null;
+  }
+  return React.createElement(RouterContext.Provider, { value: router }, children);
 };

@@ -1,26 +1,29 @@
-import type { App, Plugin } from 'vue';
+import { App, Plugin, inject, computed, Ref, ref, shallowRef } from 'vue';
 import { Router } from '@esmx/router';
 
 export const RouterVuePlugin: Plugin = {
-  install(app: App, options?: any) {
-    const router = Router.getInstance();
-    
+  install(app: App, options: { router: Router }) {
+    const router = options?.router;
+
+    if (!router) {
+      console.warn('RouterVuePlugin installed without router instance.');
+      return;
+    }
+
     app.config.globalProperties.$router = router;
     app.provide('router', router);
 
-    let currentRoute = router.getCurrentRoute();
-    const routeRef = { value: currentRoute };
-    
+    const routeRef = shallowRef(router.route);
+
     app.provide('route', routeRef);
 
-    const unsubscribe = router.onRouteChange((route) => {
-      routeRef.value = route;
-      app.config.globalProperties.$forceUpdate?.();
+    const unsubscribe = router.afterEach((to) => {
+      routeRef.value = to;
     });
 
     app.mixin({
       beforeUnmount() {
-        if (this.$.type.name === 'App') {
+        if (this.$options.name === 'App' || this === app._instance?.proxy) {
           unsubscribe();
         }
       }
@@ -33,40 +36,56 @@ export const RouterVuePlugin: Plugin = {
         activeClass: { type: String, default: 'active' }
       },
       template: `
-        <a :href="path" @click.prevent="handleClick" :class="classes">
+        <a :href="url" @click.prevent="handleClick" :class="classes">
           <slot></slot>
         </a>
       `,
       setup(props) {
-        const router = Router.getInstance();
-        
-        const path = typeof props.to === 'string' ? props.to : props.to.path;
-        const routeRef = inject('route');
-        const isActive = path === window.location.pathname;
-        
+        const router = inject<Router>('router')!;
+        const routeRef = inject<Ref<any>>('route')!;
+
+        const path = computed(() => typeof props.to === 'string' ? props.to : props.to.path);
+
+        // Use router.resolve if available to get full URL, simplified here
+        const url = path;
+
+        const isActive = computed(() => {
+          return routeRef.value?.path === path.value;
+        });
+
         const classes = computed(() => {
           const result = [];
-          if (isActive && props.activeClass) {
+          if (isActive.value && props.activeClass) {
             result.push(props.activeClass);
           }
           return result;
         });
 
         const handleClick = () => {
-          router.push(path, props.replace);
+          if (props.replace) {
+            router.replace(path.value);
+          } else {
+            router.push(path.value);
+          }
         };
 
-        return { path, classes, handleClick };
+        return { url, classes, handleClick };
       }
     });
 
     app.component('router-view', {
       template: `<component v-if="Component" :is="Component" />`,
       setup() {
-        const routeRef = inject('route') as Ref<any>;
-        
+        const routeRef = inject<Ref<any>>('route');
+
+        const Component = computed(() => {
+          if (!routeRef?.value) return null;
+          const matched = routeRef.value.matched;
+          return matched && matched.length > 0 ? matched[matched.length - 1].component : null;
+        });
+
         return {
-          Component: computed(() => routeRef.value?.component || null)
+          Component
         };
       }
     });
@@ -80,7 +99,7 @@ export function install(app: App, options?: any) {
 export function useRouter(): Router {
   const router = inject<Router>('router');
   if (!router) {
-    throw new Error('useRouter must be used within RouterProvider');
+    throw new Error('useRouter must be used within RouterProvider (via RouterVuePlugin)');
   }
   return router;
 }
@@ -88,7 +107,7 @@ export function useRouter(): Router {
 export function useRoute() {
   const route = inject<Ref<any>>('route');
   if (!route) {
-    throw new Error('useRoute must be used within RouterProvider');
+    throw new Error('useRoute must be used within RouterProvider (via RouterVuePlugin)');
   }
   return route;
 }

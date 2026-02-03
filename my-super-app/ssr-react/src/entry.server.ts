@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { App } from './index.tsx';
+import { App } from './index';
 
 function getPageFromUrl(url) {
   if (url && (url === '/react/about' || url.startsWith('/react/about/'))) {
@@ -10,10 +10,28 @@ function getPageFromUrl(url) {
 }
 
 export default async function serverEntry(rc) {
-  const currentPage = getPageFromUrl(rc.url);
-  const html = renderToString(React.createElement(App, { initialPage: currentPage }));
+  // Create a new Router instance for SSR
+  // Create a new Router instance for SSR
+  const { Router, RouterMode } = await import('@esmx/router');
+  const { HomePage, AboutPage } = await import('./index');
+
+  const router = new Router({
+    mode: RouterMode.memory,
+    routes: [
+      { path: '/react', component: HomePage },
+      { path: '/react/about', component: AboutPage }
+    ]
+  });
+
+  // Initial navigation
+  console.log(`[SSR-React] Navigating to: ${rc.url}`);
+  await router.replace(rc.url);
+  console.log(`[SSR-React] Current route:`, router.route?.path);
+
+  const html = renderToString(React.createElement(App, { router }));
+  console.log(`[SSR-React] Rendered HTML length: ${html.length}`);
   await rc.commit();
-  
+
   rc.html = `<!DOCTYPE html>
 <html lang="en">
 <head>

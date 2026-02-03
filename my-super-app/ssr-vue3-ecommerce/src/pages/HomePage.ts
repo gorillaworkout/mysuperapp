@@ -8,11 +8,11 @@ export default {
             h('p', { style: 'margin-bottom: 2rem;' }, 'Welcome to our store!'),
             h('div', { style: 'background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;' }, [
                 h('h3', { style: 'margin-top: 0;' }, '🧭 Navigation'),
-                h('a', { 
+                h('a', {
                     href: '/',
                     style: 'display: inline-block; background: #6b7280; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 0.25rem; margin-right: 0.5rem;'
                 }, '← Dashboard'),
-                h('a', { 
+                h('a', {
                     href: '/ecommerce/about',
                     style: 'display: inline-block; background: #f97316; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 0.25rem;'
                 }, 'Go to About →')

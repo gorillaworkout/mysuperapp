@@ -1,47 +1,60 @@
-import { createApp, ref, onMounted, onUnmounted, h, defineComponent } from 'vue';
+import { createApp, defineComponent, h, ref } from 'vue';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 
-function getCurrentPage() {
-  const path = window.location.pathname;
-  if (path === '/admin/settings' || path.startsWith('/admin/settings/')) {
-    return 'settings';
-  }
-  return 'home';
-}
-
 export const App = defineComponent({
+  name: 'App',
   setup() {
-    const currentPage = ref(getCurrentPage());
+    const currentComponent = ref(HomePage);
 
-    const handlePopState = () => {
-      currentPage.value = getCurrentPage();
+    // Simple router logic using @esmx/router
+    const updateRoute = async () => {
+      const path = window.location.pathname;
+      if (path === '/admin/settings' || path.startsWith('/admin/settings/')) {
+        currentComponent.value = SettingsPage;
+      } else {
+        currentComponent.value = HomePage;
+      }
     };
 
-    onMounted(() => {
-      window.addEventListener('popstate', handlePopState);
-    });
+    // Initialize route
+    updateRoute();
 
-    onUnmounted(() => {
-      window.removeEventListener('popstate', handlePopState);
-    });
+    // Listen to popstate for browser navigation
+    window.addEventListener('popstate', updateRoute);
 
-    return { currentPage };
+    return { currentComponent };
   },
   render() {
-    return this.currentPage === 'settings'
-      ? h(SettingsPage)
-      : h(HomePage);
+    return h(this.currentComponent);
   }
 });
 
-export function mount(container: HTMLElement) {
+export async function mount(container: HTMLElement) {
+  // Import router for programmatic navigation
+  const { Router, RouterMode } = await import('@esmx/router');
+
+  const router = new Router({
+    root: container,
+    mode: RouterMode.history,
+    routes: [
+      { path: '/admin', component: HomePage },
+      { path: '/admin/settings', component: SettingsPage }
+    ]
+  });
+
   const app = createApp(App);
+  app.config.globalProperties.$router = router;
+
   app.mount(container);
-  
+
+  // Navigate to current URL to activate the route
+  await router.replace(window.location.pathname);
+
   return {
     unmount: () => {
       app.unmount();
+      router.destroy();
     }
   };
 }

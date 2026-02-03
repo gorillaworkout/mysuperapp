@@ -62,7 +62,7 @@ const microApps = {
 // Hub Registry API
 const hubRegistry = {
   apps: microApps,
-  
+
   getAppByPath(path) {
     for (const [route, config] of Object.entries(this.apps)) {
       if (path === route || path.startsWith(route + '/')) {
@@ -71,11 +71,11 @@ const hubRegistry = {
     }
     return null;
   },
-  
+
   getAllApps() {
     return Object.values(this.apps);
   },
-  
+
   isSSRApp(path) {
     const app = this.getAppByPath(path);
     return app ? app.ssr : false;
@@ -89,22 +89,22 @@ const hubRegistry = {
 async function renderMicroApp(appConfig, url, req, res) {
   try {
     console.log(`[SSR] Rendering ${appConfig.name}...`);
-    
+
     // Find the server entry file (pattern: entry.server.{hash}.final.mjs)
     const { readdirSync } = await import('fs');
     const serverSrcPath = join(__dirname, 'my-super-app', appConfig.dir, 'dist/server/src');
     const files = readdirSync(serverSrcPath);
     const serverEntryFile = files.find(f => f.startsWith('entry.server.') && f.endsWith('.final.mjs'));
-    
+
     if (!serverEntryFile) {
       console.error(`[SSR ERROR] No server entry found in ${serverSrcPath}`);
       return false;
     }
-    
+
     console.log(`[SSR] Loading server entry: ${serverEntryFile}`);
     const serverEntry = await import(join(serverSrcPath, serverEntryFile));
     console.log(`[SSR] Server entry loaded:`, Object.keys(serverEntry));
-    
+
     // Create a mock RenderContext
     const rc = {
       html: '',
@@ -132,7 +132,10 @@ async function renderMicroApp(appConfig, url, req, res) {
   "imports": {
     "react": "https://esm.sh/react@18.3.1",
     "react-dom": "https://esm.sh/react-dom@18.3.1",
-    "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13"
+    "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13",
+    "@esmx/router": "https://esm.sh/@esmx/router@3.0.0-rc.107",
+    "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/entry.client.69b742e9.final.mjs",
+    "ssr-npm-vue3": "https://esm.sh/vue@3.5.13"
   }
 }</script>`;
       },
@@ -141,7 +144,7 @@ async function renderMicroApp(appConfig, url, req, res) {
         // Note: We can't read files here synchronously in the render context
         // So we'll construct the path based on the known pattern
         const clientSrcPath = `/my-super-app/${appConfig.dir}/dist/client/src`;
-        
+
         // Client bundles follow pattern: entry.client.{hash}.final.mjs
         // For now, return a comment - we'll add this dynamically after render
         return `<!-- Client hydration: ${clientSrcPath}/entry.client.*.final.mjs -->`;
@@ -153,23 +156,23 @@ async function renderMicroApp(appConfig, url, req, res) {
         return `<script>window.${varName} = ${JSON.stringify(data)};</script>`;
       }
     };
-    
+
     // Call the server entry function
     const entryFn = serverEntry.default;
     await entryFn(rc);
-    
+
     console.log(`[SSR] Rendered, HTML length: ${rc.html ? rc.html.length : 0}`);
-    
+
     // Inject client bundle for hydration
     if (rc.html) {
       // Find the actual client entry file (hashed filename)
       const clientSrcPath = join(__dirname, 'my-super-app', appConfig.dir, 'dist/client/src');
       let clientScript = '';
-      
+
       try {
         const clientFiles = readdirSync(clientSrcPath);
         const clientEntryFile = clientFiles.find(f => f.startsWith('entry.client.') && f.endsWith('.final.mjs'));
-        
+
         if (clientEntryFile) {
           clientScript = `<script type="module" src="/my-super-app/${appConfig.dir}/dist/client/src/${clientEntryFile}"></script>`;
           console.log(`[SSR] Client entry found: ${clientEntryFile}`);
@@ -179,21 +182,21 @@ async function renderMicroApp(appConfig, url, req, res) {
       } catch (err) {
         console.log(`[SSR] Warning: Could not read client directory: ${err.message}`);
       }
-      
+
       if (clientScript) {
         rc.html = rc.html.replace('</body>', `  ${clientScript}\n</body>`);
         console.log(`[SSR] Client hydration script injected`);
       }
     }
-    
+
     console.log(`[SSR] Final HTML length: ${rc.html ? rc.html.length : 0}`);
-    
+
     if (rc.html) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(rc.html);
       return true;
     }
-    
+
     return false;
   } catch (error) {
     console.error(`[SSR ERROR] Failed to render ${appConfig.name}:`, error.message);
@@ -247,26 +250,26 @@ const server = createServer(async (req, res) => {
     const rendered = await renderMicroApp(appConfig, url, req, res);
     if (rendered) return;
   }
-  
+
   // Handle client-side apps (Vue apps without SSR)
   if (appConfig && !appConfig.ssr) {
     console.log(`[CLIENT] Serving client-side app: ${appConfig.name}`);
-    
+
     // Find client entry file
     const clientSrcPath = join(__dirname, 'my-super-app', appConfig.dir, 'dist/client/src');
     let clientScript = '';
-    
+
     try {
       const clientFiles = readdirSync(clientSrcPath);
       const clientEntryFile = clientFiles.find(f => f.startsWith('entry.client.') && f.endsWith('.final.mjs'));
-      
+
       if (clientEntryFile) {
         clientScript = `<script type="module" src="/my-super-app/${appConfig.dir}/dist/client/src/${clientEntryFile}"></script>`;
       }
     } catch (err) {
       console.log(`[CLIENT] Warning: Could not find client entry: ${err.message}`);
     }
-    
+
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -297,13 +300,18 @@ const server = createServer(async (req, res) => {
   <div id="app"></div>
   <script type="importmap">{
     "imports": {
-      "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13?bundle"
+      "react": "https://esm.sh/react@18.3.1",
+      "react-dom": "https://esm.sh/react-dom@18.3.1",
+      "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13",
+      "@esmx/router": "https://esm.sh/@esmx/router@3.0.0-rc.107",
+      "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/entry.client.69b742e9.final.mjs",
+      "ssr-npm-vue3": "https://esm.sh/vue@3.5.13"
     }
   }</script>
   ${clientScript}
 </body>
 </html>`;
-    
+
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(html);
     return;

@@ -1,5 +1,3 @@
 export * from 'vue';
 export * from '@esmx/router';
-export * from '@esmx/core';
-export * from '@esmx/class-state';
-export * from '@esmx/fetch';
+export * from './router-vue/index.js'; // Export Vue 2 specific router adapters

@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouterLink } from 'ssr-npm-react';
 
 export const AboutPage = () => {
   return React.createElement('div', { className: 'react-about min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-8' },
@@ -11,12 +12,12 @@ export const AboutPage = () => {
       React.createElement('div', { className: 'mb-8 p-4 bg-gray-50 rounded-lg' },
         React.createElement('h3', { className: 'font-semibold text-gray-800 mb-3' }, '🧭 Navigation'),
         React.createElement('div', { className: 'flex gap-4 flex-wrap' },
-          React.createElement('a', { 
-            href: '/',
+          React.createElement(RouterLink, {
+            to: '/',
             className: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
           }, '← Back to Dashboard'),
-          React.createElement('a', { 
-            href: '/react',
+          React.createElement(RouterLink, {
+            to: '/react',
             className: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'
           }, '← Home'),
           React.createElement('span', { className: 'text-gray-400 self-center' }, '|'),
@@ -27,7 +28,7 @@ export const AboutPage = () => {
       React.createElement('div', { className: 'grid md:grid-cols-2 gap-6 mb-8' },
         React.createElement('div', { className: 'bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500' },
           React.createElement('h3', { className: 'font-semibold text-gray-800 mb-2' }, '🎯 Multi-Page Demo'),
-          React.createElement('p', { className: 'text-sm text-gray-600' }, 
+          React.createElement('p', { className: 'text-sm text-gray-600' },
             'This demonstrates internal routing within the React micro-app. Each app can have multiple pages while being managed by the Hub.'
           )
         ),

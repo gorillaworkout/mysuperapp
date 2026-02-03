@@ -1,2 +1,2 @@
-// Provider package - no client entry needed
-export {};
+// Export router components for use in other micro-frontends
+export * from './router-react/index';

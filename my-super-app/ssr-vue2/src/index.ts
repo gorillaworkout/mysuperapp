@@ -10,56 +10,49 @@ function getCurrentPage() {
   return 'home';
 }
 
-export function mount(container: HTMLElement) {
+export async function mount(container: HTMLElement) {
   console.log('[Vue2] Mount called with container:', container);
-  let popStateHandler;
 
-  const currentPage = getCurrentPage();
-  console.log('[Vue2] Current page:', currentPage);
+  // Initialize ESMX Router
+  const { Router, RouterMode } = await import('@esmx/router');
+  const { install } = await import('ssr-npm-vue2');
+
+  const router = new Router({
+    mode: RouterMode.history, // Client-side navigation
+    routes: [
+      { path: '/vue2', component: HomePage },
+      { path: '/vue2/about', component: AboutPage }
+    ]
+  });
 
   const App = Vue.extend({
-    data() {
-      return {
-        currentPage: currentPage
-      };
-    },
     render(h) {
-      console.log('[Vue2] Rendering page:', this.currentPage);
-      const pageComponent = this.currentPage === 'about' ? AboutPage : HomePage;
-      console.log('[Vue2] Component:', pageComponent?.name || 'unknown');
-      return h(pageComponent);
-    },
-    created() {
-      console.log('[Vue2] App created');
-      popStateHandler = () => {
-        this.currentPage = getCurrentPage();
-      };
-      window.addEventListener('popstate', popStateHandler);
-    },
-    mounted() {
-      console.log('[Vue2] App mounted to DOM');
-    },
-    beforeDestroy() {
-      window.removeEventListener('popstate', popStateHandler);
+      return h('router-view');
     }
   });
 
+  // Install the router plugin
+  if (install) {
+    install(Vue, { router });
+  }
+
   console.log('[Vue2] Creating Vue instance...');
   container.innerHTML = '';
-  
+
   const vm = new Vue({
     el: container,
     render: h => h(App)
   });
-  
+
   console.log('[Vue2] Mount complete');
-  
+
   return {
     unmount: () => {
       vm.$destroy();
       if (container) {
         container.innerHTML = '';
       }
+      // router.destroy(); // if router supports it
     }
   };
 }

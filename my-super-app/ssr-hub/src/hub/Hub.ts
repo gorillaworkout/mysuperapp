@@ -33,7 +33,7 @@ export class MicroAppHub {
   private setupRouterHooks(): void {
     this.unmountBeforeEach = this.router.beforeEach(async (to, from) => {
       const app = this.registry.getAppByPath(to.path);
-      
+
       if (app && this.state.currentApp && this.state.currentApp.name !== app.name) {
         this.unmountApp(this.state.currentApp.name);
       }
@@ -74,7 +74,7 @@ export class MicroAppHub {
 
     try {
       const module = await app.loader();
-      
+
       const updatedApp = this.registry.updateApp(name, {
         isLoaded: true,
         module,
@@ -83,7 +83,7 @@ export class MicroAppHub {
 
       this.options.onAppLoad?.(updatedApp!);
       this.setState({ isLoading: false });
-      
+
       return updatedApp || null;
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
@@ -106,13 +106,16 @@ export class MicroAppHub {
       return false;
     }
 
+    // Merge router into props if not present
+    const mountProps = { ...props, router: this.router };
+
     if (app.mountInstance) {
       return true;
     }
 
     try {
       let mountFn: MountFunction;
-      
+
       if (typeof app.module.mount === 'function') {
         mountFn = app.module.mount;
       } else if (typeof app.module.default === 'function') {
@@ -122,11 +125,11 @@ export class MicroAppHub {
         return false;
       }
 
-      const instance = mountFn(targetContainer, props);
-      
+      const instance = mountFn(targetContainer, mountProps);
+
       this.registry.updateApp(name, { mountInstance: instance });
       this.setState({ currentApp: app });
-      
+
       return true;
     } catch (error) {
       console.error(`[Hub] Failed to mount app "${name}":`, error);
@@ -143,11 +146,11 @@ export class MicroAppHub {
     try {
       app.mountInstance.unmount();
       this.registry.updateApp(name, { mountInstance: undefined });
-      
+
       if (this.state.currentApp?.name === name) {
         this.setState({ currentApp: null });
       }
-      
+
       return true;
     } catch (error) {
       console.error(`[Hub] Failed to unmount app "${name}":`, error);
@@ -209,7 +212,7 @@ export class MicroAppHub {
     });
     this.registry.clear();
     this.listeners.clear();
-    
+
     if (this.unmountBeforeEach) {
       this.unmountBeforeEach();
     }

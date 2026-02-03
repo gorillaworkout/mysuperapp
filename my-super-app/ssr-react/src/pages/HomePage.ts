@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouterLink } from 'ssr-npm-react';
 
 export const HomePage = () => {
   return React.createElement('div', { className: 'react-home min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8' },
@@ -43,12 +44,12 @@ export const HomePage = () => {
           React.createElement('span', { className: 'bg-purple-100 text-purple-800 px-3 py-1 rounded text-sm' }, '/vue3 → Vue 3 App')
         ),
         React.createElement('div', { className: 'mt-4 flex gap-3' },
-          React.createElement('a', { 
-            href: '/',
+          React.createElement(RouterLink, {
+            to: '/',
             className: 'inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
           }, '← Back to Dashboard'),
-          React.createElement('a', { 
-            href: '/react/about',
+          React.createElement(RouterLink, {
+            to: '/react/about',
             className: 'inline-block bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition'
           }, 'Go to About Page →')
         )
