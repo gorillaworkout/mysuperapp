@@ -1,10 +1,17 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { HomePage } from './pages/HomePage.tsx';
-import type { RenderContext } from '@esmx/core';
+import { App } from './index.tsx';
 
-export default async function serverEntry(rc: RenderContext) {
-  const html = renderToString(React.createElement(HomePage));
+function getPageFromUrl(url) {
+  if (url && (url === '/react/about' || url.startsWith('/react/about/'))) {
+    return 'about';
+  }
+  return 'home';
+}
+
+export default async function serverEntry(rc) {
+  const currentPage = getPageFromUrl(rc.url);
+  const html = renderToString(React.createElement(App, { initialPage: currentPage }));
   await rc.commit();
   
   rc.html = `<!DOCTYPE html>

@@ -34,14 +34,19 @@ export const HomePage = () => {
         )
       ),
 
-      // Routing Info
       React.createElement('div', { className: 'bg-yellow-50 p-6 rounded-lg mb-6' },
         React.createElement('h3', { className: 'font-semibold text-gray-800 mb-2' }, '🔄 Navigation Demo'),
         React.createElement('p', { className: 'text-sm text-gray-600 mb-4' }, 'This page is routed via Universal Router from ssr-hub!'),
-        React.createElement('div', { className: 'flex flex-wrap gap-3' },
+        React.createElement('div', { className: 'flex flex-wrap gap-3 mb-4' },
           React.createElement('span', { className: 'bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm' }, '/react → React App'),
           React.createElement('span', { className: 'bg-green-100 text-green-800 px-3 py-1 rounded text-sm' }, '/vue2 → Vue 2 App'),
           React.createElement('span', { className: 'bg-purple-100 text-purple-800 px-3 py-1 rounded text-sm' }, '/vue3 → Vue 3 App')
+        ),
+        React.createElement('div', { className: 'mt-4' },
+          React.createElement('a', { 
+            href: '/react/about',
+            className: 'inline-block bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition'
+          }, 'Go to About Page →')
         )
       ),
 

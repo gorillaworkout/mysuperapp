@@ -19,32 +19,66 @@ const mimeTypes = {
   '.svg': 'image/svg+xml'
 };
 
-// Micro-app configurations
+// Micro-app configurations - Hub Registry
+// These apps are registered with the Hub for uniform management
 const microApps = {
   '/react': {
-    name: 'React SSR',
+    name: 'react',
+    title: 'React SSR',
     dir: 'ssr-react',
-    framework: 'react'
+    framework: 'react',
+    ssr: true
   },
   '/vue2': {
-    name: 'Vue 2.7',
+    name: 'vue2',
+    title: 'Vue 2.7',
     dir: 'ssr-vue2',
-    framework: 'vue2'
+    framework: 'vue2',
+    ssr: false
   },
   '/vue3': {
-    name: 'Vue 3.3',
+    name: 'vue3',
+    title: 'Vue 3.3',
     dir: 'ssr-vue3',
-    framework: 'vue3'
+    framework: 'vue3',
+    ssr: false
   },
   '/ecommerce': {
-    name: 'E-Commerce',
+    name: 'ecommerce',
+    title: 'E-Commerce',
     dir: 'ssr-vue3-ecommerce',
-    framework: 'vue3'
+    framework: 'vue3',
+    ssr: false
   },
   '/admin': {
-    name: 'Admin Dashboard',
+    name: 'admin',
+    title: 'Admin Dashboard',
     dir: 'ssr-vue3-admin',
-    framework: 'vue3'
+    framework: 'vue3',
+    ssr: false
+  }
+};
+
+// Hub Registry API
+const hubRegistry = {
+  apps: microApps,
+  
+  getAppByPath(path) {
+    for (const [route, config] of Object.entries(this.apps)) {
+      if (path === route || path.startsWith(route + '/')) {
+        return config;
+      }
+    }
+    return null;
+  },
+  
+  getAllApps() {
+    return Object.values(this.apps);
+  },
+  
+  isSSRApp(path) {
+    const app = this.getAppByPath(path);
+    return app ? app.ssr : false;
   }
 };
 
@@ -74,6 +108,7 @@ async function renderMicroApp(appConfig, url, req, res) {
     // Create a mock RenderContext
     const rc = {
       html: '',
+      url: url,
       importMetaSet: new Set(),
       files: {
         js: [],
@@ -127,10 +162,28 @@ async function renderMicroApp(appConfig, url, req, res) {
     
     // Inject client bundle for hydration
     if (rc.html) {
-      const clientScript = `<script type="module" src="/my-super-app/${appConfig.dir}/dist/client/src/hydrate.mjs"></script>`;
+      // Find the actual client entry file (hashed filename)
+      const clientSrcPath = join(__dirname, 'my-super-app', appConfig.dir, 'dist/client/src');
+      let clientScript = '';
       
-      rc.html = rc.html.replace('</body>', `  ${clientScript}\n</body>`);
-      console.log(`[SSR] Client hydration script injected`);
+      try {
+        const clientFiles = readdirSync(clientSrcPath);
+        const clientEntryFile = clientFiles.find(f => f.startsWith('entry.client.') && f.endsWith('.final.mjs'));
+        
+        if (clientEntryFile) {
+          clientScript = `<script type="module" src="/my-super-app/${appConfig.dir}/dist/client/src/${clientEntryFile}"></script>`;
+          console.log(`[SSR] Client entry found: ${clientEntryFile}`);
+        } else {
+          console.log(`[SSR] Warning: No client entry file found in ${clientSrcPath}`);
+        }
+      } catch (err) {
+        console.log(`[SSR] Warning: Could not read client directory: ${err.message}`);
+      }
+      
+      if (clientScript) {
+        rc.html = rc.html.replace('</body>', `  ${clientScript}\n</body>`);
+        console.log(`[SSR] Client hydration script injected`);
+      }
     }
     
     console.log(`[SSR] Final HTML length: ${rc.html ? rc.html.length : 0}`);
@@ -188,12 +241,11 @@ const server = createServer(async (req, res) => {
     }
   }
 
-  // Route to micro-apps
-  for (const [route, config] of Object.entries(microApps)) {
-    if (url.startsWith(route)) {
-      const rendered = await renderMicroApp(config, url, req, res);
-      if (rendered) return;
-    }
+  // Route to micro-apps using Hub Registry
+  const appConfig = hubRegistry.getAppByPath(url);
+  if (appConfig && appConfig.ssr) {
+    const rendered = await renderMicroApp(appConfig, url, req, res);
+    if (rendered) return;
   }
 
   // Serve static files from public/ directory

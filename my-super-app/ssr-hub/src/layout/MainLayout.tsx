@@ -1,67 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-const microApps = [
-  {
-    name: 'react',
-    path: '/react',
-    icon: '🔥',
-    title: 'React SSR',
-    description: 'React 18 + TypeScript',
-    color: 'blue',
-    loader: () => import('ssr-react')
-  },
-  {
-    name: 'vue2',
-    path: '/vue2',
-    icon: '🌿',
-    title: 'Vue 2.7',
-    description: 'Options API',
-    color: 'emerald',
-    loader: () => import('ssr-vue2')
-  },
-  {
-    name: 'vue3',
-    path: '/vue3',
-    icon: '💜',
-    title: 'Vue 3.3',
-    description: 'Composition API',
-    color: 'purple',
-    loader: () => import('ssr-vue3')
-  },
-  {
-    name: 'ecommerce',
-    path: '/ecommerce',
-    icon: '🛒',
-    title: 'E-Commerce',
-    description: 'Vue 3 Store',
-    color: 'orange',
-    loader: () => import('ssr-vue3-ecommerce')
-  },
-  {
-    name: 'admin',
-    path: '/admin',
-    icon: '⚙️',
-    title: 'Admin',
-    description: 'Vue 3 Admin',
-    color: 'gray',
-    loader: () => import('ssr-vue3-admin')
-  }
-];
+const colorClasses = {
+  blue: 'hover:border-blue-400 hover:shadow-blue-100',
+  emerald: 'hover:border-emerald-400 hover:shadow-emerald-100',
+  purple: 'hover:border-purple-400 hover:shadow-purple-100',
+  orange: 'hover:border-orange-400 hover:shadow-orange-100',
+  gray: 'hover:border-gray-400 hover:shadow-gray-100',
+  red: 'hover:border-red-400 hover:shadow-red-100',
+  yellow: 'hover:border-yellow-400 hover:shadow-yellow-100',
+  indigo: 'hover:border-indigo-400 hover:shadow-indigo-100'
+};
 
-function Dashboard() {
-  const colorClasses = {
-    blue: 'hover:border-blue-400 hover:shadow-blue-100',
-    emerald: 'hover:border-emerald-400 hover:shadow-emerald-100',
-    purple: 'hover:border-purple-400 hover:shadow-purple-100',
-    orange: 'hover:border-orange-400 hover:shadow-orange-100',
-    gray: 'hover:border-gray-400 hover:shadow-gray-100'
-  };
-
+function Dashboard({ apps }) {
   return React.createElement('div', { className: 'text-center p-8' },
     React.createElement('h2', { className: 'text-3xl font-bold mb-4 text-gray-900' }, 'ESMX Super App Dashboard'),
     React.createElement('p', { className: 'text-gray-600 mb-8' }, 'Select a micro-app to get started'),
     React.createElement('div', { className: 'grid md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto' },
-      ...microApps.map(app =>
+      ...apps.map(app =>
         React.createElement('a', {
           key: app.name,
           href: app.path,
@@ -70,7 +25,7 @@ function Dashboard() {
             window.history.pushState({}, '', app.path);
             window.dispatchEvent(new PopStateEvent('popstate'));
           },
-          className: `block p-6 bg-white rounded-xl border-2 border-gray-100 transition-all duration-300 hover:shadow-lg ${colorClasses[app.color]} group cursor-pointer`
+          className: `block p-6 bg-white rounded-xl border-2 border-gray-100 transition-all duration-300 hover:shadow-lg ${colorClasses[app.color] || colorClasses.gray} group cursor-pointer`
         },
           React.createElement('div', { className: 'text-4xl mb-3 group-hover:scale-110 transition-transform' }, app.icon),
           React.createElement('h3', { className: 'font-bold text-gray-900 mb-1' }, app.title),
@@ -81,41 +36,46 @@ function Dashboard() {
   );
 }
 
-function MicroAppContainer({ appConfig }) {
-  const [mountNode, setMountNode] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
+function MicroAppContainer({ app, hub }) {
+  const [mountNode, setMountNode] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!mountNode) return;
 
-    let unmount = null;
+    let unmountFn = null;
 
-    appConfig.loader()
-      .then(module => {
+    app.loader()
+      .then((module) => {
         setLoading(false);
         
-        if (module.default && typeof module.default === 'function') {
+        if (module.mount && typeof module.mount === 'function') {
+          const result = module.mount(mountNode);
+          if (result && typeof result.unmount === 'function') {
+            unmountFn = result.unmount;
+          }
+        } else if (module.default && typeof module.default === 'function') {
           const result = module.default(mountNode);
           if (result && typeof result.unmount === 'function') {
-            unmount = result.unmount;
+            unmountFn = result.unmount;
           }
         }
       })
-      .catch(err => {
-        console.error(`Failed to load ${appConfig.name}:`, err);
-        setError(`Failed to load ${appConfig.title}`);
+      .catch((err) => {
+        console.error(`Failed to load ${app.name}:`, err);
+        setError(`Failed to load ${app.title}`);
         setLoading(false);
       });
 
     return () => {
-      if (unmount) unmount();
+      if (unmountFn) unmountFn();
     };
-  }, [mountNode, appConfig]);
+  }, [mountNode, app]);
 
   if (loading) {
     return React.createElement('div', { className: 'flex items-center justify-center h-64' },
-      React.createElement('div', { className: 'text-gray-600' }, `Loading ${appConfig.title}...`)
+      React.createElement('div', { className: 'text-gray-600' }, `Loading ${app.title}...`)
     );
   }
 
@@ -131,26 +91,53 @@ function MicroAppContainer({ appConfig }) {
   });
 }
 
-export function MainLayout() {
+export function MainLayout({ hub }) {
   const [currentPath, setCurrentPath] = useState(() => 
     typeof window !== 'undefined' ? window.location.pathname : '/'
   );
+  const [currentApp, setCurrentApp] = useState(null);
+  const [apps, setApps] = useState([]);
+
+  useEffect(() => {
+    if (hub) {
+      setApps(hub.getAllApps());
+      const state = hub.getState();
+      setCurrentPath(state.currentPath);
+      setCurrentApp(state.currentApp);
+      
+      return hub.subscribe((state) => {
+        setCurrentPath(state.currentPath);
+        setCurrentApp(state.currentApp);
+      });
+    } else {
+      setApps([]);
+    }
+  }, [hub]);
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
+      const newPath = window.location.pathname;
+      setCurrentPath(newPath);
+      if (hub) {
+        const app = hub.getAppByPath(newPath);
+        setCurrentApp(app || null);
+      }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [hub]);
 
   const navigate = (path) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
+    if (hub) {
+      hub.navigateToPath(path);
+      const app = hub.getAppByPath(path);
+      setCurrentApp(app || null);
+    }
   };
 
-  const currentApp = microApps.find(app => currentPath.startsWith(app.path));
   const isActive = (path) => currentPath.startsWith(path);
 
   return React.createElement('div', { className: 'min-h-screen bg-gray-50' },
@@ -170,7 +157,7 @@ export function MainLayout() {
           ),
 
           React.createElement('nav', { className: 'flex space-x-1' },
-            ...microApps.map(app =>
+            ...apps.map(app =>
               React.createElement('a', {
                 key: app.name,
                 href: app.path,
@@ -195,8 +182,8 @@ export function MainLayout() {
 
     React.createElement('main', { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8' },
       currentApp
-        ? React.createElement(MicroAppContainer, { appConfig: currentApp })
-        : React.createElement(Dashboard)
+        ? React.createElement(MicroAppContainer, { app: currentApp, hub })
+        : React.createElement(Dashboard, { apps })
     ),
 
     React.createElement('footer', { className: 'bg-gray-900 text-white py-8 mt-auto' },

@@ -134,7 +134,16 @@ function increment() {
         </div>
       </div>
 
-      <!-- Footer -->
+      <div class="max-w-6xl mx-auto px-6 py-16">
+        <div class="bg-gradient-to-r from-violet-500 to-fuchsia-600 rounded-2xl p-8 text-center text-white">
+          <h3 class="text-2xl font-bold mb-4">🧭 Multi-Page Navigation</h3>
+          <p class="mb-4">This Vue 3 app has multiple pages with internal routing</p>
+          <a href="/vue3/about" class="inline-block px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+            Go to About Page →
+          </a>
+        </div>
+      </div>
+
       <div class="bg-gray-900 text-white py-8">
         <div class="max-w-6xl mx-auto px-6 text-center">
           <p class="text-gray-400">
