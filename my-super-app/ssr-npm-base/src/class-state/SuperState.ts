@@ -1,4 +1,4 @@
-import { BaseState } from '../index.js';
+import { BaseState } from './index';
 
 export interface Todo {
   id: number;

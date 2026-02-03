@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { MainLayout } from './layout/MainLayout.tsx';
 import { Router, RouterMode } from '@esmx/router';
-import { createHub } from './hub/index.js';
+import { createHub } from './hub';
 import { microAppConfigs } from './appConfigs.ts';
 
 const router = new Router({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { App } from './index.tsx';
-import { createHub } from './hub/index.js';
+import { createHub } from './hub';
 import { microAppConfigs } from './appConfigs.ts';
 import { Router, RouterMode } from '@esmx/router';
 import type { RenderContext } from '@esmx/core';
