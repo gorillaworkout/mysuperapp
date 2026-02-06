@@ -10,9 +10,13 @@ import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
 export function App(props: { router?: Router }) {
-  const sharedRouter = props.router || null;
+  const isSSR = typeof window === 'undefined';
   
   const [localRouter] = React.useState(() => {
+    if (isSSR && props.router) {
+      return props.router;
+    }
+    
     const r = new Router({
       mode: RouterMode.history,
       routes: [
@@ -21,12 +25,14 @@ export function App(props: { router?: Router }) {
       ]
     });
 
-    if (typeof window !== 'undefined') {
+    if (!isSSR) {
       r.push(window.location.pathname);
     }
 
     return r;
   });
+
+  const sharedRouter = isSSR ? null : (props.router || null);
 
   return React.createElement(RouterProvider, {
     router: localRouter,

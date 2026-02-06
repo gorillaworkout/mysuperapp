@@ -33,28 +33,28 @@ const microApps = {
     title: 'Vue 2.7',
     dir: 'ssr-vue2',
     framework: 'vue2',
-    ssr: false
+    ssr: true
   },
   '/vue3': {
     name: 'vue3',
     title: 'Vue 3.3',
     dir: 'ssr-vue3',
     framework: 'vue3',
-    ssr: false
+    ssr: true
   },
   '/ecommerce': {
     name: 'ecommerce',
     title: 'E-Commerce',
     dir: 'ssr-vue3-ecommerce',
     framework: 'vue3',
-    ssr: false
+    ssr: true
   },
   '/admin': {
     name: 'admin',
     title: 'Admin Dashboard',
     dir: 'ssr-vue3-admin',
     framework: 'vue3',
-    ssr: false
+    ssr: true
   }
 };
 
@@ -95,8 +95,9 @@ async function renderMicroApp(appConfig, url, req, res) {
       importmap() {
         return `<script type="importmap">{
   "imports": {
-    "react": "https://esm.sh/react@18.3.1",
-    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react": "/my-super-app/ssr-npm-react/dist/client/react.mjs",
+    "react-dom": "/my-super-app/ssr-npm-react/dist/client/react-dom.mjs",
+    "react-dom/client": "/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs",
     "@esmx/router": "/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs",
     "ssr-npm-base": "/my-super-app/ssr-npm-base/dist/client/index.mjs",
     "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/index.mjs",
@@ -213,29 +214,58 @@ const server = createServer(async (req, res) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${appConfig.title} - ESMX</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'); body { font-family: 'Inter', sans-serif; }</style>
+  <style>
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 80rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+    nav a {
+      padding: 0.5rem 1rem;
+      color: #4b5563;
+      text-decoration: none;
+      border-radius: 0.5rem;
+    }
+    nav a:hover { color: #2563eb; background: #f3f4f6; }
+    .container { max-width: 80rem; margin: 0 auto; padding: 2rem 1rem; }
+  </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600">🚀 ESMX Super App</a>
-        <nav class="flex space-x-1">
-          <a href="/react" class="px-4 py-2 text-gray-600 hover:text-blue-600">React</a>
-          <a href="/vue2" class="px-4 py-2 text-gray-600 hover:text-blue-600">Vue 2</a>
-          <a href="/vue3" class="px-4 py-2 text-gray-600 hover:text-blue-600">Vue 3</a>
-          <a href="/ecommerce" class="px-4 py-2 text-gray-600 hover:text-blue-600">E-Commerce</a>
-          <a href="/admin" class="px-4 py-2 text-gray-600 hover:text-blue-600">Admin</a>
-        </nav>
-      </div>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="/" style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: bold; color: #111827; text-decoration: none;">🚀 ESMX Super App</a>
+      <nav style="display: flex; gap: 0.25rem;">
+        <a href="/react">React</a>
+        <a href="/vue2">Vue 2</a>
+        <a href="/vue3">Vue 3</a>
+        <a href="/ecommerce">E-Commerce</a>
+        <a href="/admin">Admin</a>
+      </nav>
     </div>
   </header>
-  <div id="micro-app-mount"></div>
+  <div id="micro-app-mount" class="container"></div>
   <script type="importmap">{
     "imports": {
-      "react": "https://esm.sh/react@18.3.1",
-      "react-dom": "https://esm.sh/react-dom@18.3.1",
+      "react": "/my-super-app/ssr-npm-react/dist/client/react.mjs",
+      "react-dom": "/my-super-app/ssr-npm-react/dist/client/react-dom.mjs",
+      "react-dom/client": "/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs",
       "@esmx/router": "/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs",
       "ssr-npm-base": "/my-super-app/ssr-npm-base/dist/client/index.mjs",
       "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/index.mjs",

@@ -3,21 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>ESMX Super App - Micro-Frontend Hub</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    body { font-family: 'Inter', sans-serif; }
-    .loading-spinner {
-      animation: spin 1s linear infinite;
+    * { box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      min-height: 100vh;
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
+    .header-inner {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #111827;
+      text-decoration: none;
+    }
+    .logo:hover { color: #2563eb; }
+    nav { display: flex; gap: 0.25rem; }
+    nav a {
+      padding: 0.5rem 1rem;
+      color: #4b5563;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    nav a:hover { color: #2563eb; background: #f3f4f6; }
+    nav a.active { color: #2563eb; background: #eff6ff; }
+    .container { max-width: 80rem; margin: 0 auto; padding: 2rem 1rem; }
+    .hero { text-align: center; margin-bottom: 3rem; }
+    .hero h1 { font-size: 2.5rem; font-weight: 700; color: #111827; margin: 0 0 0.5rem 0; }
+    .hero p { font-size: 1.125rem; color: #4b5563; margin: 0 0 1rem 0; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f0fdf4;
+      color: #15803d;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.5rem;
+    }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    .card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-color: #dbeafe;
+      transform: translateY(-2px);
+    }
+    .card-body { padding: 1.5rem; }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .card-icon { font-size: 2rem; }
+    .card-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+    .card-badge.green { background: #dcfce7; color: #15803d; }
+    .card-badge.yellow { background: #fef9c3; color: #a16207; }
+    .card h3 { font-size: 1.125rem; font-weight: 600; margin: 0 0 0.5rem 0; }
+    .card p { font-size: 0.875rem; color: #4b5563; margin: 0; }
+    .card-btn {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.625rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-align: center;
+      color: white;
+      transition: background 0.2s;
+    }
+    .card-btn.blue { background: #2563eb; }
+    .card-btn.blue:hover { background: #1d4ed8; }
+    .card-btn.green { background: #10b981; }
+    .card-btn.green:hover { background: #059669; }
+    .card-btn.purple { background: #8b5cf6; }
+    .card-btn.purple:hover { background: #7c3aed; }
+    .card-btn.orange { background: #ea580c; }
+    .card-btn.orange:hover { background: #c2410c; }
+    .card-btn.gray { background: #6b7280; }
+    .card-btn.gray:hover { background: #4b5563; }
+    footer {
+      background: #111827;
+      color: #9ca3af;
+      padding: 2rem 1rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    .hidden { display: none; }
+    #micro-app-mount { min-height: 400px; }
   </style>
   <script type="importmap">
   {
@@ -54,148 +169,123 @@
   }
   </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors" data-nav="/">
-          🚀 ESMX Super App
-        </a>
-        <nav class="flex space-x-1">
-          <a href="/react" data-nav="/react" class="nav-link font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">React</a>
-          <a href="/vue2" data-nav="/vue2" class="nav-link font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 2</a>
-          <a href="/vue3" data-nav="/vue3" class="nav-link font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 3</a>
-          <a href="/ecommerce" data-nav="/ecommerce" class="nav-link font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">E-Commerce</a>
-          <a href="/admin" data-nav="/admin" class="nav-link font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Admin</a>
-        </nav>
-      </div>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo" data-nav="/">🚀 ESMX Super App</a>
+      <nav>
+        <a href="/react" data-nav="/react">React</a>
+        <a href="/vue2" data-nav="/vue2">Vue 2</a>
+        <a href="/vue3" data-nav="/vue3">Vue 3</a>
+        <a href="/ecommerce" data-nav="/ecommerce">E-Commerce</a>
+        <a href="/admin" data-nav="/admin">Admin</a>
+      </nav>
     </div>
   </header>
 
-  <div id="app-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Dashboard Content (shown when at root) -->
+  <div id="app-container" class="container">
     <div id="dashboard-view">
-      <div class="text-center space-y-4 mb-12">
-        <h1 class="text-5xl font-bold text-gray-900">ESMX Super App Dashboard</h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Micro-frontend architecture with SSR and ESMX Federation
-        </p>
-        <div class="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-          ✅ Server-Side Rendering Ready
-        </div>
+      <div class="hero">
+        <h1>ESMX Super App Dashboard</h1>
+        <p>Micro-frontend architecture with SSR and ESMX Federation</p>
+        <div class="badge">✅ Server-Side Rendering Ready</div>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="/react" data-nav="/react" class="app-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-200 group block">
-          <div class="p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="text-4xl">🔥</div>
-              <div class="text-xs font-medium px-2 py-1 rounded bg-green-100 text-green-700">✅ SSR Ready</div>
+      <div class="grid">
+        <a href="/react" data-nav="/react" class="card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-icon">🔥</div>
+              <div class="card-badge green">✅ SSR</div>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">React SSR</h3>
-            <p class="text-gray-600 text-sm">React 18 + TypeScript + Server-Side Rendering</p>
-            <div class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">Launch App →</div>
+            <h3 style="color: #2563eb;">React SSR</h3>
+            <p>React 18 + TypeScript + Server-Side Rendering</p>
+            <div class="card-btn blue">Launch App →</div>
           </div>
         </a>
 
-        <a href="/vue2" data-nav="/vue2" class="app-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-emerald-200 group block">
-          <div class="p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="text-4xl">🌿</div>
-              <div class="text-xs font-medium px-2 py-1 rounded bg-yellow-100 text-yellow-700">⏳ Client-Side</div>
+        <a href="/vue2" data-nav="/vue2" class="card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-icon">🌿</div>
+              <div class="card-badge green">✅ SSR</div>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">Vue 2.7 Classic</h3>
-            <p class="text-gray-600 text-sm">Options API + Composition API Support</p>
-            <div class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">Launch App →</div>
+            <h3 style="color: #10b981;">Vue 2.7 Classic</h3>
+            <p>Options API + Composition API Support</p>
+            <div class="card-btn green">Launch App →</div>
           </div>
         </a>
 
-        <a href="/vue3" data-nav="/vue3" class="app-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-purple-200 group block">
-          <div class="p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="text-4xl">💜</div>
-              <div class="text-xs font-medium px-2 py-1 rounded bg-yellow-100 text-yellow-700">⏳ Client-Side</div>
+        <a href="/vue3" data-nav="/vue3" class="card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-icon">💜</div>
+              <div class="card-badge green">✅ SSR</div>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">Vue 3 Composition</h3>
-            <p class="text-gray-600 text-sm">Modern Vue with Composition API</p>
-            <div class="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">Launch App →</div>
+            <h3 style="color: #8b5cf6;">Vue 3 Composition</h3>
+            <p>Modern Vue with Composition API</p>
+            <div class="card-btn purple">Launch App →</div>
           </div>
         </a>
 
-        <a href="/ecommerce" data-nav="/ecommerce" class="app-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-orange-200 group block">
-          <div class="p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="text-4xl">🛒</div>
-              <div class="text-xs font-medium px-2 py-1 rounded bg-yellow-100 text-yellow-700">⏳ Client-Side</div>
+        <a href="/ecommerce" data-nav="/ecommerce" class="card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-icon">🛒</div>
+              <div class="card-badge yellow">🔄 CSR</div>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">E-Commerce Platform</h3>
-            <p class="text-gray-600 text-sm">Full-featured shopping experience</p>
-            <div class="w-full mt-4 bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">Launch App →</div>
+            <h3 style="color: #ea580c;">E-Commerce Platform</h3>
+            <p>Full-featured shopping experience</p>
+            <div class="card-btn orange">Launch App →</div>
           </div>
         </a>
 
-        <a href="/admin" data-nav="/admin" class="app-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-gray-200 group block">
-          <div class="p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="text-4xl">⚙️</div>
-              <div class="text-xs font-medium px-2 py-1 rounded bg-yellow-100 text-yellow-700">⏳ Client-Side</div>
+        <a href="/admin" data-nav="/admin" class="card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-icon">⚙️</div>
+              <div class="card-badge yellow">🔄 CSR</div>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 group-hover:text-gray-600 transition-colors">Admin Dashboard</h3>
-            <p class="text-gray-600 text-sm">Management and analytics</p>
-            <div class="w-full mt-4 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">Launch App →</div>
+            <h3 style="color: #6b7280;">Admin Dashboard</h3>
+            <p>Management and analytics</p>
+            <div class="card-btn gray">Launch App →</div>
           </div>
         </a>
       </div>
     </div>
 
-    <!-- Micro-app container (hidden by default) -->
     <div id="micro-app-view" class="hidden">
-      <div id="micro-app-mount" class="micro-app-container"></div>
+      <div id="micro-app-mount"></div>
     </div>
   </div>
 
-  <footer class="bg-gray-900 text-white py-8 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center text-gray-400">
-        Built with ESMX Federation • Micro-Frontend Architecture
-      </div>
-    </div>
+  <footer>
+    Built with ESMX Federation • Micro-Frontend Architecture
   </footer>
 
   <script type="module">
     import { Router, RouterMode } from '@esmx/router';
 
-    // Micro-app registry
     const microApps = {
       '/react': {
         name: 'react',
-        title: 'React SSR',
-        loader: () => import('/my-super-app/ssr-react/dist/client/src/index.mjs'),
-        framework: 'react'
+        loader: () => import('/my-super-app/ssr-react/dist/client/src/index.mjs')
       },
       '/vue2': {
         name: 'vue2',
-        title: 'Vue 2.7',
-        loader: () => import('/my-super-app/ssr-vue2/dist/client/src/index.mjs'),
-        framework: 'vue'
+        loader: () => import('/my-super-app/ssr-vue2/dist/client/src/index.mjs')
       },
       '/vue3': {
         name: 'vue3',
-        title: 'Vue 3.3',
-        loader: () => import('/my-super-app/ssr-vue3/dist/client/src/index.mjs'),
-        framework: 'vue'
+        loader: () => import('/my-super-app/ssr-vue3/dist/client/src/index.mjs')
       },
       '/ecommerce': {
         name: 'ecommerce',
-        title: 'E-Commerce',
-        loader: () => import('/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs'),
-        framework: 'vue'
+        loader: () => import('/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs')
       },
       '/admin': {
         name: 'admin',
-        title: 'Admin',
-        loader: () => import('/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs'),
-        framework: 'vue'
+        loader: () => import('/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs')
       }
     };
 
@@ -204,22 +294,18 @@
 
     const dashboardView = document.getElementById('dashboard-view');
     const microAppView = document.getElementById('micro-app-view');
-    const microAppMount = document.getElementById('micro-app-mount');
 
     function showDashboard() {
       dashboardView.classList.remove('hidden');
       microAppView.classList.add('hidden');
-      document.getElementById('app-container').classList.remove('hidden');
     }
 
     function showMicroApp() {
       dashboardView.classList.add('hidden');
       microAppView.classList.remove('hidden');
-      document.getElementById('app-container').classList.remove('hidden');
     }
 
     async function loadMicroApp(path) {
-      // Unmount current app if exists
       if (unmountFn) {
         unmountFn();
         unmountFn = null;
@@ -236,92 +322,50 @@
       }
 
       const [, config] = appConfig;
-
-      // Show micro-app container BEFORE loading module
       showMicroApp();
       
-      // Get or recreate mount container
       let mountContainer = document.getElementById('micro-app-mount');
       if (!mountContainer) {
-        // Container was destroyed - recreate it
-        const microAppView = document.getElementById('micro-app-view');
-        if (microAppView) {
-          microAppView.innerHTML = '<div id="micro-app-mount" class="micro-app-container"></div>';
-          mountContainer = document.getElementById('micro-app-mount');
-        }
+        microAppView.innerHTML = '<div id="micro-app-mount"></div>';
+        mountContainer = document.getElementById('micro-app-mount');
       }
-      
-      if (!mountContainer) {
-        console.error('[Hub] micro-app-mount container not found and could not be created!');
-        return;
-      }
-      
-      // Mark container as hub-managed
-      mountContainer.setAttribute('data-hub-mounted', 'true');
-      mountContainer.innerHTML = '<div class="flex items-center justify-center h-64"><div class="loading-spinner w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div></div>';
 
       try {
-        console.log(`[Hub] Loading module for ${config.name}...`);
         const module = await config.loader();
-        console.log(`[Hub] Module loaded for ${config.name}:`, module);
         
-        // Get fresh reference
         let freshContainer = document.getElementById('micro-app-mount');
         if (!freshContainer) {
-          // Recreate if lost
-          const microAppView = document.getElementById('micro-app-view');
-          if (microAppView) {
-            microAppView.innerHTML = '<div id="micro-app-mount" class="micro-app-container"></div>';
-            freshContainer = document.getElementById('micro-app-mount');
-          }
-        }
-        
-        if (!freshContainer) {
-          console.error('[Hub] Container lost after module load');
-          return;
+          microAppView.innerHTML = '<div id="micro-app-mount"></div>';
+          freshContainer = document.getElementById('micro-app-mount');
         }
         
         freshContainer.innerHTML = '';
-        freshContainer.setAttribute('data-hub-mounted', 'true');
 
-        console.log(`[Hub] Looking for mount function in ${config.name}...`);
-        console.log(`[Hub] module.mount:`, module.mount);
-        console.log(`[Hub] module.default:`, module.default);
         const mountFn = module.mount || module.default;
-        console.log(`[Hub] mountFn:`, mountFn);
         
         if (typeof mountFn === 'function') {
-          console.log(`[Hub] Calling mount for ${config.name}...`);
           const result = mountFn(freshContainer, { router: router });
-          console.log(`[Hub] Mount result for ${config.name}:`, result);
           
-          // Handle async mount functions (Vue3, Ecommerce, Admin)
           if (result && typeof result.then === 'function') {
-            // It's a Promise - wait for it to resolve
             result.then(resolved => {
-              console.log(`[Hub] Async mount resolved for ${config.name}:`, resolved);
               if (resolved && typeof resolved.unmount === 'function') {
                 unmountFn = resolved.unmount;
               }
             }).catch(err => {
-              console.error(`[Hub] Async mount failed for ${config.name}:`, err);
-              freshContainer.innerHTML = `<div class="text-red-600 p-8">Error loading ${config.title}: ${err.message}</div>`;
+              freshContainer.innerHTML = `<div style="color: red; padding: 2rem;">Error: ${err.message}</div>`;
             });
           } else if (result && typeof result.unmount === 'function') {
-            // It's a synchronous result with unmount
             unmountFn = result.unmount;
           }
           currentApp = config.name;
-          console.log(`[Hub] ${config.name} mounted successfully`);
         } else {
-          console.error(`[Hub] App ${config.name} does not export a mount function`);
-          freshContainer.innerHTML = '<div class="text-red-600 p-8">Failed to load app - no mount function</div>';
+          freshContainer.innerHTML = '<div style="color: red; padding: 2rem;">No mount function</div>';
         }
       } catch (err) {
-        console.error(`[Hub] Failed to load ${config.name}:`, err);
+        console.error(`Failed to load ${config.name}:`, err);
         const errorContainer = document.getElementById('micro-app-mount');
         if (errorContainer) {
-          errorContainer.innerHTML = `<div class="text-red-600 p-8">Error loading ${config.title}: ${err.message}</div>`;
+          errorContainer.innerHTML = `<div style="color: red; padding: 2rem;">Error: ${err.message}</div>`;
         }
       }
     }
@@ -332,7 +376,6 @@
       )?.[1];
     }
 
-    // Initialize Router
     const router = new Router({
       mode: RouterMode.history,
       routes: [
@@ -348,12 +391,6 @@
         { path: '/admin', component: null },
         { path: '/admin/:rest(.*)', component: null }
       ]
-    });
-
-    // Handle route changes
-    router.beforeEach((to, from) => {
-      const fromPath = from ? from.path : 'null';
-      console.log(`[Router] Navigating from ${fromPath} to ${to.path}`);
     });
 
     router.afterEach((to) => {
@@ -374,42 +411,28 @@
     });
 
     function updateActiveNav(path) {
-      document.querySelectorAll('.nav-link').forEach(link => {
+      document.querySelectorAll('nav a').forEach(link => {
         const linkPath = link.getAttribute('data-nav');
         const isActive = path === linkPath || (linkPath !== '/' && path.startsWith(linkPath));
-        
-        if (isActive) {
-          link.classList.add('text-blue-600', 'bg-blue-50');
-          link.classList.remove('text-gray-600');
-        } else {
-          link.classList.remove('text-blue-600', 'bg-blue-50');
-          link.classList.add('text-gray-600');
-        }
+        link.classList.toggle('active', isActive);
       });
     }
 
-    // Setup navigation handlers
     document.addEventListener('click', (e) => {
       if (e.defaultPrevented) return;
       if (e.button !== 0) return;
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-
-      const link = target.closest('a[data-nav]');
+      const link = e.target.closest('a[data-nav]');
       if (!link) return;
-      if (link.getAttribute('target') && link.getAttribute('target') !== '_self') return;
 
       const path = link.getAttribute('data-nav');
       if (!path) return;
 
       e.preventDefault();
-      console.log(`[Nav] Clicked: ${path}`);
-      router.push(path).catch(err => console.error('[Router] Push error:', err));
+      router.push(path);
     });
 
-    // Handle browser back/forward
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
       if (path === '/') {
@@ -435,17 +458,12 @@
       updateActiveNav(path);
     });
 
-    // Initialize based on current URL
     const initialPath = window.location.pathname;
     if (initialPath !== '/') {
       loadMicroApp(initialPath);
     }
     updateActiveNav(initialPath);
-    
-    // Initialize router with current path
-    router.replace(initialPath).catch(err => console.log('[Router] Initial replace:', err));
-
-    console.log('✅ ESMX Router initialized');
+    router.replace(initialPath);
   </script>
 </body>
 </html>

@@ -34,31 +34,58 @@ export default async function(rc: any) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vue 2.7 - ESMX</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    body { font-family: 'Inter', sans-serif; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 80rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+    nav a {
+      padding: 0.5rem 1rem;
+      color: #4b5563;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    nav a:hover { color: #2563eb; background: #f3f4f6; }
+    .container { max-width: 80rem; margin: 0 auto; padding: 2rem 1rem; }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">🚀 ESMX Super App</a>
-        <nav class="flex space-x-1">
-          <a href="/react" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">React</a>
-          <a href="/vue2" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 2</a>
-          <a href="/vue3" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 3</a>
-          <a href="/ecommerce" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">E-Commerce</a>
-          <a href="/admin" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Admin</a>
-        </nav>
-      </div>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="/" style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: bold; color: #111827; text-decoration: none;">🚀 ESMX Super App</a>
+      <nav style="display: flex; gap: 0.25rem;">
+        <a href="/react">React</a>
+        <a href="/vue2">Vue 2</a>
+        <a href="/vue3">Vue 3</a>
+        <a href="/ecommerce">E-Commerce</a>
+        <a href="/admin">Admin</a>
+      </nav>
     </div>
   </header>
-  <div id="app">${html}</div>
+  <div id="app" class="container">${html}</div>
   <script type="importmap">{
     "imports": {
-      "vue": "https://esm.sh/vue@2.7.13?bundle"
+      "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
     }
   }</script>
   ${rc.moduleEntry()}
