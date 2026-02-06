@@ -1,2 +1,2 @@
-// Export router components for use in other micro-frontends
-export * from './router-react/index';
+// Export everything from index.ts for browser usage
+export * from './index';

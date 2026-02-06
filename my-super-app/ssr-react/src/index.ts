@@ -1,11 +1,15 @@
-import React from 'react';
+import { 
+  React, 
+  Router, 
+  RouterMode,
+  RouterProvider, 
+  RouterView 
+} from 'ssr-npm-react';
 import { createRoot } from 'react-dom/client';
-import { Router, RouterMode } from '@esmx/router';
-import { RouterProvider, RouterView } from 'ssr-npm-react';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
-export function App(props: any) {
+export function App(props: { router?: Router }) {
   const sharedRouter = props.router || null;
   
   const [localRouter] = React.useState(() => {
@@ -31,10 +35,9 @@ export function App(props: any) {
   });
 }
 
-export function mount(container: HTMLElement, props: any) {
+export function mount(container: HTMLElement, props?: { router?: Router }) {
   const root = createRoot(container);
-
-  root.render(React.createElement(App, props));
+  root.render(React.createElement(App, props || {}));
 
   return {
     unmount: () => {

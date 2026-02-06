@@ -16,7 +16,7 @@ importers:
         version: 3.0.0-rc.107
       '@esmx/router-react':
         specifier: ^3.0.0-rc.107
-        version: 3.0.0-rc.107
+        version: 3.0.0-rc.107(react@18.3.1)
       '@esmx/router-vue':
         specifier: ^3.0.0-rc.107
         version: 3.0.0-rc.107(vue@3.5.27(typescript@5.9.3))
@@ -121,6 +121,12 @@ importers:
 
   my-super-app/ssr-npm-react:
     dependencies:
+      '@esmx/router':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107
+      '@esmx/router-react':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -146,6 +152,12 @@ importers:
 
   my-super-app/ssr-npm-vue2:
     dependencies:
+      '@esmx/router':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107
+      '@esmx/router-vue':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107(vue@2.7.16)
       ssr-npm-base:
         specifier: workspace:*
         version: link:../ssr-npm-base
@@ -165,6 +177,12 @@ importers:
 
   my-super-app/ssr-npm-vue3:
     dependencies:
+      '@esmx/router':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107
+      '@esmx/router-vue':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107(vue@3.5.27(typescript@5.9.3))
       ssr-npm-base:
         specifier: workspace:*
         version: link:../ssr-npm-base
@@ -2592,9 +2610,15 @@ snapshots:
     dependencies:
       '@import-maps/resolve': 2.0.0
 
-  '@esmx/router-react@3.0.0-rc.107':
+  '@esmx/router-react@3.0.0-rc.107(react@18.3.1)':
     dependencies:
       '@esmx/router': 3.0.0-rc.107
+      react: 18.3.1
+
+  '@esmx/router-vue@3.0.0-rc.107(vue@2.7.16)':
+    dependencies:
+      '@esmx/router': 3.0.0-rc.107
+      vue: 2.7.16
 
   '@esmx/router-vue@3.0.0-rc.107(vue@3.5.27(typescript@5.9.3))':
     dependencies:

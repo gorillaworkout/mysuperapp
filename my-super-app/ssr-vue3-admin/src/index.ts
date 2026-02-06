@@ -1,5 +1,4 @@
-import { createApp, h, defineComponent, resolveComponent } from 'ssr-npm-vue3';
-import { Router, RouterMode } from '@esmx/router';
+import { createApp, h, defineComponent, resolveComponent, Router, RouterMode, install } from 'ssr-npm-vue3';
 import type { Router as RouterType } from '@esmx/router';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
@@ -27,7 +26,6 @@ export async function mount(container: HTMLElement, props?: { router?: RouterTyp
 
   const app = createApp(App);
   
-  const { install } = await import('ssr-npm-vue3');
   if (install) {
     install(app, { router: localRouter, sharedRouter: sharedRouter || undefined });
   }

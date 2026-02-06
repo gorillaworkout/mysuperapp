@@ -1,4 +1,8 @@
-export * from 'vue';
-export { default } from 'vue';
-export * from '@esmx/router';
-export * from './router-vue/index'; // Export Vue 2 specific router adapters
+import Vue from 'vue';
+export { Vue };
+export default Vue;
+
+export { Router, RouterMode } from '@esmx/router';
+export type { Route, RouteConfig } from '@esmx/router';
+
+export { install, RouterView, RouterLink } from './router-vue/index';

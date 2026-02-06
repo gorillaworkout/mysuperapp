@@ -1,15 +1,12 @@
-import Vue from 'ssr-npm-vue2';
+import Vue, { Router, RouterMode, install } from 'ssr-npm-vue2';
+import type { Router as RouterType } from '@esmx/router';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
-import type { Router as RouterType } from '@esmx/router';
 
 export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
   console.log('[Vue2] Mount called with container:', container);
 
   const sharedRouter = props?.router;
-  
-  const { Router, RouterMode } = await import('@esmx/router');
-  const { install } = await import('ssr-npm-vue2');
 
   const localRouter = new Router({
     mode: RouterMode.history,
