@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'ssr-npm-vue2';
 
   template: `
     <div class="vue2-dashboard">

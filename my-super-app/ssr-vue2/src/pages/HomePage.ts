@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'ssr-npm-vue2';
 
 export const HomePage = Vue.extend({
   name: 'Vue2HomePage',
@@ -39,13 +39,13 @@ export const HomePage = Vue.extend({
           h('h3', { class: 'font-semibold text-gray-800 mb-2' }, '🧭 Multi-Page Navigation'),
           h('p', { class: 'text-sm text-gray-600 mb-4' }, 'This Vue 2 app has multiple pages with internal routing'),
           h('div', { class: 'flex gap-3' }, [
-            h('a', { 
-              attrs: { href: '/' },
-              class: 'inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+            h('router-link', { 
+              props: { to: '/' },
+              staticClass: 'inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
             }, '← Dashboard'),
-            h('a', { 
-              attrs: { href: '/vue2/about' },
-              class: 'inline-block bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600 transition'
+            h('router-link', {
+              props: { to: '/vue2/about' },
+              staticClass: 'inline-block bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600 transition'
             }, 'Go to About Page →')
           ])
         ]),

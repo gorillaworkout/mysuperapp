@@ -1,4 +1,4 @@
-import { defineComponent, h } from 'vue';
+import { defineComponent, h, resolveComponent } from 'ssr-npm-vue3';
 
 export const AboutPage = defineComponent({
   name: 'Vue3AboutPage',
@@ -15,14 +15,14 @@ export const AboutPage = defineComponent({
         h('div', { class: 'mb-8 p-4 bg-gray-50 rounded-lg' }, [
           h('h3', { class: 'font-semibold text-gray-800 mb-3' }, '🧭 Navigation'),
           h('div', { class: 'flex gap-4 flex-wrap' }, [
-            h('a', { 
-              href: '/',
+            h(resolveComponent('router-link'), { 
+              to: '/',
               class: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
-            }, '← Dashboard'),
-            h('a', { 
-              href: '/vue3',
+            }, () => '← Dashboard'),
+            h(resolveComponent('router-link'), { 
+              to: '/vue3',
               class: 'bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition'
-            }, '← Home'),
+            }, () => '← Home'),
             h('span', { class: 'text-gray-400 self-center' }, '|'),
             h('span', { class: 'text-gray-600 self-center' }, 'Current: About Page')
           ])

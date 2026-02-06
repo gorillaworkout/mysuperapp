@@ -283,20 +283,6 @@ const server = createServer(async (req, res) => {
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="/" class="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">🚀 ESMX Super App</a>
-        <nav class="flex space-x-1">
-          <a href="/react" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">React</a>
-          <a href="/vue2" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 2</a>
-          <a href="/vue3" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Vue 3</a>
-          <a href="/ecommerce" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">E-Commerce</a>
-          <a href="/admin" class="font-medium transition-all duration-200 rounded-lg px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50">Admin</a>
-        </nav>
-      </div>
-    </div>
-  </header>
   <div id="app"></div>
   <script type="importmap">{
     "imports": {
@@ -305,7 +291,8 @@ const server = createServer(async (req, res) => {
       "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13",
       "@esmx/router": "https://esm.sh/@esmx/router@3.0.0-rc.107",
       "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/entry.client.69b742e9.final.mjs",
-      "ssr-npm-vue3": "https://esm.sh/vue@3.5.13"
+      "ssr-npm-vue3": "/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs",
+      "ssr-npm-vue2": "/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs"
     }
   }</script>
   ${clientScript}

@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp } from 'ssr-npm-vue3';
 import { renderToString } from 'vue/server-renderer';
 
 export default async function server(ctx: any) {

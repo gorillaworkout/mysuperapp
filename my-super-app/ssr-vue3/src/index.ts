@@ -1,47 +1,48 @@
-import { createApp, ref, onMounted, onUnmounted, h, defineComponent } from 'vue';
+import { createApp, h, defineComponent, resolveComponent } from 'ssr-npm-vue3';
+import { Router, RouterMode } from '@esmx/router';
+import type { Router as RouterType } from '@esmx/router';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 
-function getCurrentPage() {
-  const path = window.location.pathname;
-  if (path === '/vue3/about' || path.startsWith('/vue3/about/')) {
-    return 'about';
-  }
-  return 'home';
-}
-
 export const App = defineComponent({
-  setup() {
-    const currentPage = ref(getCurrentPage());
-
-    const handlePopState = () => {
-      currentPage.value = getCurrentPage();
-    };
-
-    onMounted(() => {
-      window.addEventListener('popstate', handlePopState);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener('popstate', handlePopState);
-    });
-
-    return { currentPage };
-  },
+  name: 'App',
   render() {
-    return this.currentPage === 'about'
-      ? h(AboutPage)
-      : h(HomePage);
+    const RouterView = resolveComponent('router-view');
+    return h(RouterView);
   }
 });
 
-export function mount(container: HTMLElement) {
-  const app = createApp(App);
-  app.mount(container);
+export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
+  const sharedRouter = props?.router;
   
+  const localRouter: RouterType = new Router({
+    mode: RouterMode.history,
+    routes: [
+      { path: '/vue3', component: HomePage },
+      { path: '/vue3/about', component: AboutPage }
+    ]
+  });
+
+  await localRouter.replace(window.location.pathname);
+
+  const app = createApp(App);
+  
+  const { install } = await import('ssr-npm-vue3');
+  if (install) {
+    install(app, { router: localRouter, sharedRouter: sharedRouter || undefined });
+  }
+
+  container.innerHTML = '';
+  const vueContainer = document.createElement('div');
+  container.appendChild(vueContainer);
+  app.mount(vueContainer);
+
   return {
     unmount: () => {
       app.unmount();
+      if (!sharedRouter) {
+        localRouter.destroy();
+      }
     }
   };
 }

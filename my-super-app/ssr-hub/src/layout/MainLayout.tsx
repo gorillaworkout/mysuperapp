@@ -11,7 +11,7 @@ const colorClasses = {
   indigo: 'hover:border-indigo-400 hover:shadow-indigo-100'
 };
 
-function Dashboard({ apps }) {
+function Dashboard({ apps, onNavigate }) {
   return React.createElement('div', { className: 'text-center p-8' },
     React.createElement('h2', { className: 'text-3xl font-bold mb-4 text-gray-900' }, 'ESMX Super App Dashboard'),
     React.createElement('p', { className: 'text-gray-600 mb-8' }, 'Select a micro-app to get started'),
@@ -22,8 +22,7 @@ function Dashboard({ apps }) {
           href: app.path,
           onClick: (e) => {
             e.preventDefault();
-            window.history.pushState({}, '', app.path);
-            window.dispatchEvent(new PopStateEvent('popstate'));
+            onNavigate(app.path);
           },
           className: `block p-6 bg-white rounded-xl border-2 border-gray-100 transition-all duration-300 hover:shadow-lg ${colorClasses[app.color] || colorClasses.gray} group cursor-pointer`
         },
@@ -42,36 +41,32 @@ function MicroAppContainer({ app, hub }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!mountNode) return;
+    if (!mountNode || !hub) return;
 
-    let unmountFn = null;
+    let mounted = true;
 
-    app.loader()
-      .then((module) => {
-        setLoading(false);
-        
-        if (module.mount && typeof module.mount === 'function') {
-          const result = module.mount(mountNode);
-          if (result && typeof result.unmount === 'function') {
-            unmountFn = result.unmount;
-          }
-        } else if (module.default && typeof module.default === 'function') {
-          const result = module.default(mountNode);
-          if (result && typeof result.unmount === 'function') {
-            unmountFn = result.unmount;
+    hub.mountApp(app.name, mountNode)
+      .then((success) => {
+        if (mounted) {
+          setLoading(false);
+          if (!success) {
+            setError(`Failed to mount ${app.title}`);
           }
         }
       })
       .catch((err) => {
-        console.error(`Failed to load ${app.name}:`, err);
-        setError(`Failed to load ${app.title}`);
-        setLoading(false);
+        if (mounted) {
+          console.error(`Failed to load ${app.name}:`, err);
+          setError(`Failed to load ${app.title}`);
+          setLoading(false);
+        }
       });
 
     return () => {
-      if (unmountFn) unmountFn();
+      mounted = false;
+      hub.unmountApp(app.name);
     };
-  }, [mountNode, app]);
+  }, [mountNode, app, hub]);
 
   if (loading) {
     return React.createElement('div', { className: 'flex items-center justify-center h-64' },
@@ -129,12 +124,8 @@ export function MainLayout({ hub }) {
   }, [hub]);
 
   const navigate = (path) => {
-    window.history.pushState({}, '', path);
-    setCurrentPath(path);
     if (hub) {
       hub.navigateToPath(path);
-      const app = hub.getAppByPath(path);
-      setCurrentApp(app || null);
     }
   };
 
@@ -183,7 +174,7 @@ export function MainLayout({ hub }) {
     React.createElement('main', { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8' },
       currentApp
         ? React.createElement(MicroAppContainer, { app: currentApp, hub })
-        : React.createElement(Dashboard, { apps })
+        : React.createElement(Dashboard, { apps, onNavigate: navigate })
     ),
 
     React.createElement('footer', { className: 'bg-gray-900 text-white py-8 mt-auto' },

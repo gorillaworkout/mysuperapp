@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'ssr-npm-vue2';
 
 export const AboutPage = Vue.extend({
   name: 'Vue2AboutPage',
@@ -15,13 +15,13 @@ export const AboutPage = Vue.extend({
         h('div', { class: 'mb-8 p-4 bg-gray-50 rounded-lg' }, [
           h('h3', { class: 'font-semibold text-gray-800 mb-3' }, '🧭 Navigation'),
           h('div', { class: 'flex gap-4 flex-wrap' }, [
-            h('a', { 
-              attrs: { href: '/' },
-              class: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
+            h('router-link', { 
+              props: { to: '/' },
+              staticClass: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
             }, '← Dashboard'),
-            h('a', { 
-              attrs: { href: '/vue2' },
-              class: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'
+            h('router-link', { 
+              props: { to: '/vue2' },
+              staticClass: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'
             }, '← Home'),
             h('span', { class: 'text-gray-400 self-center' }, '|'),
             h('span', { class: 'text-gray-600 self-center' }, 'Current: About Page')

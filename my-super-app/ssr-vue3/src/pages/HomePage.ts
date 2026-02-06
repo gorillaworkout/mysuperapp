@@ -1,4 +1,4 @@
-import { defineComponent, h } from 'vue';
+import { defineComponent, h, resolveComponent } from 'ssr-npm-vue3';
 
 export const HomePage = defineComponent({
   name: 'Vue3HomePage',
@@ -39,14 +39,14 @@ export const HomePage = defineComponent({
           h('h3', { class: 'font-semibold text-gray-800 mb-2' }, '🧭 Multi-Page Navigation'),
           h('p', { class: 'text-sm text-gray-600 mb-4' }, 'This Vue 3 app has multiple pages with internal routing'),
           h('div', { class: 'flex gap-3' }, [
-            h('a', { 
-              href: '/',
+            h(resolveComponent('router-link'), { 
+              to: '/',
               class: 'inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition'
-            }, '← Dashboard'),
-            h('a', { 
-              href: '/vue3/about',
+            }, () => '← Dashboard'),
+            h(resolveComponent('router-link'), { 
+              to: '/vue3/about',
               class: 'inline-block bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition'
-            }, 'Go to About Page →')
+            }, () => 'Go to About Page →')
           ])
         ]),
 

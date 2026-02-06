@@ -5,12 +5,12 @@ import { RouterProvider, RouterView } from 'ssr-npm-react';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
-export function App(props: any) {
-  // If router is passed from parent (e.g. Hub), use it. 
-  // Otherwise create a new instance (standalone mode).
-  const [router] = React.useState(() => {
-    if (props.router) return props.router;
+const SharedRouterContext = React.createContext<Router | null>(null);
 
+export function App(props: any) {
+  const sharedRouter = props.router || null;
+  
+  const [localRouter] = React.useState(() => {
     const r = new Router({
       mode: RouterMode.history,
       routes: [
@@ -19,7 +19,6 @@ export function App(props: any) {
       ]
     });
 
-    // In standalone mode (no parent router), we must initialize the first route
     if (typeof window !== 'undefined') {
       r.push(window.location.pathname);
     }
@@ -27,26 +26,23 @@ export function App(props: any) {
     return r;
   });
 
-  return React.createElement(RouterProvider, {
-    router,
-    children: React.createElement(RouterView)
+  return React.createElement(SharedRouterContext.Provider, {
+    value: sharedRouter,
+    children: React.createElement(RouterProvider, {
+      router: localRouter,
+      children: React.createElement(RouterView)
+    })
   });
 }
 
 export function mount(container: HTMLElement, props: any) {
   const root = createRoot(container);
 
-  // Pass props to App (including router if it exists)
   root.render(React.createElement(App, props));
 
   return {
     unmount: () => {
       root.unmount();
-      // If we created a local router instance, we should destroy it?
-      // But App component manages the router reference state. 
-      // If props.router was passed, we don't own it.
-      // If we created it, we might want to destroy it, but RouterProvider doesn't expose it easily out here.
-      // Usually fine to leave it for GC or if we want to be strict we can refactor mount to create router outside.
     }
   };
 }

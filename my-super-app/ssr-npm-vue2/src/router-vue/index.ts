@@ -7,7 +7,15 @@ export interface RouterVuePlugin extends PluginObject<any> {
 
 const VueRouterPlugin: RouterVuePlugin = {
   install(vueInstance: typeof Vue, options?: any) {
-    const router = Router.getInstance();
+    const router =
+      options?.router ||
+      (typeof (Router as any).getInstance === 'function'
+        ? (Router as any).getInstance()
+        : null);
+    if (!router) {
+      console.warn('[esmx-router-vue2] Router instance not provided.');
+      return;
+    }
     this.router = router;
 
     vueInstance.prototype.$router = router;
@@ -18,13 +26,11 @@ const VueRouterPlugin: RouterVuePlugin = {
           this._routerRoot = this;
           this._router = router;
           
-          let currentRoute = router.getCurrentRoute();
-          
-          if (currentRoute) {
-            this._route = currentRoute;
-          }
-          
-          const unsubscribe = router.onRouteChange((route) => {
+          try {
+            this._route = router.route;
+          } catch (e) { }
+
+          const unsubscribe = router.afterEach((route) => {
             this._route = route;
             this.$forceUpdate();
           });
@@ -83,13 +89,23 @@ const VueRouterPlugin: RouterVuePlugin = {
       functional: true,
       render(h, { parent }):
       any {
-        const route = parent.$route || router.getCurrentRoute();
-        
-        if (!route || !route.component) {
+        let route = parent.$route;
+        if (!route) {
+          try {
+            route = router.route;
+          } catch (e) { }
+        }
+
+        const matched = route?.matched;
+        const component = matched && matched.length > 0
+          ? matched[matched.length - 1].component
+          : null;
+
+        if (!component) {
           return null;
         }
         
-        return h(route.component);
+        return h(component);
       }
     });
   }
@@ -103,11 +119,20 @@ export function RouterView(Vue) {
   return Vue.component('router-view', {
     functional: true,
     render(h, { parent }) {
-      const route = parent.$route || Router.getInstance().getCurrentRoute();
-      if (!route || !route.component) {
+      let route = parent.$route;
+      if (!route) {
+        try {
+          route = (Router as any).getInstance?.()?.route;
+        } catch (e) { }
+      }
+      const matched = route?.matched;
+      const component = matched && matched.length > 0
+        ? matched[matched.length - 1].component
+        : null;
+      if (!component) {
         return null;
       }
-      return h(route.component);
+      return h(component);
     }
   });
 }
@@ -121,7 +146,7 @@ export function RouterLink(Vue) {
       tag: { type: String, default: 'a' }
     },
     render(h) {
-      const router = this.$router || Router.getInstance();
+      const router = this.$router || (Router as any).getInstance?.();
       const path = typeof this.to === 'string' ? this.to : this.to.path;
       const isActive = router && path === window.location.pathname;
       

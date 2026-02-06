@@ -34,8 +34,11 @@ export class MicroAppHub {
     this.unmountBeforeEach = this.router.beforeEach(async (to, from) => {
       const app = this.registry.getAppByPath(to.path);
 
-      if (app && this.state.currentApp && this.state.currentApp.name !== app.name) {
-        this.unmountApp(this.state.currentApp.name);
+      // If navigating to a different app, or navigating to a path with no app (e.g., Dashboard)
+      if (this.state.currentApp) {
+        if (!app || this.state.currentApp.name !== app.name) {
+          this.unmountApp(this.state.currentApp.name);
+        }
       }
 
       this.setState({ currentPath: to.path });
@@ -45,6 +48,9 @@ export class MicroAppHub {
       const app = this.registry.getAppByPath(to.path);
       if (app) {
         this.mountApp(app.name);
+      } else {
+        // No app for this path - clear currentApp to show Dashboard
+        this.setState({ currentApp: null });
       }
     });
   }

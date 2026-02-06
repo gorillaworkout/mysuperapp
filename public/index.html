@@ -25,8 +25,19 @@
       "react": "https://esm.sh/react@18.3.1",
       "react-dom": "https://esm.sh/react-dom@18.3.1",
       "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-      "vue": "https://esm.sh/vue@3.5.13",
-      "@esmx/router": "https://esm.sh/@esmx/router@3.0.0-rc.107"
+      "@esmx/router": "/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs",
+      "ssr-npm-base": "/my-super-app/ssr-npm-base/dist/client/index.mjs",
+      "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/index.mjs",
+      "ssr-npm-vue2": "/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs",
+      "ssr-npm-vue3": "/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs"
+    },
+    "scopes": {
+      "/my-super-app/ssr-npm-vue2/": {
+        "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-npm-vue3/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      }
     }
   }
   </script>
@@ -203,9 +214,6 @@
       }
       currentApp = null;
 
-      // Clear mount point
-      microAppMount.innerHTML = '<div class="flex items-center justify-center h-64"><div class="loading-spinner w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div></div>';
-
       const appConfig = Object.entries(microApps).find(([route]) => 
         path === route || path.startsWith(route + '/')
       );
@@ -217,28 +225,92 @@
 
       const [, config] = appConfig;
 
-      try {
-        const module = await config.loader();
-        
-        // Clear loading spinner
-        microAppMount.innerHTML = '';
+      // Show micro-app container BEFORE loading module
+      showMicroApp();
+      
+      // Get or recreate mount container
+      let mountContainer = document.getElementById('micro-app-mount');
+      if (!mountContainer) {
+        // Container was destroyed - recreate it
+        const microAppView = document.getElementById('micro-app-view');
+        if (microAppView) {
+          microAppView.innerHTML = '<div id="micro-app-mount" class="micro-app-container"></div>';
+          mountContainer = document.getElementById('micro-app-mount');
+        }
+      }
+      
+      if (!mountContainer) {
+        console.error('[Hub] micro-app-mount container not found and could not be created!');
+        return;
+      }
+      
+      // Mark container as hub-managed
+      mountContainer.setAttribute('data-hub-mounted', 'true');
+      mountContainer.innerHTML = '<div class="flex items-center justify-center h-64"><div class="loading-spinner w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div></div>';
 
-        // Call mount function
+      try {
+        console.log(`[Hub] Loading module for ${config.name}...`);
+        const module = await config.loader();
+        console.log(`[Hub] Module loaded for ${config.name}:`, module);
+        
+        // Get fresh reference
+        let freshContainer = document.getElementById('micro-app-mount');
+        if (!freshContainer) {
+          // Recreate if lost
+          const microAppView = document.getElementById('micro-app-view');
+          if (microAppView) {
+            microAppView.innerHTML = '<div id="micro-app-mount" class="micro-app-container"></div>';
+            freshContainer = document.getElementById('micro-app-mount');
+          }
+        }
+        
+        if (!freshContainer) {
+          console.error('[Hub] Container lost after module load');
+          return;
+        }
+        
+        freshContainer.innerHTML = '';
+        freshContainer.setAttribute('data-hub-mounted', 'true');
+
+        console.log(`[Hub] Looking for mount function in ${config.name}...`);
+        console.log(`[Hub] module.mount:`, module.mount);
+        console.log(`[Hub] module.default:`, module.default);
         const mountFn = module.mount || module.default;
+        console.log(`[Hub] mountFn:`, mountFn);
+        
         if (typeof mountFn === 'function') {
-          const result = mountFn(microAppMount, { router });
-          if (result && typeof result.unmount === 'function') {
+          console.log(`[Hub] Calling mount for ${config.name}...`);
+          const result = mountFn(freshContainer);
+          console.log(`[Hub] Mount result for ${config.name}:`, result);
+          
+          // Handle async mount functions (Vue3, Ecommerce, Admin)
+          if (result && typeof result.then === 'function') {
+            // It's a Promise - wait for it to resolve
+            result.then(resolved => {
+              console.log(`[Hub] Async mount resolved for ${config.name}:`, resolved);
+              if (resolved && typeof resolved.unmount === 'function') {
+                unmountFn = resolved.unmount;
+              }
+            }).catch(err => {
+              console.error(`[Hub] Async mount failed for ${config.name}:`, err);
+              freshContainer.innerHTML = `<div class="text-red-600 p-8">Error loading ${config.title}: ${err.message}</div>`;
+            });
+          } else if (result && typeof result.unmount === 'function') {
+            // It's a synchronous result with unmount
             unmountFn = result.unmount;
           }
           currentApp = config.name;
-          showMicroApp();
+          console.log(`[Hub] ${config.name} mounted successfully`);
         } else {
-          console.error(`App ${config.name} does not export a mount function`);
-          microAppMount.innerHTML = '<div class="text-red-600 p-8">Failed to load app</div>';
+          console.error(`[Hub] App ${config.name} does not export a mount function`);
+          freshContainer.innerHTML = '<div class="text-red-600 p-8">Failed to load app - no mount function</div>';
         }
       } catch (err) {
-        console.error(`Failed to load ${config.name}:`, err);
-        microAppMount.innerHTML = `<div class="text-red-600 p-8">Error loading ${config.title}: ${err.message}</div>`;
+        console.error(`[Hub] Failed to load ${config.name}:`, err);
+        const errorContainer = document.getElementById('micro-app-mount');
+        if (errorContainer) {
+          errorContainer.innerHTML = `<div class="text-red-600 p-8">Error loading ${config.title}: ${err.message}</div>`;
+        }
       }
     }
 
@@ -254,15 +326,15 @@
       routes: [
         { path: '/', component: null },
         { path: '/react', component: null },
-        { path: '/react/*', component: null },
+        { path: '/react/:rest(.*)', component: null },
         { path: '/vue2', component: null },
-        { path: '/vue2/*', component: null },
+        { path: '/vue2/:rest(.*)', component: null },
         { path: '/vue3', component: null },
-        { path: '/vue3/*', component: null },
+        { path: '/vue3/:rest(.*)', component: null },
         { path: '/ecommerce', component: null },
-        { path: '/ecommerce/*', component: null },
+        { path: '/ecommerce/:rest(.*)', component: null },
         { path: '/admin', component: null },
-        { path: '/admin/*', component: null }
+        { path: '/admin/:rest(.*)', component: null }
       ]
     });
 
@@ -305,13 +377,24 @@
     }
 
     // Setup navigation handlers
-    document.querySelectorAll('a[data-nav]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const path = link.getAttribute('data-nav');
-        console.log(`[Nav] Clicked: ${path}`);
-        router.push(path).catch(err => console.error('[Router] Push error:', err));
-      });
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented) return;
+      if (e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+
+      const link = target.closest('a[data-nav]');
+      if (!link) return;
+      if (link.getAttribute('target') && link.getAttribute('target') !== '_self') return;
+
+      const path = link.getAttribute('data-nav');
+      if (!path) return;
+
+      e.preventDefault();
+      console.log(`[Nav] Clicked: ${path}`);
+      router.push(path).catch(err => console.error('[Router] Push error:', err));
     });
 
     // Handle browser back/forward
@@ -325,7 +408,17 @@
         }
         currentApp = null;
       } else {
-        loadMicroApp(path);
+        const app = getAppByPath(path);
+        if (!app) {
+          showDashboard();
+          if (unmountFn) {
+            unmountFn();
+            unmountFn = null;
+          }
+          currentApp = null;
+        } else if (!currentApp || currentApp !== app.name) {
+          loadMicroApp(path);
+        }
       }
       updateActiveNav(path);
     });

@@ -1,29 +1,25 @@
-import Vue from 'vue';
+import Vue from 'ssr-npm-vue2';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
+import type { Router as RouterType } from '@esmx/router';
 
-function getCurrentPage() {
-  const path = window.location.pathname;
-  if (path === '/vue2/about' || path.startsWith('/vue2/about/')) {
-    return 'about';
-  }
-  return 'home';
-}
-
-export async function mount(container: HTMLElement) {
+export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
   console.log('[Vue2] Mount called with container:', container);
 
-  // Initialize ESMX Router
+  const sharedRouter = props?.router;
+  
   const { Router, RouterMode } = await import('@esmx/router');
   const { install } = await import('ssr-npm-vue2');
 
-  const router = new Router({
-    mode: RouterMode.history, // Client-side navigation
+  const localRouter = new Router({
+    mode: RouterMode.history,
     routes: [
       { path: '/vue2', component: HomePage },
       { path: '/vue2/about', component: AboutPage }
     ]
   });
+
+  await localRouter.replace(window.location.pathname);
 
   const App = Vue.extend({
     render(h) {
@@ -31,18 +27,22 @@ export async function mount(container: HTMLElement) {
     }
   });
 
-  // Install the router plugin
   if (install) {
-    install(Vue, { router });
+    install(Vue, { router: localRouter, sharedRouter: sharedRouter || undefined });
   }
 
   console.log('[Vue2] Creating Vue instance...');
   container.innerHTML = '';
 
+  const vueContainer = document.createElement('div');
+  container.appendChild(vueContainer);
+
   const vm = new Vue({
-    el: container,
-    render: h => h(App)
-  });
+    router: localRouter,
+    render: (h: any) => h(App)
+  } as any);
+  
+  vm.$mount(vueContainer);
 
   console.log('[Vue2] Mount complete');
 
@@ -52,7 +52,9 @@ export async function mount(container: HTMLElement) {
       if (container) {
         container.innerHTML = '';
       }
-      // router.destroy(); // if router supports it
+      if (!sharedRouter) {
+        localRouter.destroy();
+      }
     }
   };
 }

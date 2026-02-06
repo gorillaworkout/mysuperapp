@@ -47,7 +47,7 @@ export default async function serverEntry(rc) {
   ${rc.css()}
 </head>
 <body>
-  <div id="app">${html}</div>
+  <div id="micro-app-mount">${html}</div>
   ${rc.importmap()}
   ${rc.moduleEntry()}
 </body>

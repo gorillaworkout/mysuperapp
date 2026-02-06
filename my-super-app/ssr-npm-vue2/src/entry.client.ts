@@ -1,2 +1,2 @@
-// Provider package - no client entry needed
-export {};
+// Provider package - expose Vue + router adapters in the client bundle
+export * from './index';

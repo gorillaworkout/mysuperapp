@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'ssr-npm-vue2';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 

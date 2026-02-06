@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from 'ssr-npm-vue3';
 
   template: `
     <div class="vue3-services">
@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
   `
 });
 
-import { defineComponent } from 'vue';
+import { defineComponent } from 'ssr-npm-vue3';
 
   template: `
     <div class="vue3-settings">
