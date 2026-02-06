@@ -4,6 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ESMX Super App - Micro-Frontend Hub</title>
+  
+  <!-- Modulepreload: Downloads modules to cache WITHOUT executing them -->
+  <!-- Shared dependencies (loaded first as they're required by all apps) -->
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-base/dist/client/index.mjs">
+  
+  <!-- React shared modules -->
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/react.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/react-dom.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/src/index.mjs">
+  
+  <!-- Vue 2 shared modules -->
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-vue2/dist/client/vue.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs">
+  
+  <!-- Vue 3 shared modules -->
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-vue3/dist/client/vue.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs">
+  
+  <!-- Micro-app entry points -->
+  <link rel="modulepreload" href="/my-super-app/ssr-react/dist/client/src/index.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-vue2/dist/client/src/index.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-vue3/dist/client/src/index.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs">
   <style>
     * { box-sizing: border-box; }
     body { 
