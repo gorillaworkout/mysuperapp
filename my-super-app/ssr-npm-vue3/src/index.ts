@@ -8,8 +8,9 @@ export { Router, RouterMode };
 export type { Route, RouteConfig };
 
 export const RouterVuePlugin: Plugin = {
-  install(app: App, options: { router: Router }) {
+  install(app: App, options: { router: Router; sharedRouter?: Router }) {
     const router = options?.router;
+    const sharedRouter = options?.sharedRouter;
 
     if (!router) {
       console.warn('RouterVuePlugin installed without router instance.');
@@ -17,7 +18,9 @@ export const RouterVuePlugin: Plugin = {
     }
 
     app.config.globalProperties.$router = router;
+    app.config.globalProperties.$sharedRouter = sharedRouter || null;
     app.provide('router', router);
+    app.provide('sharedRouter', sharedRouter || null);
 
     const routeRef = shallowRef(router.route);
 
@@ -42,12 +45,13 @@ export const RouterVuePlugin: Plugin = {
         activeClass: { type: String, default: 'active' }
       },
       template: `
-        <a :href="url" @click.prevent="handleClick" :class="classes">
+        <a :href="url" @click.prevent.stop="handleClick" :class="classes">
           <slot></slot>
         </a>
       `,
       setup(props: any) {
-        const router = inject<Router>('router')!;
+        const localRouter = inject<Router>('router')!;
+        const hubRouter = inject<Router | null>('sharedRouter');
         const routeRef = inject<Ref<any>>('route')!;
 
         const path = computed(() => typeof props.to === 'string' ? props.to : props.to.path);
@@ -66,11 +70,20 @@ export const RouterVuePlugin: Plugin = {
           return result;
         });
 
+        const isLocalRoute = computed(() => {
+          const routes = (localRouter as any).routes || [];
+          return routes.some((r: any) => 
+            path.value === r.path || path.value.startsWith(r.path + '/')
+          );
+        });
+
         const handleClick = () => {
+          const targetRouter = isLocalRoute.value ? localRouter : (hubRouter || localRouter);
+          
           if (props.replace) {
-            router.replace(path.value);
+            targetRouter.replace(path.value);
           } else {
-            router.push(path.value);
+            targetRouter.push(path.value);
           }
         };
 

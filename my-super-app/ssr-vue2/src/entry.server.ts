@@ -1,4 +1,4 @@
-import Vue from 'ssr-npm-vue2';
+import Vue, { Router, RouterMode, install } from 'ssr-npm-vue2';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
@@ -13,6 +13,18 @@ export default async function(rc: any) {
   
   console.log('[Vue2 SSR] Rendering page:', isAboutPage ? 'about' : 'home');
   
+  const localRouter = new Router({
+    mode: RouterMode.history,
+    routes: [
+      { path: '/vue2', component: HomePage },
+      { path: '/vue2/about', component: AboutPage }
+    ]
+  });
+
+  if (install) {
+    install(Vue, { router: localRouter });
+  }
+  
   const App = Vue.extend({
     render(h) {
       const PageComponent = isAboutPage ? AboutPage : HomePage;
@@ -21,8 +33,9 @@ export default async function(rc: any) {
   });
   
   const app = new Vue({
+    router: localRouter,
     render: h => h(App)
-  });
+  } as any);
   
   try {
     const html = await renderer.renderToString(app);

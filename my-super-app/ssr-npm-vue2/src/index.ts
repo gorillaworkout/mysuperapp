@@ -8,6 +8,7 @@ export default Vue;
 
 export interface RouterVuePlugin {
   router?: Router;
+  sharedRouter?: Router;
   install: (vueInstance: typeof Vue, options?: any) => void;
 }
 
@@ -23,8 +24,10 @@ const VueRouterPlugin: RouterVuePlugin = {
       return;
     }
     this.router = router;
+    this.sharedRouter = options?.sharedRouter;
 
     vueInstance.prototype.$router = router;
+    vueInstance.prototype.$sharedRouter = options?.sharedRouter || null;
     
     vueInstance.mixin({
       beforeCreate() {
@@ -57,6 +60,10 @@ const VueRouterPlugin: RouterVuePlugin = {
       get() { return this._routerRoot._route || {}; }
     });
 
+    const sharedRouter = options?.sharedRouter;
+    const localRoutes = router.options?.routes || [];
+    const isSSR = typeof window === 'undefined';
+
     vueInstance.component('router-link', {
       props: {
         to: { type: [String, Object], required: true },
@@ -66,7 +73,7 @@ const VueRouterPlugin: RouterVuePlugin = {
       },
       render(h) {
         const path = typeof this.to === 'string' ? this.to : this.to.path;
-        const isActive = this.$router && path === window.location.pathname;
+        const isActive = !isSSR && this.$router && path === window.location.pathname;
         
         const classes = [];
         if (this.$vnode.data && this.$vnode.data.staticClass) {
@@ -76,17 +83,35 @@ const VueRouterPlugin: RouterVuePlugin = {
           classes.push(this.activeClass);
         }
 
-        const data = {
+        const localRouter = this.$router;
+        const hubRouter = this.$sharedRouter || sharedRouter;
+        
+        const isLocalRoute = localRoutes.some((r: any) => 
+          path === r.path || path.startsWith(r.path + '/')
+        );
+
+        const clickHandler = isSSR ? null : (e: Event) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          if (isLocalRoute) {
+            localRouter.push(path);
+          } else if (hubRouter) {
+            hubRouter.push(path);
+          } else {
+            window.location.href = path;
+          }
+        };
+
+        const data: any = {
           class: classes,
           style: this.$vnode.data?.style,
-          on: {
-            click: (e: Event) => {
-              e.preventDefault();
-              this.$router.push(path, this.replace);
-            }
-          },
           attrs: { href: path }
         };
+        
+        if (clickHandler) {
+          data.on = { click: clickHandler };
+        }
 
         return h(this.tag, data, this.$slots.default);
       }

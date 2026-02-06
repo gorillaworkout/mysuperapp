@@ -269,25 +269,27 @@
     const microApps = {
       '/react': {
         name: 'react',
-        loader: () => import('/my-super-app/ssr-react/dist/client/src/index.mjs')
+        modulePath: '/my-super-app/ssr-react/dist/client/src/index.mjs'
       },
       '/vue2': {
         name: 'vue2',
-        loader: () => import('/my-super-app/ssr-vue2/dist/client/src/index.mjs')
+        modulePath: '/my-super-app/ssr-vue2/dist/client/src/index.mjs'
       },
       '/vue3': {
         name: 'vue3',
-        loader: () => import('/my-super-app/ssr-vue3/dist/client/src/index.mjs')
+        modulePath: '/my-super-app/ssr-vue3/dist/client/src/index.mjs'
       },
       '/ecommerce': {
         name: 'ecommerce',
-        loader: () => import('/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs')
+        modulePath: '/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs'
       },
       '/admin': {
         name: 'admin',
-        loader: () => import('/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs')
+        modulePath: '/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs'
       }
     };
+
+    const moduleCache = {};
 
     let currentApp = null;
     let unmountFn = null;
@@ -321,7 +323,7 @@
         return;
       }
 
-      const [, config] = appConfig;
+      const [appPath, config] = appConfig;
       showMicroApp();
       
       let mountContainer = document.getElementById('micro-app-mount');
@@ -329,13 +331,19 @@
         microAppView.innerHTML = '<div id="micro-app-mount"></div>';
         mountContainer = document.getElementById('micro-app-mount');
       }
+      
+      mountContainer.setAttribute('data-hub-mounted', 'true');
 
       try {
-        const module = await config.loader();
+        let module = moduleCache[appPath];
+        if (!module) {
+          module = await import(config.modulePath);
+          moduleCache[appPath] = module;
+        }
         
         let freshContainer = document.getElementById('micro-app-mount');
         if (!freshContainer) {
-          microAppView.innerHTML = '<div id="micro-app-mount"></div>';
+          microAppView.innerHTML = '<div id="micro-app-mount" data-hub-mounted="true"></div>';
           freshContainer = document.getElementById('micro-app-mount');
         }
         
@@ -419,17 +427,18 @@
     }
 
     document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-nav]');
+      if (!link) return;
+      
       if (e.defaultPrevented) return;
       if (e.button !== 0) return;
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-
-      const link = e.target.closest('a[data-nav]');
-      if (!link) return;
 
       const path = link.getAttribute('data-nav');
       if (!path) return;
 
       e.preventDefault();
+      e.stopPropagation();
       router.push(path);
     });
 
