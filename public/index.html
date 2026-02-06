@@ -22,9 +22,9 @@
   <script type="importmap">
   {
     "imports": {
-      "react": "https://esm.sh/react@18.3.1",
-      "react-dom": "https://esm.sh/react-dom@18.3.1",
-      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+      "react": "/my-super-app/ssr-npm-react/dist/client/react.mjs",
+      "react-dom": "/my-super-app/ssr-npm-react/dist/client/react-dom.mjs",
+      "react-dom/client": "/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs",
       "@esmx/router": "/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs",
       "ssr-npm-base": "/my-super-app/ssr-npm-base/dist/client/index.mjs",
       "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/index.mjs",
@@ -36,6 +36,18 @@
         "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
       },
       "/my-super-app/ssr-npm-vue3/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue2/": {
+        "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue3/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue3-ecommerce/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue3-admin/": {
         "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
       }
     }
@@ -280,7 +292,7 @@
         
         if (typeof mountFn === 'function') {
           console.log(`[Hub] Calling mount for ${config.name}...`);
-          const result = mountFn(freshContainer);
+          const result = mountFn(freshContainer, { router: router });
           console.log(`[Hub] Mount result for ${config.name}:`, result);
           
           // Handle async mount functions (Vue3, Ecommerce, Admin)

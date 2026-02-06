@@ -2,6 +2,11 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Router } from '@esmx/router';
 
 const RouterContext = createContext<Router | null>(null);
+const SharedRouterContext = createContext<Router | null>(null);
+
+export function useSharedRouter(): Router | null {
+  return useContext(SharedRouterContext);
+}
 
 export function useRouter(): Router {
   const router = useContext(RouterContext);
@@ -54,7 +59,8 @@ export const RouterLink: React.FC<RouterLinkProps> = ({
   className,
   children
 }) => {
-  const router = useRouter();
+  const localRouter = useRouter();
+  const sharedRouter = useSharedRouter();
   const currentRoute = useRoute();
 
   const path = typeof to === 'string' ? to : to.path;
@@ -67,10 +73,33 @@ export const RouterLink: React.FC<RouterLinkProps> = ({
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (replace) {
-      router.replace(path);
+    
+    // Determine if this is a cross-app navigation (path doesn't match current app's routes)
+    const currentPath = currentRoute?.path || '';
+    const currentAppPrefix = currentPath.split('/').slice(0, 2).join('/'); // e.g., "/react"
+    const isCrossAppNavigation = !path.startsWith(currentAppPrefix) || path === '/';
+    
+    if (sharedRouter) {
+      // Hub context: use sharedRouter for all navigation
+      if (replace) {
+        sharedRouter.replace(path);
+      } else {
+        sharedRouter.push(path);
+      }
+    } else if (isCrossAppNavigation) {
+      // No sharedRouter + cross-app navigation: use window.location for full page navigation
+      if (replace) {
+        window.location.replace(path);
+      } else {
+        window.location.href = path;
+      }
     } else {
-      router.push(path);
+      // No sharedRouter + same-app navigation: use localRouter
+      if (replace) {
+        localRouter.replace(path);
+      } else {
+        localRouter.push(path);
+      }
     }
   };
 
@@ -109,17 +138,23 @@ export const RouterView: React.FC = () => {
 };
 
 export interface RouterProviderProps {
-  router: Router; // Required
+  router: Router;
+  sharedRouter?: Router | null;
   children: React.ReactNode;
 }
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({
   router,
+  sharedRouter = null,
   children
 }) => {
   if (!router) {
     console.warn("RouterProvider requires a 'router' prop.");
     return null;
   }
-  return React.createElement(RouterContext.Provider, { value: router }, children);
+  return React.createElement(
+    SharedRouterContext.Provider,
+    { value: sharedRouter },
+    React.createElement(RouterContext.Provider, { value: router }, children)
+  );
 };

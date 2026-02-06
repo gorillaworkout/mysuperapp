@@ -5,8 +5,6 @@ import { RouterProvider, RouterView } from 'ssr-npm-react';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
-const SharedRouterContext = React.createContext<Router | null>(null);
-
 export function App(props: any) {
   const sharedRouter = props.router || null;
   
@@ -26,12 +24,10 @@ export function App(props: any) {
     return r;
   });
 
-  return React.createElement(SharedRouterContext.Provider, {
-    value: sharedRouter,
-    children: React.createElement(RouterProvider, {
-      router: localRouter,
-      children: React.createElement(RouterView)
-    })
+  return React.createElement(RouterProvider, {
+    router: localRouter,
+    sharedRouter: sharedRouter,
+    children: React.createElement(RouterView)
   });
 }
 

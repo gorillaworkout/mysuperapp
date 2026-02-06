@@ -128,14 +128,37 @@ async function renderMicroApp(appConfig, url, req, res) {
       },
       importmap() {
         // Return import map for dependencies
+        // React uses esm.sh CDN because bundled React is CommonJS without ESM exports
+        // Vue and other modules use local bundles
         return `<script type="importmap">{
   "imports": {
-    "react": "https://esm.sh/react@18.3.1",
-    "react-dom": "https://esm.sh/react-dom@18.3.1",
-    "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13",
-    "@esmx/router": "https://esm.sh/@esmx/router@3.0.0-rc.107",
-    "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/entry.client.69b742e9.final.mjs",
-    "ssr-npm-vue3": "https://esm.sh/vue@3.5.13"
+    "react": "/my-super-app/ssr-npm-react/dist/client/react.mjs",
+    "react-dom": "/my-super-app/ssr-npm-react/dist/client/react-dom.mjs",
+    "react-dom/client": "/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs",
+    "@esmx/router": "/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs",
+    "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/index.mjs",
+    "ssr-npm-vue3": "/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs",
+    "ssr-npm-vue2": "/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs"
+  },
+  "scopes": {
+    "/my-super-app/ssr-npm-vue2/": {
+      "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+    },
+    "/my-super-app/ssr-npm-vue3/": {
+      "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+    },
+    "/my-super-app/ssr-vue2/": {
+      "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+    },
+    "/my-super-app/ssr-vue3/": {
+      "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+    },
+    "/my-super-app/ssr-vue3-ecommerce/": {
+      "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+    },
+    "/my-super-app/ssr-vue3-admin/": {
+      "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+    }
   }
 }</script>`;
       },
@@ -286,13 +309,34 @@ const server = createServer(async (req, res) => {
   <div id="app"></div>
   <script type="importmap">{
     "imports": {
-      "react": "https://esm.sh/react@18.3.1",
-      "react-dom": "https://esm.sh/react-dom@18.3.1",
-      "vue": "https://esm.sh/vue@${appConfig.framework === 'vue2' ? '2.7' : '3.5'}.13",
-      "@esmx/router": "https://esm.sh/@esmx/router@3.0.0-rc.107",
-      "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/entry.client.69b742e9.final.mjs",
-      "ssr-npm-vue3": "/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs",
-      "ssr-npm-vue2": "/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs"
+      "react": "/my-super-app/ssr-npm-react/dist/client/react.mjs",
+      "react-dom": "/my-super-app/ssr-npm-react/dist/client/react-dom.mjs",
+      "react-dom/client": "/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs",
+      "@esmx/router": "/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs",
+      "ssr-npm-base": "/my-super-app/ssr-npm-base/dist/client/index.mjs",
+      "ssr-npm-react": "/my-super-app/ssr-npm-react/dist/client/src/index.mjs",
+      "ssr-npm-vue2": "/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs",
+      "ssr-npm-vue3": "/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs"
+    },
+    "scopes": {
+      "/my-super-app/ssr-npm-vue2/": {
+        "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-npm-vue3/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue2/": {
+        "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue3/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue3-ecommerce/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      },
+      "/my-super-app/ssr-vue3-admin/": {
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+      }
     }
   }</script>
   ${clientScript}
