@@ -13,16 +13,29 @@ export const App = defineComponent({
 
 export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
   const sharedRouter = props?.router;
+  const isHubMode = typeof window !== 'undefined' && !!(window as any).__ESMX_HUB_MODE__;
   
   const localRouter: RouterType = new Router({
-    mode: RouterMode.history,
+    mode: isHubMode ? RouterMode.memory : RouterMode.history,
     routes: [
       { path: '/admin', component: HomePage },
       { path: '/admin/settings', component: SettingsPage }
     ]
   });
 
-  await localRouter.replace(window.location.pathname);
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/admin';
+  await localRouter.replace(currentPath.startsWith('/admin') ? currentPath : '/admin');
+
+  // Sync local router when shared router navigates to sub-routes
+  let unsubscribe: (() => void) | undefined;
+  if (sharedRouter && isHubMode) {
+    unsubscribe = sharedRouter.afterEach((to) => {
+      const currentPath = localRouter.route?.path || '';
+      if (to.path.startsWith('/admin') && to.path !== currentPath) {
+        localRouter.replace(to.path);
+      }
+    });
+  }
 
   const app = createApp(App);
   
@@ -37,6 +50,7 @@ export async function mount(container: HTMLElement, props?: { router?: RouterTyp
 
   return {
     unmount: () => {
+      if (unsubscribe) unsubscribe();
       app.unmount();
       if (!sharedRouter) {
         localRouter.destroy();

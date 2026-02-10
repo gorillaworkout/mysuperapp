@@ -75,6 +75,7 @@
     }
     nav a:hover { color: #2563eb; background: #f3f4f6; }
     nav a.active { color: #2563eb; background: #eff6ff; }
+    nav a.loading { opacity: 0.6; }
     .container { max-width: 80rem; margin: 0 auto; padding: 2rem 1rem; }
     .hero { text-align: center; margin-bottom: 3rem; }
     .hero h1 { font-size: 2.5rem; font-weight: 700; color: #111827; margin: 0 0 0.5rem 0; }
@@ -89,6 +90,10 @@
       border-radius: 9999px;
       font-size: 0.875rem;
       font-weight: 500;
+    }
+    .badge.loading {
+      background: #fef9c3;
+      color: #a16207;
     }
     .grid {
       display: grid;
@@ -157,8 +162,17 @@
       text-align: center;
       margin-top: 3rem;
     }
-    .hidden { display: none; }
-    #micro-app-mount { min-height: 400px; }
+    
+    /* Pre-mount containers - hidden but rendered */
+    .app-view {
+      display: none;
+    }
+    .app-view.active {
+      display: block;
+    }
+    .app-container {
+      min-height: 400px;
+    }
   </style>
   <script type="importmap">
   {
@@ -210,11 +224,12 @@
   </header>
 
   <div id="app-container" class="container">
-    <div id="dashboard-view">
+    <!-- Dashboard View -->
+    <div id="view-dashboard" class="app-view active">
       <div class="hero">
         <h1>ESMX Super App Dashboard</h1>
         <p>Micro-frontend architecture with SSR and ESMX Federation</p>
-        <div class="badge">✅ Server-Side Rendering Ready</div>
+        <div id="loading-status" class="badge loading">⏳ Loading apps in background...</div>
       </div>
 
       <div class="grid">
@@ -222,7 +237,7 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">🔥</div>
-              <div class="card-badge green">✅ SSR</div>
+              <div id="status-react" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #2563eb;">React SSR</h3>
             <p>React 18 + TypeScript + Server-Side Rendering</p>
@@ -234,7 +249,7 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">🌿</div>
-              <div class="card-badge green">✅ SSR</div>
+              <div id="status-vue2" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #10b981;">Vue 2.7 Classic</h3>
             <p>Options API + Composition API Support</p>
@@ -246,7 +261,7 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">💜</div>
-              <div class="card-badge green">✅ SSR</div>
+              <div id="status-vue3" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #8b5cf6;">Vue 3 Composition</h3>
             <p>Modern Vue with Composition API</p>
@@ -258,7 +273,7 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">🛒</div>
-              <div class="card-badge yellow">🔄 CSR</div>
+              <div id="status-ecommerce" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #ea580c;">E-Commerce Platform</h3>
             <p>Full-featured shopping experience</p>
@@ -270,7 +285,7 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">⚙️</div>
-              <div class="card-badge yellow">🔄 CSR</div>
+              <div id="status-admin" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #6b7280;">Admin Dashboard</h3>
             <p>Management and analytics</p>
@@ -280,136 +295,79 @@
       </div>
     </div>
 
-    <div id="micro-app-view" class="hidden">
-      <div id="micro-app-mount"></div>
+    <!-- Pre-mounted App Views (hidden containers) -->
+    <div id="view-react" class="app-view">
+      <div id="mount-react" class="app-container" data-hub-mounted="true"></div>
+    </div>
+    <div id="view-vue2" class="app-view">
+      <div id="mount-vue2" class="app-container" data-hub-mounted="true"></div>
+    </div>
+    <div id="view-vue3" class="app-view">
+      <div id="mount-vue3" class="app-container" data-hub-mounted="true"></div>
+    </div>
+    <div id="view-ecommerce" class="app-view">
+      <div id="mount-ecommerce" class="app-container" data-hub-mounted="true"></div>
+    </div>
+    <div id="view-admin" class="app-view">
+      <div id="mount-admin" class="app-container" data-hub-mounted="true"></div>
     </div>
   </div>
 
   <footer>
-    Built with ESMX Federation • Micro-Frontend Architecture
+    Built with ESMX Federation • Micro-Frontend Architecture • Zero-Delay Navigation
   </footer>
 
+  <script>
+    window.__ESMX_HUB_MODE__ = true;
+  </script>
   <script type="module">
     import { Router, RouterMode } from '@esmx/router';
 
     const microApps = {
       '/react': {
         name: 'react',
-        modulePath: '/my-super-app/ssr-react/dist/client/src/index.mjs'
+        modulePath: '/my-super-app/ssr-react/dist/client/src/index.mjs',
+        viewId: 'view-react',
+        mountId: 'mount-react',
+        statusId: 'status-react'
       },
       '/vue2': {
         name: 'vue2',
-        modulePath: '/my-super-app/ssr-vue2/dist/client/src/index.mjs'
+        modulePath: '/my-super-app/ssr-vue2/dist/client/src/index.mjs',
+        viewId: 'view-vue2',
+        mountId: 'mount-vue2',
+        statusId: 'status-vue2'
       },
       '/vue3': {
         name: 'vue3',
-        modulePath: '/my-super-app/ssr-vue3/dist/client/src/index.mjs'
+        modulePath: '/my-super-app/ssr-vue3/dist/client/src/index.mjs',
+        viewId: 'view-vue3',
+        mountId: 'mount-vue3',
+        statusId: 'status-vue3'
       },
       '/ecommerce': {
         name: 'ecommerce',
-        modulePath: '/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs'
+        modulePath: '/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs',
+        viewId: 'view-ecommerce',
+        mountId: 'mount-ecommerce',
+        statusId: 'status-ecommerce'
       },
       '/admin': {
         name: 'admin',
-        modulePath: '/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs'
+        modulePath: '/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs',
+        viewId: 'view-admin',
+        mountId: 'mount-admin',
+        statusId: 'status-admin'
       }
     };
 
-    const moduleCache = {};
+    // Track mounted apps and their unmount functions
+    const mountedApps = {};
+    let appsReady = 0;
+    const totalApps = Object.keys(microApps).length;
+    let currentView = 'dashboard';
 
-    let currentApp = null;
-    let unmountFn = null;
-
-    const dashboardView = document.getElementById('dashboard-view');
-    const microAppView = document.getElementById('micro-app-view');
-
-    function showDashboard() {
-      dashboardView.classList.remove('hidden');
-      microAppView.classList.add('hidden');
-    }
-
-    function showMicroApp() {
-      dashboardView.classList.add('hidden');
-      microAppView.classList.remove('hidden');
-    }
-
-    async function loadMicroApp(path) {
-      if (unmountFn) {
-        unmountFn();
-        unmountFn = null;
-      }
-      currentApp = null;
-
-      const appConfig = Object.entries(microApps).find(([route]) => 
-        path === route || path.startsWith(route + '/')
-      );
-
-      if (!appConfig) {
-        showDashboard();
-        return;
-      }
-
-      const [appPath, config] = appConfig;
-      showMicroApp();
-      
-      let mountContainer = document.getElementById('micro-app-mount');
-      if (!mountContainer) {
-        microAppView.innerHTML = '<div id="micro-app-mount"></div>';
-        mountContainer = document.getElementById('micro-app-mount');
-      }
-      
-      mountContainer.setAttribute('data-hub-mounted', 'true');
-
-      try {
-        let module = moduleCache[appPath];
-        if (!module) {
-          module = await import(config.modulePath);
-          moduleCache[appPath] = module;
-        }
-        
-        let freshContainer = document.getElementById('micro-app-mount');
-        if (!freshContainer) {
-          microAppView.innerHTML = '<div id="micro-app-mount" data-hub-mounted="true"></div>';
-          freshContainer = document.getElementById('micro-app-mount');
-        }
-        
-        freshContainer.innerHTML = '';
-
-        const mountFn = module.mount || module.default;
-        
-        if (typeof mountFn === 'function') {
-          const result = mountFn(freshContainer, { router: router });
-          
-          if (result && typeof result.then === 'function') {
-            result.then(resolved => {
-              if (resolved && typeof resolved.unmount === 'function') {
-                unmountFn = resolved.unmount;
-              }
-            }).catch(err => {
-              freshContainer.innerHTML = `<div style="color: red; padding: 2rem;">Error: ${err.message}</div>`;
-            });
-          } else if (result && typeof result.unmount === 'function') {
-            unmountFn = result.unmount;
-          }
-          currentApp = config.name;
-        } else {
-          freshContainer.innerHTML = '<div style="color: red; padding: 2rem;">No mount function</div>';
-        }
-      } catch (err) {
-        console.error(`Failed to load ${config.name}:`, err);
-        const errorContainer = document.getElementById('micro-app-mount');
-        if (errorContainer) {
-          errorContainer.innerHTML = `<div style="color: red; padding: 2rem;">Error: ${err.message}</div>`;
-        }
-      }
-    }
-
-    function getAppByPath(path) {
-      return Object.entries(microApps).find(([route]) => 
-        path === route || path.startsWith(route + '/')
-      )?.[1];
-    }
-
+    // Create hub router
     const router = new Router({
       mode: RouterMode.history,
       routes: [
@@ -427,23 +385,125 @@
       ]
     });
 
-    router.afterEach((to) => {
-      const path = to.path;
-      
-      if (path === '/') {
-        showDashboard();
-        if (unmountFn) {
-          unmountFn();
-          unmountFn = null;
-        }
-        currentApp = null;
+    // Update loading status badge
+    function updateLoadingStatus() {
+      const statusEl = document.getElementById('loading-status');
+      if (appsReady === totalApps) {
+        statusEl.textContent = '✅ All apps ready - Zero delay navigation!';
+        statusEl.classList.remove('loading');
       } else {
-        loadMicroApp(path);
+        statusEl.textContent = `⏳ Loading apps... (${appsReady}/${totalApps})`;
       }
-      
-      updateActiveNav(path);
-    });
+    }
 
+    // Update individual app status
+    function updateAppStatus(name, ready) {
+      const config = Object.values(microApps).find(c => c.name === name);
+      if (config) {
+        const statusEl = document.getElementById(config.statusId);
+        if (statusEl) {
+          if (ready) {
+            statusEl.textContent = '✅ Ready';
+            statusEl.classList.remove('yellow');
+            statusEl.classList.add('green');
+          } else {
+            statusEl.textContent = '❌ Error';
+            statusEl.classList.remove('yellow');
+            statusEl.classList.add('red');
+          }
+        }
+      }
+    }
+
+    // Mount a single app to its hidden container
+    async function premountApp(path, config) {
+      try {
+        console.log(`[Hub] Pre-mounting ${config.name}...`);
+        
+        const module = await import(config.modulePath);
+        const mountFn = module.mount || module.default;
+        
+        if (typeof mountFn !== 'function') {
+          throw new Error(`No mount function found for ${config.name}`);
+        }
+
+        const container = document.getElementById(config.mountId);
+        if (!container) {
+          throw new Error(`Container ${config.mountId} not found`);
+        }
+
+        // Mount the app with shared router
+        const result = mountFn(container, { router });
+        
+        // Handle async mount functions
+        let unmountFn = null;
+        if (result && typeof result.then === 'function') {
+          const resolved = await result;
+          unmountFn = resolved?.unmount;
+        } else if (result && typeof result.unmount === 'function') {
+          unmountFn = result.unmount;
+        }
+
+        mountedApps[path] = {
+          config,
+          module,
+          unmount: unmountFn
+        };
+
+        appsReady++;
+        updateAppStatus(config.name, true);
+        updateLoadingStatus();
+        
+        console.log(`[Hub] ✅ ${config.name} pre-mounted successfully`);
+      } catch (err) {
+        console.error(`[Hub] ❌ Failed to pre-mount ${config.name}:`, err);
+        updateAppStatus(config.name, false);
+        appsReady++;
+        updateLoadingStatus();
+      }
+    }
+
+    // Pre-mount all apps in background
+    async function premountAllApps() {
+      console.log('[Hub] Starting background pre-mount of all apps...');
+      
+      // Mount all apps in parallel for faster loading
+      const promises = Object.entries(microApps).map(([path, config]) => 
+        premountApp(path, config)
+      );
+      
+      await Promise.allSettled(promises);
+      console.log('[Hub] All apps pre-mounted!');
+    }
+
+    // Switch view - just toggle visibility (INSTANT!)
+    function switchView(viewName) {
+      // Hide all views
+      document.querySelectorAll('.app-view').forEach(view => {
+        view.classList.remove('active');
+      });
+
+      // Show target view
+      const targetView = document.getElementById(`view-${viewName}`);
+      if (targetView) {
+        targetView.classList.add('active');
+        currentView = viewName;
+      }
+    }
+
+    // Get app name from path
+    function getAppNameFromPath(path) {
+      if (path === '/') return 'dashboard';
+      
+      for (const [route, config] of Object.entries(microApps)) {
+        if (path === route || path.startsWith(route + '/')) {
+          return config.name;
+        }
+      }
+      return 'dashboard';
+    }
+
+    // Update active nav
     function updateActiveNav(path) {
       document.querySelectorAll('nav a').forEach(link => {
         const linkPath = link.getAttribute('data-nav');
@@ -452,6 +512,20 @@
       });
     }
 
+    // Handle navigation - just switch views!
+    router.afterEach((to) => {
+      const path = to.path;
+      const appName = getAppNameFromPath(path);
+      
+      console.log(`[Hub] Navigating to ${path} -> showing ${appName}`);
+      switchView(appName);
+      updateActiveNav(path);
+
+      // If navigating to a sub-route within an app, push to app's local router
+      // The app's RouterLink should handle this via sharedRouter
+    });
+
+    // Click handler for navigation links
     document.addEventListener('click', (e) => {
       const link = e.target.closest('a[data-nav]');
       if (!link) return;
@@ -468,37 +542,37 @@
       router.push(path);
     });
 
+    // Handle browser back/forward
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
-      if (path === '/') {
-        showDashboard();
-        if (unmountFn) {
-          unmountFn();
-          unmountFn = null;
-        }
-        currentApp = null;
-      } else {
-        const app = getAppByPath(path);
-        if (!app) {
-          showDashboard();
-          if (unmountFn) {
-            unmountFn();
-            unmountFn = null;
-          }
-          currentApp = null;
-        } else if (!currentApp || currentApp !== app.name) {
-          loadMicroApp(path);
-        }
-      }
+      const appName = getAppNameFromPath(path);
+      switchView(appName);
       updateActiveNav(path);
     });
 
-    const initialPath = window.location.pathname;
-    if (initialPath !== '/') {
-      loadMicroApp(initialPath);
-    }
-    updateActiveNav(initialPath);
-    router.replace(initialPath);
+    // Initialize
+    (async function init() {
+      const initialPath = window.location.pathname;
+      
+      // Start pre-mounting all apps immediately
+      premountAllApps();
+      
+      // Set initial view based on URL
+      const initialApp = getAppNameFromPath(initialPath);
+      if (initialApp !== 'dashboard') {
+        // If landing on an app page, wait for that specific app to load first
+        const appPath = '/' + initialApp;
+        const config = microApps[appPath];
+        if (config && !mountedApps[appPath]) {
+          // Wait for this specific app to mount before switching view
+          await premountApp(appPath, config);
+        }
+        switchView(initialApp);
+      }
+      
+      updateActiveNav(initialPath);
+      router.replace(initialPath);
+    })();
   </script>
 </body>
 </html>

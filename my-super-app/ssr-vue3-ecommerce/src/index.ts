@@ -13,16 +13,28 @@ export const App = defineComponent({
 
 export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
   const sharedRouter = props?.router;
+  const isHubMode = typeof window !== 'undefined' && !!(window as any).__ESMX_HUB_MODE__;
   
   const localRouter: RouterType = new Router({
-    mode: RouterMode.history,
+    mode: isHubMode ? RouterMode.memory : RouterMode.history,
     routes: [
       { path: '/ecommerce', component: HomePage },
       { path: '/ecommerce/about', component: AboutPage }
     ]
   });
 
-  await localRouter.replace(window.location.pathname);
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/ecommerce';
+  await localRouter.replace(currentPath.startsWith('/ecommerce') ? currentPath : '/ecommerce');
+
+  let unsubscribe: (() => void) | undefined;
+  if (sharedRouter && isHubMode) {
+    unsubscribe = sharedRouter.afterEach((to: { path: string }) => {
+      const currentLocalPath = localRouter.route?.path || '';
+      if (to.path.startsWith('/ecommerce') && to.path !== currentLocalPath) {
+        localRouter.replace(to.path);
+      }
+    });
+  }
 
   const app = createApp(App);
   
@@ -37,6 +49,7 @@ export async function mount(container: HTMLElement, props?: { router?: RouterTyp
 
   return {
     unmount: () => {
+      if (unsubscribe) unsubscribe();
       app.unmount();
       if (!sharedRouter) {
         localRouter.destroy();

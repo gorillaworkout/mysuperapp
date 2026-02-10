@@ -11,14 +11,11 @@ import { AboutPage } from './pages/AboutPage';
 
 export function App(props: { router?: Router }) {
   const isSSR = typeof window === 'undefined';
+  const isHubMode = !isSSR && !!(window as any).__ESMX_HUB_MODE__;
   
   const [localRouter] = React.useState(() => {
-    if (isSSR && props.router) {
-      return props.router;
-    }
-    
     const r = new Router({
-      mode: RouterMode.history,
+      mode: isHubMode ? RouterMode.memory : RouterMode.history,
       routes: [
         { path: '/react', component: HomePage },
         { path: '/react/about', component: AboutPage }
@@ -26,13 +23,31 @@ export function App(props: { router?: Router }) {
     });
 
     if (!isSSR) {
-      r.push(window.location.pathname);
+      const currentPath = window.location.pathname;
+      if (currentPath.startsWith('/react')) {
+        r.replace(currentPath);
+      } else {
+        r.replace('/react');
+      }
     }
 
     return r;
   });
 
   const sharedRouter = isSSR ? null : (props.router || null);
+
+  React.useEffect(() => {
+    if (!sharedRouter || !isHubMode) return;
+    
+    const unsubscribe = sharedRouter.afterEach((to: { path: string }) => {
+      const currentPath = localRouter.route?.path || '';
+      if (to.path.startsWith('/react') && to.path !== currentPath) {
+        localRouter.replace(to.path);
+      }
+    });
+    
+    return unsubscribe;
+  }, [sharedRouter, localRouter, isHubMode]);
 
   return React.createElement(RouterProvider, {
     router: localRouter,

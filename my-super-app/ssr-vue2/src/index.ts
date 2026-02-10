@@ -7,16 +7,28 @@ export async function mount(container: HTMLElement, props?: { router?: RouterTyp
   console.log('[Vue2] Mount called with container:', container);
 
   const sharedRouter = props?.router;
+  const isHubMode = !!(window as any).__ESMX_HUB_MODE__;
 
   const localRouter = new Router({
-    mode: RouterMode.history,
+    mode: isHubMode ? RouterMode.memory : RouterMode.history,
     routes: [
       { path: '/vue2', component: HomePage },
       { path: '/vue2/about', component: AboutPage }
     ]
   });
 
-  await localRouter.replace(window.location.pathname);
+  const currentPath = window.location.pathname;
+  await localRouter.replace(currentPath.startsWith('/vue2') ? currentPath : '/vue2');
+
+  let unsubscribe: (() => void) | undefined;
+  if (sharedRouter && isHubMode) {
+    unsubscribe = sharedRouter.afterEach((to: { path: string }) => {
+      const currentLocalPath = localRouter.route?.path || '';
+      if (to.path.startsWith('/vue2') && to.path !== currentLocalPath) {
+        localRouter.replace(to.path);
+      }
+    });
+  }
 
   const App = Vue.extend({
     render(h) {
@@ -45,6 +57,7 @@ export async function mount(container: HTMLElement, props?: { router?: RouterTyp
 
   return {
     unmount: () => {
+      if (unsubscribe) unsubscribe();
       vm.$destroy();
       if (container) {
         container.innerHTML = '';

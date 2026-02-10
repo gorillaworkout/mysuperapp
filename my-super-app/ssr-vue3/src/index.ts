@@ -14,16 +14,28 @@ export const App = defineComponent({
 
 export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
   const sharedRouter = props?.router;
+  const isHubMode = typeof window !== 'undefined' && !!(window as any).__ESMX_HUB_MODE__;
   
   const localRouter: RouterType = new Router({
-    mode: RouterMode.history,
+    mode: isHubMode ? RouterMode.memory : RouterMode.history,
     routes: [
       { path: '/vue3', component: HomePage },
       { path: '/vue3/about', component: AboutPage }
     ]
   });
 
-  await localRouter.replace(window.location.pathname);
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/vue3';
+  await localRouter.replace(currentPath.startsWith('/vue3') ? currentPath : '/vue3');
+
+  let unsubscribe: (() => void) | undefined;
+  if (sharedRouter && isHubMode) {
+    unsubscribe = sharedRouter.afterEach((to: { path: string }) => {
+      const currentLocalPath = localRouter.route?.path || '';
+      if (to.path.startsWith('/vue3') && to.path !== currentLocalPath) {
+        localRouter.replace(to.path);
+      }
+    });
+  }
 
   const app = createApp(App);
   
@@ -38,6 +50,7 @@ export async function mount(container: HTMLElement, props?: { router?: RouterTyp
 
   return {
     unmount: () => {
+      if (unsubscribe) unsubscribe();
       app.unmount();
       if (!sharedRouter) {
         localRouter.destroy();
