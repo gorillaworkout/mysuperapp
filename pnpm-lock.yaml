@@ -65,6 +65,9 @@ importers:
       ssr-react:
         specifier: workspace:*
         version: link:../ssr-react
+      ssr-react-blog:
+        specifier: workspace:*
+        version: link:../ssr-react-blog
       ssr-vue2:
         specifier: workspace:*
         version: link:../ssr-vue2

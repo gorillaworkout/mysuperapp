@@ -21,6 +21,7 @@
     "ssr-npm-vue2": "workspace:*",
     "ssr-npm-vue3": "workspace:*",
     "ssr-react": "workspace:*",
+    "ssr-react-blog": "workspace:*",
     "ssr-vue2": "workspace:*",
     "ssr-vue3": "workspace:*",
     "ssr-vue3-ecommerce": "workspace:*",
