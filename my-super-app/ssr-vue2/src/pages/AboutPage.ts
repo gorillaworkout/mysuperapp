@@ -135,13 +135,23 @@ export const AboutPage = Vue.extend({
         h('div', { style: styles.navSection }, [
           h('h3', { style: styles.navTitle }, '🧭 Navigation'),
           h('div', { style: styles.navButtons }, [
-            h('router-link', { 
-              props: { to: '/' },
-              style: styles.buttonGray
+            h('a', { 
+              attrs: { href: '/' },
+              style: styles.buttonGray,
+              on: { click: (e: MouseEvent) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                (this as any).$router.push('/');
+              }}
             }, '← Dashboard'),
-            h('router-link', { 
-              props: { to: '/vue2' },
-              style: styles.buttonBlue
+            h('a', { 
+              attrs: { href: '/vue2' },
+              style: styles.buttonBlue,
+              on: { click: (e: MouseEvent) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                (this as any).$router.push('/vue2');
+              }}
             }, '← Home'),
             h('span', { style: styles.separator }, '|'),
             h('span', { style: styles.currentPage }, 'Current: About Page')

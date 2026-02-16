@@ -1,4 +1,5 @@
 import { defineComponent, h, resolveComponent } from 'ssr-npm-vue3';
+import { useRouter } from 'ssr-npm-vue3';
 
 const styles = {
   container: {
@@ -127,6 +128,22 @@ const styles = {
 
 export const HomePage = defineComponent({
   name: 'Vue3HomePage',
+  setup() {
+    const router = useRouter();
+    const navLink = (to: string, style: any, label: string) => {
+      return h('a', {
+        href: to,
+        style,
+        onClick: (e: Event) => {
+          const me = e as MouseEvent;
+          if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey) return;
+          e.preventDefault();
+          router.push(to);
+        }
+      }, label);
+    };
+    return { navLink };
+  },
   render() {
     return h('div', { style: styles.container }, [
       h('div', { style: styles.card }, [
@@ -161,14 +178,8 @@ export const HomePage = defineComponent({
           h('h3', { style: styles.navTitle }, '🧭 Multi-Page Navigation'),
           h('p', { style: styles.navDesc }, 'This Vue 3 app has multiple pages with internal routing'),
           h('div', { style: styles.buttonContainer }, [
-            h(resolveComponent('router-link'), { 
-              to: '/',
-              style: styles.buttonGray
-            }, () => '← Dashboard'),
-            h(resolveComponent('router-link'), { 
-              to: '/vue3/about',
-              style: styles.buttonPurple
-            }, () => 'Go to About Page →')
+            this.navLink('/', styles.buttonGray, '← Dashboard'),
+            this.navLink('/vue3/about', styles.buttonPurple, 'Go to About Page →')
           ])
         ]),
 

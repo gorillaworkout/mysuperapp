@@ -20,7 +20,7 @@ const mimeTypes = {
 };
 
 // App routes that should be handled by the SPA
-const appRoutes = ['/react', '/vue2', '/vue3', '/ecommerce', '/admin'];
+const appRoutes = ['/react', '/vue2', '/vue3', '/ecommerce', '/admin', '/blog'];
 
 function isAppRoute(url) {
   if (url === '/') return true;
@@ -37,8 +37,8 @@ const server = createServer(async (req, res) => {
   // Health check endpoint
   if (url === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ 
-      status: 'ok', 
+    res.end(JSON.stringify({
+      status: 'ok',
       server: 'ESMX Pre-Mount Server',
       mode: 'zero-delay-navigation'
     }));
@@ -56,7 +56,7 @@ const server = createServer(async (req, res) => {
         res.writeHead(200, { 'Content-Type': contentType });
         res.end(readFileSync(filePath));
         return;
-      } catch (error) { 
+      } catch (error) {
         console.error('[Static] Error reading file:', error.message);
       }
     }
@@ -106,6 +106,7 @@ server.listen(PORT, () => {
   console.log('║                                                    ║');
   console.log('║  🏠 Dashboard: /                                   ║');
   console.log('║  🔥 React:     /react                              ║');
+  console.log('║  📝 Blog:      /blog                               ║');
   console.log('║  🌿 Vue 2:     /vue2                               ║');
   console.log('║  💜 Vue 3:     /vue3                               ║');
   console.log('║  🛒 E-Commerce: /ecommerce                         ║');

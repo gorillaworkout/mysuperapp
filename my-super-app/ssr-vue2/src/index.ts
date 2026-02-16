@@ -1,70 +1,85 @@
-import Vue, { Router, RouterMode, install } from 'ssr-npm-vue2';
+import Vue, { defineComponent, h, RouterPlugin, useProvideRouter, useRoute } from 'ssr-npm-vue2';
 import type { Router as RouterType } from '@esmx/router';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
-export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
-  console.log('[Vue2] Mount called with container:', container);
+const routes: Record<string, any> = {
+  '/vue2': HomePage,
+  '/vue2/about': AboutPage
+};
 
-  const sharedRouter = props?.router;
-  const isHubMode = !!(window as any).__ESMX_HUB_MODE__;
-
-  const localRouter = new Router({
-    mode: isHubMode ? RouterMode.memory : RouterMode.history,
-    routes: [
-      { path: '/vue2', component: HomePage },
-      { path: '/vue2/about', component: AboutPage }
-    ]
-  });
-
-  const currentPath = window.location.pathname;
-  await localRouter.replace(currentPath.startsWith('/vue2') ? currentPath : '/vue2');
-
-  let unsubscribe: (() => void) | undefined;
-  if (sharedRouter && isHubMode) {
-    unsubscribe = sharedRouter.afterEach((to: { path: string }) => {
-      const currentLocalPath = localRouter.route?.path || '';
-      if (to.path.startsWith('/vue2') && to.path !== currentLocalPath) {
-        localRouter.replace(to.path);
-      }
-    });
+const AppView = defineComponent({
+  name: 'AppView',
+  setup() {
+    const route = useRoute();
+    return () => {
+      const path = route?.path || '/vue2';
+      const Component = routes[path] || HomePage;
+      return h(Component);
+    };
   }
+});
 
-  const App = Vue.extend({
-    render(h) {
-      return h('router-view');
+export const App = defineComponent({
+  name: 'App',
+  setup() {
+    return () => h(AppView);
+  }
+});
+
+function createRootComponent(router: RouterType) {
+  return defineComponent({
+    name: 'Root',
+    setup() {
+      useProvideRouter(router);
+      return () => h(App);
     }
   });
+}
 
-  if (install) {
-    install(Vue, { router: localRouter, sharedRouter: sharedRouter || undefined });
-  }
+export function createApp(router: RouterType) {
+  let vm: any = null;
+  let vueContainer: HTMLDivElement | null = null;
 
-  console.log('[Vue2] Creating Vue instance...');
-  container.innerHTML = '';
+  return {
+    mount(el: HTMLElement) {
+      vueContainer = document.createElement('div');
+      el.appendChild(vueContainer);
 
+      Vue.use(RouterPlugin);
+
+      vm = new Vue({
+        router,
+        render: (h: any) => h(createRootComponent(router))
+      } as any);
+      vm.$mount(vueContainer);
+    },
+    unmount() {
+      if (vm) {
+        vm.$el?.remove();
+        vm.$destroy();
+        vm = null;
+      }
+      vueContainer = null;
+    }
+  };
+}
+
+export async function mount(el: HTMLElement, props?: { router?: RouterType }) {
   const vueContainer = document.createElement('div');
-  container.appendChild(vueContainer);
+  el.appendChild(vueContainer);
+
+  Vue.use(RouterPlugin);
 
   const vm = new Vue({
-    router: localRouter,
-    render: (h: any) => h(App)
+    router: props?.router!,
+    render: (h: any) => h(createRootComponent(props?.router!))
   } as any);
-  
   vm.$mount(vueContainer);
-
-  console.log('[Vue2] Mount complete');
 
   return {
     unmount: () => {
-      if (unsubscribe) unsubscribe();
       vm.$destroy();
-      if (container) {
-        container.innerHTML = '';
-      }
-      if (!sharedRouter) {
-        localRouter.destroy();
-      }
     }
   };
 }

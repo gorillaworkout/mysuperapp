@@ -161,13 +161,23 @@ export const HomePage = Vue.extend({
           h('h3', { style: styles.navTitle }, '🧭 Multi-Page Navigation'),
           h('p', { style: styles.navDesc }, 'This Vue 2 app has multiple pages with internal routing'),
           h('div', { style: styles.buttonContainer }, [
-            h('router-link', { 
-              props: { to: '/' },
-              style: styles.buttonGray
+            h('a', { 
+              attrs: { href: '/' },
+              style: styles.buttonGray,
+              on: { click: (e: MouseEvent) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                (this as any).$router.push('/');
+              }}
             }, '← Dashboard'),
-            h('router-link', {
-              props: { to: '/vue2/about' },
-              style: styles.buttonEmerald
+            h('a', {
+              attrs: { href: '/vue2/about' },
+              style: styles.buttonEmerald,
+              on: { click: (e: MouseEvent) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                (this as any).$router.push('/vue2/about');
+              }}
             }, 'Go to About Page →')
           ])
         ]),

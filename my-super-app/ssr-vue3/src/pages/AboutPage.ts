@@ -1,4 +1,5 @@
 import { defineComponent, h, resolveComponent } from 'ssr-npm-vue3';
+import { useRouter } from 'ssr-npm-vue3';
 
 const styles = {
   container: {
@@ -124,6 +125,22 @@ const styles = {
 
 export const AboutPage = defineComponent({
   name: 'Vue3AboutPage',
+  setup() {
+    const router = useRouter();
+    const navLink = (to: string, style: any, label: string) => {
+      return h('a', {
+        href: to,
+        style,
+        onClick: (e: Event) => {
+          const me = e as MouseEvent;
+          if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey) return;
+          e.preventDefault();
+          router.push(to);
+        }
+      }, label);
+    };
+    return { navLink };
+  },
   render() {
     return h('div', { style: styles.container }, [
       h('div', { style: styles.card }, [
@@ -135,14 +152,8 @@ export const AboutPage = defineComponent({
         h('div', { style: styles.navSection }, [
           h('h3', { style: styles.navTitle }, '🧭 Navigation'),
           h('div', { style: styles.navButtons }, [
-            h(resolveComponent('router-link'), { 
-              to: '/',
-              style: styles.buttonGray
-            }, () => '← Dashboard'),
-            h(resolveComponent('router-link'), { 
-              to: '/vue3',
-              style: styles.buttonPurple
-            }, () => '← Home'),
+            this.navLink('/', styles.buttonGray, '← Dashboard'),
+            this.navLink('/vue3', styles.buttonPurple, '← Home'),
             h('span', { style: styles.separator }, '|'),
             h('span', { style: styles.currentPage }, 'Current: About Page')
           ])

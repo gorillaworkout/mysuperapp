@@ -13,7 +13,8 @@ export default {
       '@esmx/fetch': 'ssr-npm-vue2'
     },
     exports: [
-      "pkg:vue"
+      "pkg:vue",
+      "pkg:@esmx/router-vue"
     ]
   },
   async devApp(esmx) {

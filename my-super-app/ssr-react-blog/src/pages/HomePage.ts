@@ -183,7 +183,7 @@ export const HomePage = () => {
   return React.createElement('div', { className: 'react-home', style: styles.container },
     React.createElement('div', { style: styles.card },
       React.createElement('div', { style: styles.header },
-        React.createElement('h1', { style: styles.title }, '🔥 React Micro App'),
+        React.createElement('h1', { style: styles.title }, '🔥 React Micro Blog App'),
         React.createElement('p', { style: styles.subtitle }, 'Built with React 18 + SSR + TypeScript'),
         React.createElement('div', { style: styles.badge },
           '✅ Server-Side Rendering Active'
@@ -225,7 +225,7 @@ export const HomePage = () => {
             style: styles.buttonGray
           }, '← Back to Dashboard'),
           React.createElement(NavLink, {
-            to: '/react/about',
+            to: '/blog/about',
             style: styles.buttonIndigo
           }, 'Go to About Page →')
         )

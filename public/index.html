@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ESMX Super App - Micro-Frontend Hub</title>
-  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
   <!-- Modulepreload: Downloads modules to cache WITHOUT executing them -->
   <!-- Shared dependencies (loaded first as they're required by all apps) -->
   <link rel="modulepreload" href="/my-super-app/ssr-npm-base/dist/client/@esmx/router/index.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-npm-base/dist/client/index.mjs">
-  
+
   <!-- React shared modules -->
   <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/react.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/react-dom.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/react-dom/client.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-npm-react/dist/client/src/index.mjs">
-  
+
   <!-- Vue 2 shared modules -->
   <link rel="modulepreload" href="/my-super-app/ssr-npm-vue2/dist/client/vue.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-npm-vue2/dist/client/src/index.mjs">
-  
+
   <!-- Vue 3 shared modules -->
   <link rel="modulepreload" href="/my-super-app/ssr-npm-vue3/dist/client/vue.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs">
-  
+
   <!-- Micro-app entry points -->
   <link rel="modulepreload" href="/my-super-app/ssr-react/dist/client/src/index.mjs">
+  <link rel="modulepreload" href="/my-super-app/ssr-react-blog/dist/client/src/index.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-vue2/dist/client/src/index.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-vue3/dist/client/src/index.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs">
   <link rel="modulepreload" href="/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs">
   <style>
-    * { box-sizing: border-box; }
-    body { 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #f9fafb;
       margin: 0;
       min-height: 100vh;
     }
+
     header {
       background: white;
       border-bottom: 1px solid #e5e7eb;
@@ -45,6 +52,7 @@
       top: 0;
       z-index: 50;
     }
+
     .header-inner {
       max-width: 80rem;
       margin: 0 auto;
@@ -54,6 +62,7 @@
       justify-content: space-between;
       height: 4rem;
     }
+
     .logo {
       display: flex;
       align-items: center;
@@ -63,8 +72,16 @@
       color: #111827;
       text-decoration: none;
     }
-    .logo:hover { color: #2563eb; }
-    nav { display: flex; gap: 0.25rem; }
+
+    .logo:hover {
+      color: #2563eb;
+    }
+
+    nav {
+      display: flex;
+      gap: 0.25rem;
+    }
+
     nav a {
       padding: 0.5rem 1rem;
       color: #4b5563;
@@ -73,13 +90,41 @@
       font-weight: 500;
       transition: all 0.2s;
     }
-    nav a:hover { color: #2563eb; background: #f3f4f6; }
-    nav a.active { color: #2563eb; background: #eff6ff; }
-    nav a.loading { opacity: 0.6; }
-    .container { max-width: 80rem; margin: 0 auto; padding: 2rem 1rem; }
-    .hero { text-align: center; margin-bottom: 3rem; }
-    .hero h1 { font-size: 2.5rem; font-weight: 700; color: #111827; margin: 0 0 0.5rem 0; }
-    .hero p { font-size: 1.125rem; color: #4b5563; margin: 0 0 1rem 0; }
+
+    nav a:hover {
+      color: #2563eb;
+      background: #f3f4f6;
+    }
+
+    nav a.active {
+      color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .container {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: #4b5563;
+      margin: 0 0 1rem 0;
+    }
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -91,49 +136,68 @@
       font-size: 0.875rem;
       font-weight: 500;
     }
-    .badge.loading {
-      background: #fef9c3;
-      color: #a16207;
-    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
       gap: 1.5rem;
     }
-    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    @media (min-width: 640px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
     .card {
       background: white;
       border-radius: 0.75rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       border: 2px solid transparent;
       transition: all 0.2s;
       text-decoration: none;
       display: block;
     }
+
     .card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       border-color: #dbeafe;
       transform: translateY(-2px);
     }
-    .card-body { padding: 1.5rem; }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
     .card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 1rem;
     }
-    .card-icon { font-size: 2rem; }
-    .card-badge {
-      font-size: 0.75rem;
-      font-weight: 500;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
+
+    .card-icon {
+      font-size: 2rem;
     }
-    .card-badge.green { background: #dcfce7; color: #15803d; }
-    .card-badge.yellow { background: #fef9c3; color: #a16207; }
-    .card h3 { font-size: 1.125rem; font-weight: 600; margin: 0 0 0.5rem 0; }
-    .card p { font-size: 0.875rem; color: #4b5563; margin: 0; }
+
+    .card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: #4b5563;
+      margin: 0;
+    }
+
     .card-btn {
       display: block;
       width: 100%;
@@ -145,6 +209,7 @@
       color: white;
       transition: background 0.2s;
     }
+
     .card-btn.blue { background: #2563eb; }
     .card-btn.blue:hover { background: #1d4ed8; }
     .card-btn.green { background: #10b981; }
@@ -155,6 +220,7 @@
     .card-btn.orange:hover { background: #c2410c; }
     .card-btn.gray { background: #6b7280; }
     .card-btn.gray:hover { background: #4b5563; }
+
     footer {
       background: #111827;
       color: #9ca3af;
@@ -162,15 +228,8 @@
       text-align: center;
       margin-top: 3rem;
     }
-    
-    /* Pre-mount containers - hidden but rendered */
-    .app-view {
-      display: none;
-    }
-    .app-view.active {
-      display: block;
-    }
-    .app-container {
+
+    #app {
       min-height: 400px;
     }
   </style>
@@ -187,11 +246,16 @@
       "ssr-npm-vue3": "/my-super-app/ssr-npm-vue3/dist/client/src/index.mjs"
     },
     "scopes": {
+      "/my-super-app/ssr-npm-react/": {
+        "@esmx/router-react": "/my-super-app/ssr-npm-react/dist/client/@esmx/router-react.mjs"
+      },
       "/my-super-app/ssr-npm-vue2/": {
-        "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
+        "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs",
+        "@esmx/router-vue": "/my-super-app/ssr-npm-vue2/dist/client/@esmx/router-vue.mjs"
       },
       "/my-super-app/ssr-npm-vue3/": {
-        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs"
+        "vue": "/my-super-app/ssr-npm-vue3/dist/client/vue.mjs",
+        "@esmx/router-vue": "/my-super-app/ssr-npm-vue3/dist/client/@esmx/router-vue.mjs"
       },
       "/my-super-app/ssr-vue2/": {
         "vue": "/my-super-app/ssr-npm-vue2/dist/client/vue.mjs"
@@ -209,12 +273,14 @@
   }
   </script>
 </head>
+
 <body>
   <header>
     <div class="header-inner">
-      <a href="/" class="logo" data-nav="/">🚀 ESMX Super App</a>
+      <a href="/" class="logo" data-nav="/">ESMX Super App</a>
       <nav>
         <a href="/react" data-nav="/react">React</a>
+        <a href="/blog" data-nav="/blog">React Blog</a>
         <a href="/vue2" data-nav="/vue2">Vue 2</a>
         <a href="/vue3" data-nav="/vue3">Vue 3</a>
         <a href="/ecommerce" data-nav="/ecommerce">E-Commerce</a>
@@ -223,13 +289,12 @@
     </div>
   </header>
 
-  <div id="app-container" class="container">
-    <!-- Dashboard View -->
-    <div id="view-dashboard" class="app-view active">
+  <div class="container">
+    <div id="dashboard">
       <div class="hero">
         <h1>ESMX Super App Dashboard</h1>
-        <p>Micro-frontend architecture with SSR and ESMX Federation</p>
-        <div id="loading-status" class="badge loading">⏳ Loading apps in background...</div>
+        <p>Micro-frontend architecture with @esmx/router micro-app system</p>
+        <div class="badge">Powered by @esmx/router MicroApp</div>
       </div>
 
       <div class="grid">
@@ -237,11 +302,20 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">🔥</div>
-              <div id="status-react" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #2563eb;">React SSR</h3>
             <p>React 18 + TypeScript + Server-Side Rendering</p>
             <div class="card-btn blue">Launch App →</div>
+          </div>
+        </a>
+        <a href="/blog" data-nav="/blog" class="card">
+          <div class="card-body">
+            <div class="card-header">
+              <div class="card-icon">🔥</div>
+            </div>
+            <h3 style="color: #2563eb;">React Blog SSR</h3>
+            <p>React 18 + TypeScript + Server-Side Rendering</p>
+            <div class="card-btn blue">Launch Blog →</div>
           </div>
         </a>
 
@@ -249,7 +323,6 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">🌿</div>
-              <div id="status-vue2" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #10b981;">Vue 2.7 Classic</h3>
             <p>Options API + Composition API Support</p>
@@ -261,7 +334,6 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">💜</div>
-              <div id="status-vue3" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #8b5cf6;">Vue 3 Composition</h3>
             <p>Modern Vue with Composition API</p>
@@ -273,7 +345,6 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">🛒</div>
-              <div id="status-ecommerce" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #ea580c;">E-Commerce Platform</h3>
             <p>Full-featured shopping experience</p>
@@ -285,7 +356,6 @@
           <div class="card-body">
             <div class="card-header">
               <div class="card-icon">⚙️</div>
-              <div id="status-admin" class="card-badge yellow">⏳ Loading</div>
             </div>
             <h3 style="color: #6b7280;">Admin Dashboard</h3>
             <p>Management and analytics</p>
@@ -295,215 +365,67 @@
       </div>
     </div>
 
-    <!-- Pre-mounted App Views (hidden containers) -->
-    <div id="view-react" class="app-view">
-      <div id="mount-react" class="app-container" data-hub-mounted="true"></div>
-    </div>
-    <div id="view-vue2" class="app-view">
-      <div id="mount-vue2" class="app-container" data-hub-mounted="true"></div>
-    </div>
-    <div id="view-vue3" class="app-view">
-      <div id="mount-vue3" class="app-container" data-hub-mounted="true"></div>
-    </div>
-    <div id="view-ecommerce" class="app-view">
-      <div id="mount-ecommerce" class="app-container" data-hub-mounted="true"></div>
-    </div>
-    <div id="view-admin" class="app-view">
-      <div id="mount-admin" class="app-container" data-hub-mounted="true"></div>
-    </div>
+    <div id="app"></div>
   </div>
 
   <footer>
-    Built with ESMX Federation • Micro-Frontend Architecture • Zero-Delay Navigation
+    Built with ESMX Federation • @esmx/router MicroApp Architecture
   </footer>
 
-  <script>
-    window.__ESMX_HUB_MODE__ = true;
-  </script>
   <script type="module">
     import { Router, RouterMode } from '@esmx/router';
 
-    const microApps = {
-      '/react': {
-        name: 'react',
-        modulePath: '/my-super-app/ssr-react/dist/client/src/index.mjs',
-        viewId: 'view-react',
-        mountId: 'mount-react',
-        statusId: 'status-react'
-      },
-      '/vue2': {
-        name: 'vue2',
-        modulePath: '/my-super-app/ssr-vue2/dist/client/src/index.mjs',
-        viewId: 'view-vue2',
-        mountId: 'mount-vue2',
-        statusId: 'status-vue2'
-      },
-      '/vue3': {
-        name: 'vue3',
-        modulePath: '/my-super-app/ssr-vue3/dist/client/src/index.mjs',
-        viewId: 'view-vue3',
-        mountId: 'mount-vue3',
-        statusId: 'status-vue3'
-      },
-      '/ecommerce': {
-        name: 'ecommerce',
-        modulePath: '/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs',
-        viewId: 'view-ecommerce',
-        mountId: 'mount-ecommerce',
-        statusId: 'status-ecommerce'
-      },
-      '/admin': {
-        name: 'admin',
-        modulePath: '/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs',
-        viewId: 'view-admin',
-        mountId: 'mount-admin',
-        statusId: 'status-admin'
-      }
-    };
+    const [
+      reactModule,
+      blogModule,
+      vue2Module,
+      vue3Module,
+      ecommerceModule,
+      adminModule
+    ] = await Promise.all([
+      import('/my-super-app/ssr-react/dist/client/src/index.mjs'),
+      import('/my-super-app/ssr-react-blog/dist/client/src/index.mjs'),
+      import('/my-super-app/ssr-vue2/dist/client/src/index.mjs'),
+      import('/my-super-app/ssr-vue3/dist/client/src/index.mjs'),
+      import('/my-super-app/ssr-vue3-ecommerce/dist/client/src/index.mjs'),
+      import('/my-super-app/ssr-vue3-admin/dist/client/src/index.mjs')
+    ]);
 
-    // Track mounted apps and their unmount functions
-    const mountedApps = {};
-    let appsReady = 0;
-    const totalApps = Object.keys(microApps).length;
-    let currentView = 'dashboard';
+    const dashboard = document.getElementById('dashboard');
+    const appContainer = document.getElementById('app');
 
-    // Create hub router
+    function showDashboard(visible) {
+      dashboard.style.display = visible ? 'block' : 'none';
+    }
+
     const router = new Router({
+      root: appContainer,
       mode: RouterMode.history,
       routes: [
-        { path: '/', component: null },
-        { path: '/react', component: null },
-        { path: '/react/:rest(.*)', component: null },
-        { path: '/vue2', component: null },
-        { path: '/vue2/:rest(.*)', component: null },
-        { path: '/vue3', component: null },
-        { path: '/vue3/:rest(.*)', component: null },
-        { path: '/ecommerce', component: null },
-        { path: '/ecommerce/:rest(.*)', component: null },
-        { path: '/admin', component: null },
-        { path: '/admin/:rest(.*)', component: null }
-      ]
+        { path: '/' },
+        { path: '/react', app: 'react' },
+        { path: '/react/:rest(.*)', app: 'react' },
+        { path: '/blog', app: 'blog' },
+        { path: '/blog/:rest(.*)', app: 'blog' },
+        { path: '/vue2', app: 'vue2' },
+        { path: '/vue2/:rest(.*)', app: 'vue2' },
+        { path: '/vue3', app: 'vue3' },
+        { path: '/vue3/:rest(.*)', app: 'vue3' },
+        { path: '/ecommerce', app: 'ecommerce' },
+        { path: '/ecommerce/:rest(.*)', app: 'ecommerce' },
+        { path: '/admin', app: 'admin' },
+        { path: '/admin/:rest(.*)', app: 'admin' }
+      ],
+      apps: {
+        react: (router) => reactModule.createApp(router),
+        blog: (router) => blogModule.createApp(router),
+        vue2: (router) => vue2Module.createApp(router),
+        vue3: (router) => vue3Module.createApp(router),
+        ecommerce: (router) => ecommerceModule.createApp(router),
+        admin: (router) => adminModule.createApp(router)
+      }
     });
 
-    // Update loading status badge
-    function updateLoadingStatus() {
-      const statusEl = document.getElementById('loading-status');
-      if (appsReady === totalApps) {
-        statusEl.textContent = '✅ All apps ready - Zero delay navigation!';
-        statusEl.classList.remove('loading');
-      } else {
-        statusEl.textContent = `⏳ Loading apps... (${appsReady}/${totalApps})`;
-      }
-    }
-
-    // Update individual app status
-    function updateAppStatus(name, ready) {
-      const config = Object.values(microApps).find(c => c.name === name);
-      if (config) {
-        const statusEl = document.getElementById(config.statusId);
-        if (statusEl) {
-          if (ready) {
-            statusEl.textContent = '✅ Ready';
-            statusEl.classList.remove('yellow');
-            statusEl.classList.add('green');
-          } else {
-            statusEl.textContent = '❌ Error';
-            statusEl.classList.remove('yellow');
-            statusEl.classList.add('red');
-          }
-        }
-      }
-    }
-
-    // Mount a single app to its hidden container
-    async function premountApp(path, config) {
-      try {
-        console.log(`[Hub] Pre-mounting ${config.name}...`);
-        
-        const module = await import(config.modulePath);
-        const mountFn = module.mount || module.default;
-        
-        if (typeof mountFn !== 'function') {
-          throw new Error(`No mount function found for ${config.name}`);
-        }
-
-        const container = document.getElementById(config.mountId);
-        if (!container) {
-          throw new Error(`Container ${config.mountId} not found`);
-        }
-
-        // Mount the app with shared router
-        const result = mountFn(container, { router });
-        
-        // Handle async mount functions
-        let unmountFn = null;
-        if (result && typeof result.then === 'function') {
-          const resolved = await result;
-          unmountFn = resolved?.unmount;
-        } else if (result && typeof result.unmount === 'function') {
-          unmountFn = result.unmount;
-        }
-
-        mountedApps[path] = {
-          config,
-          module,
-          unmount: unmountFn
-        };
-
-        appsReady++;
-        updateAppStatus(config.name, true);
-        updateLoadingStatus();
-        
-        console.log(`[Hub] ✅ ${config.name} pre-mounted successfully`);
-      } catch (err) {
-        console.error(`[Hub] ❌ Failed to pre-mount ${config.name}:`, err);
-        updateAppStatus(config.name, false);
-        appsReady++;
-        updateLoadingStatus();
-      }
-    }
-
-    // Pre-mount all apps in background
-    async function premountAllApps() {
-      console.log('[Hub] Starting background pre-mount of all apps...');
-      
-      // Mount all apps in parallel for faster loading
-      const promises = Object.entries(microApps).map(([path, config]) => 
-        premountApp(path, config)
-      );
-      
-      await Promise.allSettled(promises);
-      console.log('[Hub] All apps pre-mounted!');
-    }
-
-    // Switch view - just toggle visibility (INSTANT!)
-    function switchView(viewName) {
-      // Hide all views
-      document.querySelectorAll('.app-view').forEach(view => {
-        view.classList.remove('active');
-      });
-
-      // Show target view
-      const targetView = document.getElementById(`view-${viewName}`);
-      if (targetView) {
-        targetView.classList.add('active');
-        currentView = viewName;
-      }
-    }
-
-    // Get app name from path
-    function getAppNameFromPath(path) {
-      if (path === '/') return 'dashboard';
-      
-      for (const [route, config] of Object.entries(microApps)) {
-        if (path === route || path.startsWith(route + '/')) {
-          return config.name;
-        }
-      }
-      return 'dashboard';
-    }
-
-    // Update active nav
     function updateActiveNav(path) {
       document.querySelectorAll('nav a').forEach(link => {
         const linkPath = link.getAttribute('data-nav');
@@ -512,67 +434,33 @@
       });
     }
 
-    // Handle navigation - just switch views!
     router.afterEach((to) => {
-      const path = to.path;
-      const appName = getAppNameFromPath(path);
-      
-      console.log(`[Hub] Navigating to ${path} -> showing ${appName}`);
-      switchView(appName);
-      updateActiveNav(path);
-
-      // If navigating to a sub-route within an app, push to app's local router
-      // The app's RouterLink should handle this via sharedRouter
+      const isDashboard = to.path === '/';
+      showDashboard(isDashboard);
+      if (isDashboard) {
+        appContainer.innerHTML = '';
+      }
+      updateActiveNav(to.path);
     });
 
-    // Click handler for navigation links
     document.addEventListener('click', (e) => {
       const link = e.target.closest('a[data-nav]');
       if (!link) return;
-      
-      if (e.defaultPrevented) return;
-      if (e.button !== 0) return;
+      if (e.defaultPrevented || e.button !== 0) return;
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
       const path = link.getAttribute('data-nav');
       if (!path) return;
 
       e.preventDefault();
-      e.stopPropagation();
       router.push(path);
     });
 
-    // Handle browser back/forward
-    window.addEventListener('popstate', () => {
-      const path = window.location.pathname;
-      const appName = getAppNameFromPath(path);
-      switchView(appName);
-      updateActiveNav(path);
-    });
-
-    // Initialize
-    (async function init() {
-      const initialPath = window.location.pathname;
-      
-      // Start pre-mounting all apps immediately
-      premountAllApps();
-      
-      // Set initial view based on URL
-      const initialApp = getAppNameFromPath(initialPath);
-      if (initialApp !== 'dashboard') {
-        // If landing on an app page, wait for that specific app to load first
-        const appPath = '/' + initialApp;
-        const config = microApps[appPath];
-        if (config && !mountedApps[appPath]) {
-          // Wait for this specific app to mount before switching view
-          await premountApp(appPath, config);
-        }
-        switchView(initialApp);
-      }
-      
-      updateActiveNav(initialPath);
-      router.replace(initialPath);
-    })();
+    const initialPath = window.location.pathname;
+    showDashboard(initialPath === '/');
+    updateActiveNav(initialPath);
+    router.replace(initialPath);
   </script>
 </body>
+
 </html>

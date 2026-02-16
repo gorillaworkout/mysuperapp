@@ -225,6 +225,31 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  my-super-app/ssr-react-blog:
+    dependencies:
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+      ssr-npm-react:
+        specifier: workspace:*
+        version: link:../ssr-npm-react
+    devDependencies:
+      '@esmx/rspack':
+        specifier: ^3.0.0-rc.107
+        version: 3.0.0-rc.107(@esmx/core@3.0.0-rc.107)(less@4.5.1)(webpack@5.104.1)
+      '@types/react':
+        specifier: ^18.2.0
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.2.0
+        version: 18.3.7(@types/react@18.3.27)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   my-super-app/ssr-vue2:
     dependencies:
       ssr-npm-vue2:

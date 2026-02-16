@@ -1,60 +1,75 @@
-import { createApp, h, defineComponent, resolveComponent, Router, RouterMode, install } from 'ssr-npm-vue3';
-import type { Router as RouterType } from '@esmx/router';
+import { createApp as createVueApp, h, defineComponent } from 'ssr-npm-vue3';
+import { RouterPlugin, useProvideRouter, useRoute } from 'ssr-npm-vue3';
+import type { Router } from '@esmx/router';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 
-export const App = defineComponent({
-  name: 'App',
-  render() {
-    const RouterView = resolveComponent('router-view');
-    return h(RouterView);
+const routes: Record<string, any> = {
+  '/admin': HomePage,
+  '/admin/settings': SettingsPage
+};
+
+const AppView = defineComponent({
+  name: 'AppView',
+  setup() {
+    const route = useRoute();
+    return () => {
+      const path = route?.path || '/admin';
+      const Component = routes[path] || HomePage;
+      return h(Component);
+    };
   }
 });
 
-export async function mount(container: HTMLElement, props?: { router?: RouterType }) {
-  const sharedRouter = props?.router;
-  const isHubMode = typeof window !== 'undefined' && !!(window as any).__ESMX_HUB_MODE__;
-  
-  const localRouter: RouterType = new Router({
-    mode: isHubMode ? RouterMode.memory : RouterMode.history,
-    routes: [
-      { path: '/admin', component: HomePage },
-      { path: '/admin/settings', component: SettingsPage }
-    ]
+export const App = defineComponent({
+  name: 'App',
+  setup() {
+    return () => h(AppView);
+  }
+});
+
+function createRootComponent(router: Router) {
+  return defineComponent({
+    name: 'Root',
+    setup() {
+      useProvideRouter(router);
+      return () => h(App);
+    }
   });
+}
 
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/admin';
-  await localRouter.replace(currentPath.startsWith('/admin') ? currentPath : '/admin');
+export function createApp(router: Router) {
+  let app: ReturnType<typeof createVueApp> | null = null;
+  let vueContainer: HTMLDivElement | null = null;
 
-  // Sync local router when shared router navigates to sub-routes
-  let unsubscribe: (() => void) | undefined;
-  if (sharedRouter && isHubMode) {
-    unsubscribe = sharedRouter.afterEach((to) => {
-      const currentPath = localRouter.route?.path || '';
-      if (to.path.startsWith('/admin') && to.path !== currentPath) {
-        localRouter.replace(to.path);
-      }
-    });
-  }
+  return {
+    mount(el: HTMLElement) {
+      vueContainer = document.createElement('div');
+      el.appendChild(vueContainer);
+      app = createVueApp(createRootComponent(router));
+      app.use(RouterPlugin);
+      app.mount(vueContainer);
+    },
+    unmount() {
+      app?.unmount();
+      app = null;
+      vueContainer?.remove();
+      vueContainer = null;
+    }
+  };
+}
 
-  const app = createApp(App);
-  
-  if (install) {
-    install(app, { router: localRouter, sharedRouter: sharedRouter || undefined });
-  }
-
+export async function mount(container: HTMLElement, props?: { router?: Router }) {
   container.innerHTML = '';
   const vueContainer = document.createElement('div');
   container.appendChild(vueContainer);
+  const app = createVueApp(createRootComponent(props?.router!));
+  app.use(RouterPlugin);
   app.mount(vueContainer);
 
   return {
     unmount: () => {
-      if (unsubscribe) unsubscribe();
       app.unmount();
-      if (!sharedRouter) {
-        localRouter.destroy();
-      }
     }
   };
 }

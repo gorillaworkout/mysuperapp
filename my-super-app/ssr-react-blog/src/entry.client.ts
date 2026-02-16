@@ -7,8 +7,8 @@ if (container) {
   const router = new Router({
     mode: RouterMode.history,
     routes: [
-      { path: '/react', component: null },
-      { path: '/react/about', component: null }
+      { path: '/blog', component: null },
+      { path: '/blog/about', component: null }
     ]
   });
   router.replace(window.location.pathname);

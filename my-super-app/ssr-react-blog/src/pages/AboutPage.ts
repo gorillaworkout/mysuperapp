@@ -140,7 +140,7 @@ export const AboutPage = () => {
   return React.createElement('div', { className: 'react-about', style: styles.container },
     React.createElement('div', { style: styles.card },
       React.createElement('div', { style: styles.header },
-        React.createElement('h1', { style: styles.title }, '📖 About React App'),
+        React.createElement('h1', { style: styles.title }, '📖 About React Blog App'),
         React.createElement('p', { style: styles.subtitle }, 'Page 2 - Multi-page routing demo')
       ),
 
@@ -152,7 +152,7 @@ export const AboutPage = () => {
             style: styles.buttonGray
           }, '← Back to Dashboard'),
           React.createElement(NavLink, {
-            to: '/react',
+            to: '/blog',
             style: styles.buttonBlue
           }, '← Home'),
           React.createElement('span', { style: styles.separator }, '|'),
@@ -170,8 +170,8 @@ export const AboutPage = () => {
         React.createElement('div', { style: styles.pinkBox },
           React.createElement('h3', { style: styles.boxTitle }, '🔄 Routing Structure'),
           React.createElement('ul', { style: styles.list },
-            React.createElement('li', { style: styles.listItem }, '• /react → Home Page'),
-            React.createElement('li', { style: styles.listItem }, '• /react/about → About Page'),
+            React.createElement('li', { style: styles.listItem }, '• /blog → Home Page'),
+            React.createElement('li', { style: styles.listItem }, '• /blog/about → About Blog Page'),
             React.createElement('li', { style: styles.listItem }, '• Hub manages app switching'),
             React.createElement('li', { style: styles.listItem }, '• App manages internal pages')
           )
@@ -179,7 +179,7 @@ export const AboutPage = () => {
       ),
 
       React.createElement('div', { style: styles.footer },
-        React.createElement('h3', { style: styles.footerTitle }, '🛣️ Route: /react/about'),
+        React.createElement('h3', { style: styles.footerTitle }, '🛣️ Route: /blog/about'),
         React.createElement('p', { style: styles.footerDesc }, 'This is the second page of the React micro-frontend')
       )
     )

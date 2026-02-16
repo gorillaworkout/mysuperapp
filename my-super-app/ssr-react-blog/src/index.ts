@@ -9,8 +9,8 @@ import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 
 const routes: Record<string, React.ComponentType> = {
-  '/react': HomePage,
-  '/react/about': AboutPage
+  '/blog': HomePage,
+  '/blog/about': AboutPage
 };
 
 function AppView() {
