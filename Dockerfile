@@ -7,7 +7,8 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 # Copy package files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY package.json pnpm-workspace.yaml .npmrc ./
+COPY pnpm-lock.yaml* ./
 COPY my-super-app/ssr-hub/package.json ./my-super-app/ssr-hub/
 COPY my-super-app/ssr-react/package.json ./my-super-app/ssr-react/
 COPY my-super-app/ssr-react-blog/package.json ./my-super-app/ssr-react-blog/
