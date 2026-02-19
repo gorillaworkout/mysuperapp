@@ -107,8 +107,10 @@ esmx-demo/
     ├── ssr-npm-vue3/                   # Vue 3.5 + @esmx/router-vue
     │
     │── Hub ────────────────────────────
-    └── ssr-hub/                        # Build config (links semua package)
+    └── ssr-hub/                        # Build-time only: links semua package
 ```
+
+> **Catatan tentang `ssr-hub`:** Package ini hanya digunakan saat **build time** untuk menghubungkan semua workspace packages dan menghasilkan bundled output. Pada **runtime**, `public/index.html` berfungsi sebagai SPA shell. Dalam setup ESMX production, `ssr-hub` biasanya menangani semuanya via `rc.importmap()`, `rc.preload()`, dll., namun demo ini menggunakan pendekatan manual (`public/index.html` + `scripts/post-build.mjs`) untuk transparansi.
 
 ---
 
@@ -614,7 +616,7 @@ h('a', {
 }, label)
 ```
 
-> **Catatan:** `@esmx/router-react` dan `@esmx/router-vue` menyediakan komponen `RouterLink` / `<router-link>`, namun pada versi `3.0.0-rc.107` terdapat bug dimana `navigate()` mengecek `e.defaultPrevented` setelah `e.preventDefault()` sudah dipanggil — sehingga navigasi tidak terjadi. Workaround ini bypass bug tersebut dengan memanggil `router.push()` langsung.
+> **Catatan:** `@esmx/router-react` dan `@esmx/router-vue` menyediakan komponen `RouterLink` / `<router-link>` dan hook `useLink()` untuk navigasi. Demo ini menggunakan custom `NavLink` component yang memanggil `router.push()` langsung sebagai contoh implementasi manual. Untuk production, disarankan menggunakan `useLink()` dari official packages.
 
 Semua navigasi menggunakan **router instance yang sama** (dari hub), sehingga navigasi antar micro-app tetap SPA — tidak ada full page reload.
 

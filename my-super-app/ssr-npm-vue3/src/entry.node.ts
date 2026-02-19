@@ -1,23 +1,28 @@
 import type { EsmxOptions } from '@esmx/core';
 
 export default {
-  modules: {
-    links: { 'ssr-npm-base': './node_modules/ssr-npm-base/dist' },
-    imports: {
-      'vue': 'ssr-npm-vue3',
-      '@esmx/router': 'ssr-npm-vue3',
-      '@esmx/core': 'ssr-npm-vue3',
-      '@esmx/class-state': 'ssr-npm-vue3',
-      '@esmx/fetch': 'ssr-npm-vue3'
+    modules: {
+        links: {
+            'ssr-npm-base': './node_modules/ssr-npm-base/dist'
+        },
+        imports: {
+            '@esmx/router': 'ssr-npm-base/@esmx/router'
+        },
+        exports: [
+            'pkg:vue',
+            'pkg:@esmx/router-vue',
+            'root:src/app-creator.ts',
+            {
+                'src/render-to-str': {
+                    client: false,
+                    server: './src/render-to-str.ts'
+                }
+            }
+        ]
     },
-    exports: [
-      "pkg:vue",
-      "pkg:@esmx/router-vue"
-    ]
-  },
-  async devApp(esmx) {
-    return import('@esmx/rspack').then((m) =>
-      m.createRspackHtmlApp(esmx, { chain() {} })
-    );
-  }
+    async devApp(esmx) {
+        return import('@esmx/rspack-vue').then((m) =>
+            m.createRspackVue3App(esmx)
+        );
+    }
 } satisfies EsmxOptions;

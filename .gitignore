@@ -1,13 +1,16 @@
 # Dependencies
 node_modules/
 .pnpm-store/
+.pnpm-debug.log*
 
-# Production & Build info
+# Build output
 dist/
 build/
 out/
 .output/
 *.tsbuildinfo
+test-dist/
+build-test/
 
 # Logs
 logs/
@@ -49,106 +52,28 @@ coverage/
 .nyc_output/
 *.lcov
 
-# Temporary
+# Temporary / Cache
 tmp/
 temp/
 .cache/
 .parcel-cache/
-
-# ESMX specific
-.esmx/
-.esmx-cache/
-rspack.config.*.timestamp-*.mjs
-
-# TypeScript
-*.tsbuildinfo
-
-# Optional caches
 .eslintcache
 .stylelintcache
-
-# Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
 .rts2_cache_es/
 .rts2_cache_umd/
 
-# Optional REPL history
-.node_repl_history
-
-# Yarn
-.yarn-integrity
+# ESMX specific
+.esmx/
+.esmx-cache/
+rspack.config.*.timestamp-*.mjs
+*.timestamp-*.mjs
 
 # Vite
 .vite/
-dist/
-*.local
-
-# SvelteKit
-.svelte-kit/
 
 # Turbo
-.turbo/
-
-# Vercel
-.vercel
-
-# Netlify
-.netlify
-
-# Cloudflare
-.wrangler/
-
-# NGINX
-nginx/*.conf
-
-# Compiled output (if not using src/ structure)
-*.js
-*.jsx
-*.map
-!src/**/*.js
-!src/**/*.jsx
-
-# Keep TypeScript sources but ignore compiled
-src/**/*.ts
-src/**/*.tsx
-
-# Allow JavaScript in specific directories if needed
-!scripts/**/*.js
-!config/**/*.js
-
-# Ignore test builds
-test-dist/
-build-test/
-
-# Ignore local development configs
-.local/
-.dev/
-
-# Ignore backup files
-*.bak
-*.backup
-*~
-
-# Ignore package tgz files
-*.tgz
-
-# Ignore any generated manifest files that shouldn't be committed
-# (but keep the source files that generate them)
-**/manifest.json
-!src/**/manifest.json
-
-# OS generated files
-*.lock
-
-# PNPM specific
-.pnpm-debug.log*
-.pnpm-store/
-
-# Vite specific
-.vite/
-
-# Turbo repo
 .turbo/
 
 # Vercel
@@ -160,63 +85,47 @@ build-test/
 # Cloudflare
 .wrangler/
 
-# Remove compiled output but keep src/
+# SvelteKit
+.svelte-kit/
+
+# Yarn
+.yarn-integrity
+
+# REPL history
+.node_repl_history
+
+# Compiled JS (keep source TS)
 *.js
 *.jsx
 *.map
 !src/**/*.js
 !src/**/*.jsx
-
-# Keep generated types if any
-!src/**/*.d.ts
-
-# ESMX build artifacts
-.esmx/
-.esmx-cache/
-*.timestamp-*.mjs
-
-# Local development configs
-.local/
-.dev/
-
-# Backup files
-*.bak
-*.backup
-*~
-
-# Package archives
-*.tgz
-
-# NGINX configs (if using)
-nginx/*.conf
-
-# Test output
-test-dist/
-build-test/
-coverage/
-.nyc_output/
-
-# Optional eslint/stylelint cache
-.eslintcache
-.stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# SvelteKit
-.svelte-kit/
+!scripts/**/*.js
+!config/**/*.js
 
 # Keep TypeScript sources
 src/**/*.ts
 src/**/*.tsx
 src/**/*.d.ts
 
-# Allow JS in scripts/config
-!scripts/**/*.js
-!config/**/*.js
+# Local development
+.local/
+.dev/
+*.local
 
-# OS files
+# Backup files
+*.bak
+*.backup
+
+# Package archives
+*.tgz
+
+# NGINX configs
+nginx/*.conf
+
+# Lock files (pnpm uses pnpm-lock.yaml)
 *.lock
+
+# Generated manifests
+**/manifest.json
+!src/**/manifest.json

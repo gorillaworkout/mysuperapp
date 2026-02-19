@@ -1,0 +1,27 @@
+{
+    "name": "ssr-vue3-dashboard",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./src/*": "./src/*"
+    },
+    "scripts": {
+        "build": "esmx build",
+        "dev": "esmx dev",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "ssr-npm-base": "workspace:*",
+        "ssr-npm-vue3": "workspace:*",
+        "vue": "^3.3.4"
+    },
+    "devDependencies": {
+        "@esmx/core": "^3.0.0-rc.107",
+        "@esmx/rspack": "^3.0.0-rc.107",
+        "@esmx/rspack-vue": "3.0.0-rc.112",
+        "ts-loader": "^9.4.0",
+        "typescript": "^5.0.0"
+    }
+}

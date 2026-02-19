@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter } from 'ssr-npm-react';
+import { NavLink } from '../components/NavLink';
 
 const styles = {
   container: {
@@ -165,19 +165,6 @@ const styles = {
     borderRadius: '0.25rem'
   }
 };
-
-function NavLink({ to, style, children }: { to: string; style?: React.CSSProperties; children?: React.ReactNode }) {
-  const router = useRouter();
-  return React.createElement('a', {
-    href: to,
-    style,
-    onClick: (e: React.MouseEvent) => {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      e.preventDefault();
-      router.push(to);
-    }
-  }, children);
-}
 
 export const HomePage = () => {
   return React.createElement('div', { className: 'react-home', style: styles.container },

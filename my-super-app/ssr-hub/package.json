@@ -2,20 +2,22 @@
   "name": "ssr-hub",
   "version": "1.0.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./layout/MainLayout": "./dist/layout/MainLayout.js"
-  },
+  "private": true,
   "scripts": {
+    "dev": "NODE_ENV=development esmx dev",
     "build": "esmx build",
-    "dev": "esmx dev",
+    "preview": "esmx preview",
     "start": "esmx start",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@esmx/core": "^3.0.0-rc.107"
+  },
+  "devDependencies": {
+    "@esmx/router": "^3.0.0-rc.107",
+    "@esmx/rspack": "^3.0.0-rc.107",
+    "@esmx/rspack-vue": "3.0.0-rc.112",
+    "@types/node": "^18.0.0",
     "ssr-npm-base": "workspace:*",
     "ssr-npm-react": "workspace:*",
     "ssr-npm-vue2": "workspace:*",
@@ -24,15 +26,9 @@
     "ssr-react-blog": "workspace:*",
     "ssr-vue2": "workspace:*",
     "ssr-vue3": "workspace:*",
+    "ssr-vue3-admin": "workspace:*",
+    "ssr-vue3-dashboard": "workspace:*",
     "ssr-vue3-ecommerce": "workspace:*",
-    "ssr-vue3-admin": "workspace:*"
-  },
-  "devDependencies": {
-    "@esmx/rspack": "^3.0.0-rc.107",
-    "@esmx/core": "^3.0.0-rc.107",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.0.0",
-    "ts-loader": "^9.4.0"
+    "typescript": "^5.0.0"
   }
 }

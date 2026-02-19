@@ -1,37 +1,61 @@
-import { h, resolveComponent, defineComponent } from 'ssr-npm-vue3';
-import { useRouter } from 'ssr-npm-vue3';
+import { defineComponent, h } from 'vue';
+import { useNavLink } from '../composables/useNavLink';
 
 export default defineComponent({
     name: 'AboutPage',
     setup() {
-        const router = useRouter();
-        const navLink = (to: string, style: string, label: string) => {
-            return h('a', {
-                href: to,
-                style,
-                onClick: (e: Event) => {
-                    const me = e as MouseEvent;
-                    if (me.metaKey || me.ctrlKey || me.shiftKey || me.altKey) return;
-                    e.preventDefault();
-                    router.push(to);
-                }
-            }, label);
-        };
+        const navLink = useNavLink();
         return { navLink };
     },
     render() {
         return h('div', { class: 'ecommerce-about', style: 'padding: 2rem;' }, [
-            h('h1', { style: 'color: #f97316; margin-bottom: 1rem;' }, '🛒 About Our Store'),
-            h('p', { style: 'margin-bottom: 1rem;' }, 'This is page 2 of the E-Commerce micro-frontend.'),
-            h('div', { style: 'background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;' }, [
-                h('h3', { style: 'margin-top: 0;' }, '🧭 Navigation'),
-                this.navLink('/', 'display: inline-block; background: #6b7280; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 0.25rem; margin-right: 0.5rem;', '← Dashboard'),
-                this.navLink('/ecommerce', 'display: inline-block; background: #f97316; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 0.25rem;', '← Back to Home')
-            ]),
-            h('div', { style: 'background: linear-gradient(135deg, #f97316, #ea580c); color: white; padding: 1.5rem; border-radius: 0.5rem; text-align: center;' }, [
-                h('h3', { style: 'margin: 0 0 0.5rem 0;' }, '🛣️ Route: /ecommerce/about'),
-                h('p', { style: 'margin: 0;' }, 'Multi-page routing demo in E-Commerce app')
-            ])
+            h(
+                'h1',
+                { style: 'color: #f97316; margin-bottom: 1rem;' },
+                '🛒 About Our Store'
+            ),
+            h(
+                'p',
+                { style: 'margin-bottom: 1rem;' },
+                'This is page 2 of the E-Commerce micro-frontend.'
+            ),
+            h(
+                'div',
+                {
+                    style: 'background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;'
+                },
+                [
+                    h('h3', { style: 'margin-top: 0;' }, '🧭 Navigation'),
+                    this.navLink(
+                        '/',
+                        'display: inline-block; background: #6b7280; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 0.25rem; margin-right: 0.5rem;',
+                        '← Dashboard'
+                    ),
+                    this.navLink(
+                        '/ecommerce',
+                        'display: inline-block; background: #f97316; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 0.25rem;',
+                        '← Back to Home'
+                    )
+                ]
+            ),
+            h(
+                'div',
+                {
+                    style: 'background: linear-gradient(135deg, #f97316, #ea580c); color: white; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'
+                },
+                [
+                    h(
+                        'h3',
+                        { style: 'margin: 0 0 0.5rem 0;' },
+                        '🛣️ Route: /ecommerce/about'
+                    ),
+                    h(
+                        'p',
+                        { style: 'margin: 0;' },
+                        'Multi-page routing demo in E-Commerce app'
+                    )
+                ]
+            )
         ]);
     }
 });

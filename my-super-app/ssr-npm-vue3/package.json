@@ -14,14 +14,16 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "vue": "^3.3.4",
     "@esmx/router": "^3.0.0-rc.107",
     "@esmx/router-vue": "^3.0.0-rc.107",
-    "ssr-npm-base": "workspace:*"
+    "@vue/server-renderer": "^3.5.28",
+    "ssr-npm-base": "workspace:*",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@esmx/rspack": "^3.0.0-rc.107",
-    "typescript": "^5.0.0",
-    "@types/node": "^18.0.0"
+    "@esmx/rspack-vue": "3.0.0-rc.107",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
   }
 }
