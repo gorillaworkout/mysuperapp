@@ -127,7 +127,7 @@ export const AboutPage = () => {
   return React.createElement('div', { className: 'react-about', style: styles.container },
     React.createElement('div', { style: styles.card },
       React.createElement('div', { style: styles.header },
-        React.createElement('h1', { style: styles.title }, '📖 About React App'),
+        React.createElement('h1', { style: styles.title }, '📖 About React App - gorillaworkout'),
         React.createElement('p', { style: styles.subtitle }, 'Page 2 - Multi-page routing demo')
       ),
 
