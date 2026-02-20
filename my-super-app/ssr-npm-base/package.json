@@ -17,13 +17,13 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@esmx/router": "^3.0.0-rc.107",
-    "@esmx/core": "^3.0.0-rc.107",
-    "@esmx/class-state": "^3.0.0-rc.107",
-    "@esmx/fetch": "^3.0.0-rc.107"
+    "@esmx/router": "^3.0.0-rc.112",
+    "@esmx/core": "^3.0.0-rc.112",
+    "@esmx/class-state": "^3.0.0-rc.112",
+    "@esmx/fetch": "^3.0.0-rc.112"
   },
   "devDependencies": {
-    "@esmx/rspack": "^3.0.0-rc.107",
+    "@esmx/rspack": "^3.0.0-rc.112",
     "typescript": "^5.0.0"
   }
 }

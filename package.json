@@ -7,17 +7,17 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "build": "pnpm --filter './my-super-app/ssr-npm-*' -r --parallel run build && pnpm --filter './my-super-app/ssr-react' --filter './my-super-app/ssr-react-blog' --filter './my-super-app/ssr-vue2' --filter './my-super-app/ssr-vue3' --filter './my-super-app/ssr-vue3-dashboard' --filter './my-super-app/ssr-vue3-ecommerce' --filter './my-super-app/ssr-vue3-admin' -r --parallel run build && pnpm --filter ssr-hub run build",
+    "build": "pnpm --filter './my-super-app/ssr-share' run build && pnpm --filter './my-super-app/ssr-npm-*' -r --parallel run build && pnpm --filter './my-super-app/ssr-react' --filter './my-super-app/ssr-react-blog' --filter './my-super-app/ssr-vue2' --filter './my-super-app/ssr-vue3' --filter './my-super-app/ssr-vue3-dashboard' --filter './my-super-app/ssr-vue3-ecommerce' --filter './my-super-app/ssr-vue3-admin' -r --parallel run build && pnpm --filter ssr-hub run build",
     "dev": "pnpm --filter ssr-hub run dev",
     "clean": "pnpm -r --parallel run clean",
     "start": "pnpm --filter ssr-hub run start"
   },
   "devDependencies": {
-    "@esmx/core": "^3.0.0-rc.107",
-    "@esmx/rspack": "^3.0.0-rc.107",
-    "@esmx/rspack-vue": "^3.0.0-rc.107",
-    "@esmx/rspack-react": "^3.0.0-rc.107",
-    "@esmx/router": "^3.0.0-rc.107",
+    "@esmx/core": "^3.0.0-rc.112",
+    "@esmx/rspack": "^3.0.0-rc.112",
+    "@esmx/rspack-vue": "^3.0.0-rc.112",
+    "@esmx/rspack-react": "^3.0.0-rc.112",
+    "@esmx/router": "^3.0.0-rc.112",
     "typescript": "^5.0.0",
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.0",

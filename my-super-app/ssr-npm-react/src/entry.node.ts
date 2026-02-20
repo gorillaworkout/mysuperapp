@@ -119,7 +119,7 @@ const REACT_DOM_EXPORTS = [
 
 export default {
     modules: {
-        links: { 'ssr-npm-base': './node_modules/ssr-npm-base/dist' },
+        links: { 'ssr-share': './node_modules/ssr-share/dist', 'ssr-npm-base': './node_modules/ssr-npm-base/dist' },
         imports: {
             '@esmx/router': 'ssr-npm-base/@esmx/router'
         },
@@ -128,6 +128,7 @@ export default {
             'pkg:react-dom',
             'pkg:@esmx/router-react',
             'root:src/app-creator.ts',
+            'root:src/use-app-store.ts',
             {
                 'src/render-to-str': {
                     client: false,

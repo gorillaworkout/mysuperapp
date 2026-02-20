@@ -3,6 +3,7 @@ import type { EsmxOptions } from '@esmx/core';
 export default {
     modules: {
         links: {
+            'ssr-share': './node_modules/ssr-share/dist',
             'ssr-npm-base': './node_modules/ssr-npm-base/dist'
         },
         imports: {
@@ -12,6 +13,7 @@ export default {
             'pkg:vue',
             'pkg:@esmx/router-vue',
             'root:src/app-creator.ts',
+            'root:src/store-plugin.ts',
             {
                 'src/render-to-str': {
                     client: false,

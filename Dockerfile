@@ -7,6 +7,7 @@ RUN npm install -g pnpm
 # Copy workspace config + all package.json files for dependency resolution
 COPY package.json pnpm-workspace.yaml .npmrc ./
 COPY pnpm-lock.yaml* ./
+COPY my-super-app/ssr-share/package.json ./my-super-app/ssr-share/
 COPY my-super-app/ssr-hub/package.json ./my-super-app/ssr-hub/
 COPY my-super-app/ssr-npm-base/package.json ./my-super-app/ssr-npm-base/
 COPY my-super-app/ssr-npm-react/package.json ./my-super-app/ssr-npm-react/

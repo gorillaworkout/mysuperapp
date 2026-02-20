@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 export default {
     modules: {
         links: {
+            'ssr-share': './node_modules/ssr-share/dist',
             'ssr-npm-base': './node_modules/ssr-npm-base/dist',
             'ssr-npm-react': './node_modules/ssr-npm-react/dist',
             'ssr-npm-vue2': './node_modules/ssr-npm-vue2/dist',

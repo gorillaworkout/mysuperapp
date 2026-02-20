@@ -1,0 +1,18 @@
+export const formatPrice = (price: number): string => {
+    return `$${price.toFixed(2)}`;
+};
+
+export const formatDate = (timestamp: number): string => {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+};
+
+export const truncateText = (text: string, maxLength: number): string => {
+    if (text.length <= maxLength) return text;
+    return `${text.slice(0, maxLength)}...`;
+};

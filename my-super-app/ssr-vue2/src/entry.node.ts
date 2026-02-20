@@ -3,6 +3,7 @@ import type { EsmxOptions } from '@esmx/core';
 export default {
     modules: {
         links: {
+            'ssr-share': './node_modules/ssr-share/dist',
             'ssr-npm-base': './node_modules/ssr-npm-base/dist',
             'ssr-npm-vue2': './node_modules/ssr-npm-vue2/dist'
         },

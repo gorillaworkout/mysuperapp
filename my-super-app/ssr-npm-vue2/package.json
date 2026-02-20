@@ -1,29 +1,30 @@
 {
-  "name": "ssr-npm-vue2",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "./src/index.ts",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./router-vue": "./src/router-vue/index.ts"
-  },
-  "scripts": {
-    "build": "esmx build",
-    "dev": "esmx dev",
-    "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "@esmx/router": "^3.0.0-rc.107",
-    "@esmx/router-vue": "^3.0.0-rc.107",
-    "ssr-npm-base": "workspace:*",
-    "vue": "^2.7.14",
-    "vue-server-renderer": "^2.7.16"
-  },
-  "devDependencies": {
-    "@esmx/rspack": "^3.0.0-rc.107",
-    "@esmx/rspack-vue": "3.0.0-rc.107",
-    "@types/node": "^18.0.0",
-    "typescript": "^5.0.0"
-  }
+    "name": "ssr-npm-vue2",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./src/index.ts",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./router-vue": "./src/router-vue/index.ts"
+    },
+    "scripts": {
+        "build": "esmx build",
+        "dev": "esmx dev",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@esmx/router": "^3.0.0-rc.112",
+        "@esmx/router-vue": "^3.0.0-rc.112",
+        "ssr-npm-base": "workspace:*",
+        "ssr-share": "workspace:*",
+        "vue": "^2.7.14",
+        "vue-server-renderer": "^2.7.16"
+    },
+    "devDependencies": {
+        "@esmx/rspack": "^3.0.0-rc.112",
+        "@esmx/rspack-vue": "3.0.0-rc.112",
+        "@types/node": "^18.0.0",
+        "typescript": "^5.0.0"
+    }
 }
