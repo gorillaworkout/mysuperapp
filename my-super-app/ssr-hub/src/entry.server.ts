@@ -54,7 +54,6 @@ export default async (rc: RenderContext) => {
       padding: 0 1rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       height: 4rem;
     }
     .logo {
@@ -67,17 +66,7 @@ export default async (rc: RenderContext) => {
       text-decoration: none;
     }
     .logo:hover { color: #2563eb; }
-    nav { display: flex; gap: 0.25rem; }
-    nav a {
-      padding: 0.5rem 1rem;
-      color: #4b5563;
-      text-decoration: none;
-      border-radius: 0.5rem;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    nav a:hover { color: #2563eb; background: #f3f4f6; }
-    nav a.active { color: #2563eb; background: #eff6ff; }
+
     .container {
       max-width: 80rem;
       margin: 0 auto;
@@ -97,14 +86,6 @@ export default async (rc: RenderContext) => {
   <header>
     <div class="header-inner">
       <a href="/" class="logo" data-nav="/">ESMX Super App</a>
-      <nav>
-        <a href="/react" data-nav="/react">React</a>
-        <a href="/blog" data-nav="/blog">React Blog</a>
-        <a href="/vue2" data-nav="/vue2">Vue 2</a>
-        <a href="/vue3" data-nav="/vue3">Vue 3</a>
-        <a href="/ecommerce" data-nav="/ecommerce">E-Commerce</a>
-        <a href="/admin" data-nav="/admin">Admin</a>
-      </nav>
     </div>
   </header>
 
