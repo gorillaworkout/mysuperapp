@@ -11,7 +11,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@esmx/core": "^3.0.0-rc.112"
+    "@esmx/core": "^3.0.0-rc.112",
+    "ssr-npm-base": "workspace:*"
   },
   "devDependencies": {
     "@esmx/router": "^3.0.0-rc.112",
@@ -19,7 +20,6 @@
     "@esmx/rspack-vue": "3.0.0-rc.112",
     "@types/node": "^18.0.0",
     "ssr-share": "workspace:*",
-    "ssr-npm-base": "workspace:*",
     "ssr-npm-react": "workspace:*",
     "ssr-npm-vue2": "workspace:*",
     "ssr-npm-vue3": "workspace:*",

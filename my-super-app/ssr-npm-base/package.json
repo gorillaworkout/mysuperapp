@@ -6,10 +6,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./@esmx/router": "./dist/router/index.js",
-    "./@esmx/core": "./dist/core/index.js",
-    "./@esmx/class-state": "./dist/class-state/index.js",
-    "./@esmx/fetch": "./dist/fetch/index.js"
+    "./@esmx/router": "./dist/router/index.js"
   },
   "scripts": {
     "build": "esmx build",
@@ -17,10 +14,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@esmx/router": "^3.0.0-rc.112",
-    "@esmx/core": "^3.0.0-rc.112",
-    "@esmx/class-state": "^3.0.0-rc.112",
-    "@esmx/fetch": "^3.0.0-rc.112"
+    "@esmx/router": "^3.0.0-rc.112"
   },
   "devDependencies": {
     "@esmx/rspack": "^3.0.0-rc.112",

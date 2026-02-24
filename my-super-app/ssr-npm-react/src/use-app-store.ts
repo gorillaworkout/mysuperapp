@@ -1,11 +1,9 @@
 import { appStore, Reactive, uniqueKeys } from 'ssr-share/src/store';
-import type { CartItem, Notification, User } from 'ssr-share/src/store';
+import type { Notification, User } from 'ssr-share/src/store';
 import { useEffect, useState } from 'react';
 
 export interface ReactAppStore {
     // Reactive state values
-    cartItems: CartItem[];
-    cartTotal: number;
     currentUser: User | null;
     isAuthenticated: boolean;
     notifications: Notification[];
@@ -13,10 +11,6 @@ export interface ReactAppStore {
     darkMode: boolean;
 
     // Methods
-    addToCart: typeof appStore.addToCart;
-    removeFromCart: typeof appStore.removeFromCart;
-    updateQuantity: typeof appStore.updateQuantity;
-    clearCart: typeof appStore.clearCart;
     login: typeof appStore.login;
     logout: typeof appStore.logout;
     addNotification: typeof appStore.addNotification;

@@ -66,7 +66,6 @@ export default async (rc: RenderContext) => {
       text-decoration: none;
     }
     .logo:hover { color: #2563eb; }
-
     .container {
       max-width: 80rem;
       margin: 0 auto;

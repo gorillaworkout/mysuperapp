@@ -1,5 +1,6 @@
 import type { Router, RouterMicroAppOptions } from '@esmx/router';
 import { RouterProvider, RouterView } from '@esmx/router-react';
+import type { ReactElement } from 'react';
 import * as React from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 
@@ -10,7 +11,7 @@ declare global {
 }
 
 export interface AppCreatorOptions {
-    renderToString?: (element: React.ReactElement) => string;
+    renderToString?: (element: ReactElement) => string;
 }
 
 export const appCreator = (

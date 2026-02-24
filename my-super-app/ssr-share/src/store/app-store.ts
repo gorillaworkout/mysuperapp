@@ -1,4 +1,4 @@
-import type { CartItem, Notification, Product, User } from './types';
+import type { Notification, User } from './types';
 
 export interface Ref<T> {
     value: T;
@@ -35,10 +35,6 @@ export function ref<T>(initialValue: T): Reactive<T> {
 }
 
 export class AppStore {
-    // Cart state
-    cartItems = ref<CartItem[]>([]);
-    cartTotal = ref(0);
-
     // User state
     currentUser = ref<User | null>(null);
     isAuthenticated = ref(false);
@@ -50,56 +46,6 @@ export class AppStore {
     // Theme
     darkMode = ref(false);
 
-    // Cart methods
-    addToCart(product: Product, quantity = 1) {
-        const items = [...this.cartItems.value];
-        const existing = items.find(
-            (item) => item.product.id === product.id
-        );
-
-        if (existing) {
-            existing.quantity += quantity;
-        } else {
-            items.push({ product, quantity });
-        }
-
-        this.cartItems.value = items;
-        this.updateCartTotal();
-    }
-
-    removeFromCart(productId: number) {
-        this.cartItems.value = this.cartItems.value.filter(
-            (item) => item.product.id !== productId
-        );
-        this.updateCartTotal();
-    }
-
-    updateQuantity(productId: number, quantity: number) {
-        const items = [...this.cartItems.value];
-        const item = items.find((i) => i.product.id === productId);
-        if (item) {
-            item.quantity = Math.max(0, quantity);
-            if (item.quantity === 0) {
-                this.removeFromCart(productId);
-                return;
-            }
-            this.cartItems.value = items;
-            this.updateCartTotal();
-        }
-    }
-
-    clearCart() {
-        this.cartItems.value = [];
-        this.cartTotal.value = 0;
-    }
-
-    private updateCartTotal() {
-        this.cartTotal.value = this.cartItems.value.reduce(
-            (total, item) => total + item.product.price * item.quantity,
-            0
-        );
-    }
-
     // User methods
     login(user: User) {
         this.currentUser.value = user;
@@ -109,7 +55,6 @@ export class AppStore {
     logout() {
         this.currentUser.value = null;
         this.isAuthenticated.value = false;
-        this.clearCart();
     }
 
     // Notification methods
