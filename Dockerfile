@@ -14,12 +14,9 @@ COPY my-super-app/ssr-npm-react/package.json ./my-super-app/ssr-npm-react/
 COPY my-super-app/ssr-npm-vue2/package.json ./my-super-app/ssr-npm-vue2/
 COPY my-super-app/ssr-npm-vue3/package.json ./my-super-app/ssr-npm-vue3/
 COPY my-super-app/ssr-react/package.json ./my-super-app/ssr-react/
-COPY my-super-app/ssr-react-blog/package.json ./my-super-app/ssr-react-blog/
 COPY my-super-app/ssr-vue2/package.json ./my-super-app/ssr-vue2/
 COPY my-super-app/ssr-vue3/package.json ./my-super-app/ssr-vue3/
-COPY my-super-app/ssr-vue3-admin/package.json ./my-super-app/ssr-vue3-admin/
 COPY my-super-app/ssr-vue3-dashboard/package.json ./my-super-app/ssr-vue3-dashboard/
-COPY my-super-app/ssr-vue3-ecommerce/package.json ./my-super-app/ssr-vue3-ecommerce/
 
 RUN pnpm install
 

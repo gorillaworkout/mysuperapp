@@ -12,12 +12,9 @@ export default {
             'ssr-npm-vue2': './node_modules/ssr-npm-vue2/dist',
             'ssr-npm-vue3': './node_modules/ssr-npm-vue3/dist',
             'ssr-react': './node_modules/ssr-react/dist',
-            'ssr-react-blog': './node_modules/ssr-react-blog/dist',
             'ssr-vue2': './node_modules/ssr-vue2/dist',
             'ssr-vue3': './node_modules/ssr-vue3/dist',
-            'ssr-vue3-dashboard': './node_modules/ssr-vue3-dashboard/dist',
-            'ssr-vue3-ecommerce': './node_modules/ssr-vue3-ecommerce/dist',
-            'ssr-vue3-admin': './node_modules/ssr-vue3-admin/dist'
+            'ssr-vue3-dashboard': './node_modules/ssr-vue3-dashboard/dist'
         },
         imports: {
             react: 'ssr-npm-react/react',

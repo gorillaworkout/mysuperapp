@@ -24,12 +24,9 @@
     "ssr-npm-vue2": "workspace:*",
     "ssr-npm-vue3": "workspace:*",
     "ssr-react": "workspace:*",
-    "ssr-react-blog": "workspace:*",
     "ssr-vue2": "workspace:*",
     "ssr-vue3": "workspace:*",
-    "ssr-vue3-admin": "workspace:*",
     "ssr-vue3-dashboard": "workspace:*",
-    "ssr-vue3-ecommerce": "workspace:*",
     "typescript": "^5.0.0"
   }
 }

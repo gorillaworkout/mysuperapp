@@ -47,10 +47,6 @@ export async function createApp({
                 reactAppCreator(router, {
                     renderToString: reactRenderToStr
                 }),
-            blog: (router) =>
-                reactAppCreator(router, {
-                    renderToString: reactRenderToStr
-                }),
             vue2: (router) =>
                 vue2AppCreator(router, {
                     beforeCreateApp: (Vue) => {
@@ -60,22 +56,6 @@ export async function createApp({
                     ssrCtx
                 }),
             vue3: (router) =>
-                vue3AppCreator(router, {
-                    afterCreateApp: (app) => {
-                        app.use(Vue3AppStorePlugin);
-                    },
-                    renderToString: vue3RenderToStr,
-                    ssrCtx
-                }),
-            ecommerce: (router) =>
-                vue3AppCreator(router, {
-                    afterCreateApp: (app) => {
-                        app.use(Vue3AppStorePlugin);
-                    },
-                    renderToString: vue3RenderToStr,
-                    ssrCtx
-                }),
-            admin: (router) =>
                 vue3AppCreator(router, {
                     afterCreateApp: (app) => {
                         app.use(Vue3AppStorePlugin);
