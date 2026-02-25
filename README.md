@@ -35,30 +35,53 @@ esmx-demo/
 │   │   └── routes.ts           Aggregates routes from all micro-apps.
 │   │
 │   │── Shared NPM Packages (Framework Providers) ─────
-│   ├── ssr-npm-base/            @esmx/router + @esmx/class-state
+│   ├── ssr-npm-base/            @esmx/router provider
+│   │   └── entry.node.ts       - re-exports @esmx/router for import maps
 │   ├── ssr-npm-vue3/            Vue 3 provider:
 │   │   ├── app-creator.ts       - creates Vue 3 app + mount/unmount/renderToString
+│   │   ├── store-plugin.ts      - Vue 3 reactive wrapper for shared AppStore
 │   │   └── render-to-str.ts     - imports @vue/server-renderer (SERVER ONLY)
 │   ├── ssr-npm-vue2/            Vue 2 provider:
 │   │   ├── app-creator.ts       - creates Vue 2 app + mount/unmount/renderToString
+│   │   ├── store-plugin.ts      - Vue 2 reactive wrapper for shared AppStore
 │   │   └── render-to-str.ts     - imports vue-server-renderer (SERVER ONLY)
 │   └── ssr-npm-react/           React provider:
 │       ├── app-creator.ts       - creates React app + mount/unmount/renderToString
+│       ├── use-app-store.ts     - React hook for shared AppStore
 │       └── render-to-str.ts     - imports react-dom/server (SERVER ONLY)
 │   │
 │   │── Micro-Apps ─────────────────────────────────────
 │   ├── ssr-vue3-dashboard/      Vue 3 — Landing page at /
+│   │   └── pages/HomePage.ts    Dashboard with app counter + feature cards
 │   ├── ssr-vue3/                Vue 3 — Demo app at /vue3
+│   │   └── pages/               HomePage, AboutPage
 │   ├── ssr-vue2/                Vue 2 — Demo app at /vue2
+│   │   └── pages/               HomePage, AboutPage
 │   ├── ssr-react/               React — Demo app at /react
-│   └── ssr-share/               Shared state (cross-framework)
+│   │   └── pages/               HomePage, AboutPage
+│   └── ssr-share/               Cross-framework shared state
+│       └── store/               AppStore (user, notifications, theme)
 │
-├── Dockerfile                   Production Docker image
-├── .dockerignore
+├── Dockerfile                   Production Docker image (Node 24 Alpine)
 ├── package.json                 Root workspace scripts
 ├── pnpm-workspace.yaml          Workspace package list
 └── .npmrc                       pnpm configuration
 ```
+
+### What Each Package Does
+
+| Package | Role | Why It Exists |
+|---------|------|---------------|
+| `ssr-hub` | Orchestrator | HTTP server, Router, SSR, HTML assembly |
+| `ssr-npm-base` | Router provider | Re-exports `@esmx/router` via import maps — required by ESMX module resolution |
+| `ssr-npm-react` | React provider | Bundles React 18 + router-react + app-creator + renderToString |
+| `ssr-npm-vue2` | Vue 2 provider | Bundles Vue 2.7 + router-vue + app-creator + renderToString |
+| `ssr-npm-vue3` | Vue 3 provider | Bundles Vue 3.5 + router-vue + app-creator + renderToString |
+| `ssr-react` | React micro-app | Pages (Home, About) mounted at `/react` |
+| `ssr-vue2` | Vue 2 micro-app | Pages (Home, About) mounted at `/vue2` |
+| `ssr-vue3` | Vue 3 micro-app | Pages (Home, About) mounted at `/vue3` |
+| `ssr-vue3-dashboard` | Dashboard | Landing page at `/` — app counter, feature cards, navigation |
+| `ssr-share` | Shared state | Cross-framework state: user auth, notifications, theme toggle |
 
 ---
 
@@ -75,6 +98,39 @@ esmx-demo/
 | `/vue2/about` | ssr-vue2 | Vue 2.7 | `vue2` |
 | `/vue3` | ssr-vue3 | Vue 3.5 | `vue3` |
 | `/vue3/about` | ssr-vue3 | Vue 3.5 | `vue3` |
+
+---
+
+## Shared State (ssr-share)
+
+Cross-framework state management using a reactive `AppStore` class. All micro-apps share the same state:
+
+### Available State
+
+| State | Type | Description |
+|-------|------|-------------|
+| `currentUser` | `User \| null` | Logged-in user |
+| `isAuthenticated` | `boolean` | Auth status |
+| `notifications` | `Notification[]` | App notifications |
+| `unreadCount` | `number` | Unread notification count |
+| `darkMode` | `boolean` | Theme toggle |
+
+### Available Methods
+
+| Method | Description |
+|--------|-------------|
+| `login(user)` | Set current user |
+| `logout()` | Clear user session |
+| `addNotification(notification)` | Push notification |
+| `markAsRead(id)` | Mark single notification read |
+| `markAllAsRead()` | Mark all notifications read |
+| `toggleDarkMode()` | Toggle dark/light theme |
+
+### Framework Integration
+
+- **React**: `useAppStore()` hook (subscribes to Reactive changes, auto re-renders)
+- **Vue 3**: `Vue3AppStorePlugin` + `useAppStore()` composable (provides/injects store)
+- **Vue 2**: `Vue2AppStorePlugin` + `useAppStore()` function (global mixin)
 
 ---
 
@@ -137,30 +193,6 @@ The `app-creator.ts` files receive `renderToString` as a **parameter** instead o
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Why NOT import renderToString directly in app-creator.ts?
-
-```typescript
-// ❌ WRONG — will break the client bundle build!
-// app-creator.ts
-import { renderToString } from './render-to-str';
-// → render-to-str.ts imports 'vue-server-renderer'
-// → vue-server-renderer is Node.js only
-// → client bundle tries to include it → BUILD ERROR
-
-// ✅ CORRECT — parameter injection, safe for both bundles
-// app-creator.ts
-export const appCreator = (router, { renderToString }) => {
-    // renderToString is passed from entry.server.ts (server)
-    // or undefined from entry.client.ts (browser)
-    return {
-        async renderToString() {
-            if (typeof renderToString !== 'function') return '';
-            return renderToString(app, ssrCtx);
-        }
-    };
-};
-```
-
 ### File-by-File Summary
 
 | File | Role | Imports server modules? |
@@ -214,18 +246,19 @@ pnpm build
 Runs 3 phases in strict order:
 
 ```
-Phase 1: pnpm --filter './my-super-app/ssr-npm-*' build
-         ├── ssr-npm-base    (builds @esmx/router bundle)
+Phase 1: Shared packages (ssr-share + ssr-npm-*)
+         ├── ssr-share       (builds shared state + format utils)
+         ├── ssr-npm-base    (builds @esmx/router re-export)
          ├── ssr-npm-vue3    (builds Vue 3 + router-vue + app-creator)
          ├── ssr-npm-vue2    (builds Vue 2 + router-vue + app-creator)
          └── ssr-npm-react   (builds React + router-react + app-creator)
 
-Phase 2: pnpm --filter './my-super-app/ssr-*' (micro-apps) build
+Phase 2: Micro-apps
          ├── ssr-vue3-dashboard    ├── ssr-react
-         ├── ssr-vue3              ├── ssr-vue2
-         └── ssr-share
+         ├── ssr-vue3              └── ssr-vue2
+         └── (ssr-share already built in Phase 1)
 
-Phase 3: pnpm --filter ssr-hub build
+Phase 3: Hub
          └── ssr-hub (links all dist/ outputs, bundles entry points)
 ```
 
@@ -235,18 +268,20 @@ Phase 3: pnpm --filter ssr-hub build
 
 ## Deployment
 
-### Docker
+### Docker (Recommended)
 
 ```bash
 docker build -t mysuperapp .
-docker run -d --name mysuperapp -p 3000:3000 mysuperapp
+docker run -d --name mysuperapp -p 3000:3000 --restart unless-stopped mysuperapp
 ```
 
-### Manual
+> **Note:** Requires Node 24+. The Docker image uses `node:24-alpine` since most servers run Node 22. Using Docker avoids version conflicts.
+
+### Manual (Requires Node 24+)
 
 ```bash
 NODE_ENV=production pnpm start
-# or
+# or with custom port
 NODE_ENV=production PORT=8080 pnpm start
 ```
 
@@ -259,6 +294,7 @@ ESMX uses native browser [Import Maps](https://developer.mozilla.org/en-US/docs/
 - **No duplicate frameworks** — one Vue 3 bundle shared across dashboard + vue3 apps
 - **No duplicate React** — one React bundle for all React apps
 - **Scoped resolution** — Vue 2 and Vue 3 apps each get their own `vue` import
+- **`ssr-npm-base`** — provides the shared `@esmx/router` import mapping for all packages
 
 ---
 
@@ -310,7 +346,7 @@ This project follows the official [`router-demo`](https://github.com/esmnext/esm
 | `ssr-npm-react` | React 18 provider (reference only has Vue) |
 | `ssr-react` | React micro-app |
 | `ssr-vue3-dashboard` | Landing page at `/` |
-| `ssr-share` | Cross-framework shared state |
+| `ssr-share` | Cross-framework shared state (user, notifications, theme) |
 | `window.__ESMX_HYDRATED__` guard | Prevents SSR hydration mismatch during SPA transitions |
 | `data-nav` click interceptor | SPA navigation for logo/header links |
 | 3-phase build script | Prevents race condition in monorepo build order |
